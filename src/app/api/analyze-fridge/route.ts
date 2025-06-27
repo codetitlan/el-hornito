@@ -194,6 +194,7 @@ Requirements:
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
+  let personalApiKey: string | null = null;
 
   try {
     // Parse form data
@@ -204,7 +205,7 @@ export async function POST(request: NextRequest) {
       | string
       | null;
     const userSettingsJson = formData.get('userSettings') as string | null;
-    const personalApiKey = formData.get('apiKey') as string | null;
+    personalApiKey = formData.get('apiKey') as string | null;
 
     // Parse user settings if provided
     let userSettings = null;
@@ -263,20 +264,54 @@ export async function POST(request: NextRequest) {
     const apiKeyToUse = personalApiKey || ENV.ANTHROPIC_API_KEY;
 
     if (!apiKeyToUse) {
-      console.error('No API key available');
+      console.error(
+        'No API key available - personalApiKey:',
+        !!personalApiKey,
+        'ENV.ANTHROPIC_API_KEY:',
+        !!ENV.ANTHROPIC_API_KEY
+      );
       return NextResponse.json(
         {
           success: false,
-          error: 'API configuration error',
+          error: ENV.ANTHROPIC_API_KEY
+            ? 'API configuration error: No API key available'
+            : 'Personal API key required. Please configure your Anthropic API key in settings.',
+        } as AnalyzeFridgeResponse,
+        { status: 401 }
+      );
+    }
+
+    // Validate API key format
+    if (!apiKeyToUse.startsWith('sk-ant-api')) {
+      console.error(
+        'Invalid API key format:',
+        apiKeyToUse.substring(0, 10) + '...'
+      );
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'API configuration error: Invalid API key format',
         } as AnalyzeFridgeResponse,
         { status: 500 }
       );
     }
 
     // Create Anthropic client with appropriate API key
-    const anthropicClient = new Anthropic({
-      apiKey: apiKeyToUse,
-    });
+    let anthropicClient: Anthropic;
+    try {
+      anthropicClient = new Anthropic({
+        apiKey: apiKeyToUse,
+      });
+    } catch (clientError) {
+      console.error('Failed to create Anthropic client:', clientError);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'API configuration error: Failed to initialize client',
+        } as AnalyzeFridgeResponse,
+        { status: 500 }
+      );
+    }
 
     // Validate image file
     if (!imageFile || !(imageFile instanceof File)) {
@@ -416,6 +451,25 @@ export async function POST(request: NextRequest) {
 
     // Handle specific Anthropic API errors
     if (error instanceof Error) {
+      // Check for authentication errors (invalid API key)
+      if (
+        error.message.includes('401') ||
+        error.message.includes('unauthorized') ||
+        error.message.includes('authentication') ||
+        error.message.includes('invalid_api_key')
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: personalApiKey
+              ? 'Invalid personal API key. Please check your Anthropic API key in settings.'
+              : 'Authentication failed. Please configure a valid API key.',
+            processingTime,
+          } as AnalyzeFridgeResponse,
+          { status: 401 }
+        );
+      }
+
       if (error.message.includes('rate_limit')) {
         return NextResponse.json(
           {
@@ -435,6 +489,21 @@ export async function POST(request: NextRequest) {
             processingTime,
           } as AnalyzeFridgeResponse,
           { status: 400 }
+        );
+      }
+
+      // Check for permission denied errors
+      if (
+        error.message.includes('403') ||
+        error.message.includes('forbidden')
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Access denied. Please check your API key permissions.',
+            processingTime,
+          } as AnalyzeFridgeResponse,
+          { status: 403 }
         );
       }
     }

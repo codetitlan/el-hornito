@@ -5,6 +5,7 @@ import { ChefHat, Sparkles, Camera, Utensils, Settings } from 'lucide-react';
 import { FridgeUploader } from '@/components/FridgeUploader';
 import { RecipeDisplay } from '@/components/RecipeDisplay';
 import { OnboardingBanner } from '@/components/OnboardingBanner';
+import { ApiKeyRequiredBanner } from '@/components/ApiKeyRequiredBanner';
 import { Recipe } from '@/types';
 import Link from 'next/link';
 
@@ -124,6 +125,11 @@ export default function Home() {
             {/* Onboarding Banner */}
             <div className="max-w-2xl mx-auto mb-8">
               <OnboardingBanner />
+            </div>
+
+            {/* API Key Required Banner */}
+            <div className="max-w-2xl mx-auto mb-8">
+              <ApiKeyRequiredBanner />
             </div>
 
             {/* Upload Section */}
