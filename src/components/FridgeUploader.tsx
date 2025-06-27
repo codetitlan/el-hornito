@@ -1,84 +1,91 @@
-'use client'
+'use client';
 
-import React, { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react'
-import { cn, validateFile, formatFileSize } from '@/lib/utils'
-import { APP_CONFIG } from '@/lib/constants'
-import { Button } from './ui/Button'
-import { ProgressSpinner } from './ui/LoadingSpinner'
-import { analyzeFridge } from '@/lib/api'
-import { Recipe } from '@/types'
+import React, { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react';
+import { cn, validateFile, formatFileSize } from '@/lib/utils';
+import { APP_CONFIG } from '@/lib/constants';
+import { Button } from './ui/Button';
+import { ProgressSpinner } from './ui/LoadingSpinner';
+import { analyzeFridge } from '@/lib/api';
+import { Recipe } from '@/types';
 
 interface FridgeUploaderProps {
-  onRecipeGenerated: (recipe: Recipe) => void
-  onError: (error: string) => void
-  className?: string
+  onRecipeGenerated: (recipe: Recipe) => void;
+  onError: (error: string) => void;
+  className?: string;
 }
 
 interface UploadState {
-  isUploading: boolean
-  progress: number
-  status: string
-  error: string | null
+  isUploading: boolean;
+  progress: number;
+  status: string;
+  error: string | null;
 }
 
-export function FridgeUploader({ onRecipeGenerated, onError, className }: FridgeUploaderProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+export function FridgeUploader({
+  onRecipeGenerated,
+  onError,
+  className,
+}: FridgeUploaderProps) {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>({
     isUploading: false,
     progress: 0,
     status: '',
-    error: null
-  })
-  const [preferences, setPreferences] = useState('')
-  const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([])
+    error: null,
+  });
+  const [preferences, setPreferences] = useState('');
+  const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]
-    if (!file) return
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (!file) return;
 
-    const validation = validateFile(file)
-    if (!validation.isValid) {
-      onError(validation.error || 'Invalid file')
-      return
-    }
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        onError(validation.error || 'Invalid file');
+        return;
+      }
 
-    setSelectedFile(file)
-    setUploadState(prev => ({ ...prev, error: null }))
-  }, [onError])
+      setSelectedFile(file);
+      setUploadState((prev) => ({ ...prev, error: null }));
+    },
+    [onError]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.webp']
+      'image/*': ['.jpeg', '.jpg', '.png', '.webp'],
     },
     maxSize: APP_CONFIG.MAX_FILE_SIZE,
     multiple: false,
     onDropRejected: (fileRejections) => {
-      const rejection = fileRejections[0]
+      const rejection = fileRejections[0];
       if (rejection) {
-        const error = rejection.errors[0]
+        const error = rejection.errors[0];
         if (error.code === 'file-too-large') {
-          onError(APP_CONFIG.ERROR_MESSAGES.FILE_TOO_LARGE)
+          onError(APP_CONFIG.ERROR_MESSAGES.FILE_TOO_LARGE);
         } else if (error.code === 'file-invalid-type') {
-          onError(APP_CONFIG.ERROR_MESSAGES.INVALID_FILE_TYPE)
+          onError(APP_CONFIG.ERROR_MESSAGES.INVALID_FILE_TYPE);
         } else {
-          onError(error.message)
+          onError(error.message);
         }
       }
-    }
-  })
+    },
+  });
 
   const handleAnalyze = async () => {
-    if (!selectedFile) return
+    if (!selectedFile) return;
 
     setUploadState({
       isUploading: true,
       progress: 0,
       status: 'Preparing...',
-      error: null
-    })
+      error: null,
+    });
 
     try {
       const recipe = await analyzeFridge(
@@ -87,66 +94,78 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
         dietaryRestrictions.length > 0 ? dietaryRestrictions : undefined,
         {
           onProgress: (progress) => {
-            setUploadState(prev => ({ ...prev, progress }))
+            setUploadState((prev) => ({ ...prev, progress }));
           },
           onStatusUpdate: (status) => {
-            setUploadState(prev => ({ ...prev, status }))
-          }
+            setUploadState((prev) => ({ ...prev, status }));
+          },
         }
-      )
+      );
 
-      onRecipeGenerated(recipe)
-      
+      onRecipeGenerated(recipe);
+
       // Reset form
-      setSelectedFile(null)
-      setPreferences('')
-      setDietaryRestrictions([])
-      
+      setSelectedFile(null);
+      setPreferences('');
+      setDietaryRestrictions([]);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Analysis failed'
-      onError(errorMessage)
-      setUploadState(prev => ({ ...prev, error: errorMessage }))
+      const errorMessage =
+        error instanceof Error ? error.message : 'Analysis failed';
+      onError(errorMessage);
+      setUploadState((prev) => ({ ...prev, error: errorMessage }));
     } finally {
-      setUploadState(prev => ({ 
-        ...prev, 
-        isUploading: false, 
-        progress: 0, 
-        status: '' 
-      }))
+      setUploadState((prev) => ({
+        ...prev,
+        isUploading: false,
+        progress: 0,
+        status: '',
+      }));
     }
-  }
+  };
 
   const removeFile = () => {
-    setSelectedFile(null)
-    setUploadState(prev => ({ ...prev, error: null }))
-  }
+    setSelectedFile(null);
+    setUploadState((prev) => ({ ...prev, error: null }));
+  };
 
   const toggleDietaryRestriction = (restriction: string) => {
-    setDietaryRestrictions(prev => 
+    setDietaryRestrictions((prev) =>
       prev.includes(restriction)
-        ? prev.filter(r => r !== restriction)
+        ? prev.filter((r) => r !== restriction)
         : [...prev, restriction]
-    )
-  }
+    );
+  };
 
   const commonRestrictions = [
-    'Vegetarian', 'Vegan', 'Gluten-free', 'Dairy-free', 
-    'Nut-free', 'Low-carb', 'Keto', 'Paleo'
-  ]
+    'Vegetarian',
+    'Vegan',
+    'Gluten-free',
+    'Dairy-free',
+    'Nut-free',
+    'Low-carb',
+    'Keto',
+    'Paleo',
+  ];
 
   if (uploadState.isUploading) {
     return (
-      <div className={cn('flex flex-col items-center justify-center p-8 space-y-4', className)}>
-        <ProgressSpinner 
-          progress={uploadState.progress} 
+      <div
+        className={cn(
+          'flex flex-col items-center justify-center p-8 space-y-4',
+          className
+        )}
+      >
+        <ProgressSpinner
+          progress={uploadState.progress}
           size="lg"
           message={uploadState.status}
         />
         <p className="text-center text-gray-600 max-w-md">
-          Our AI is analyzing your fridge contents and creating a perfect recipe just for you!
+          Our AI is analyzing your fridge contents and creating a perfect recipe
+          just for you!
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -156,15 +175,15 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
         {...getRootProps()}
         className={cn(
           'relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200',
-          isDragActive 
-            ? 'border-orange-400 bg-orange-50' 
+          isDragActive
+            ? 'border-orange-400 bg-orange-50'
             : selectedFile
             ? 'border-green-400 bg-green-50'
             : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50/50'
         )}
       >
         <input {...getInputProps()} />
-        
+
         {selectedFile ? (
           <div className="space-y-4">
             <div className="relative inline-block">
@@ -176,8 +195,8 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
               />
               <button
                 onClick={(e) => {
-                  e.stopPropagation()
-                  removeFile()
+                  e.stopPropagation();
+                  removeFile();
                 }}
                 title="Remove image"
                 aria-label="Remove selected image"
@@ -188,7 +207,9 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
             </div>
             <div>
               <p className="font-medium text-gray-900">{selectedFile.name}</p>
-              <p className="text-sm text-gray-500">{formatFileSize(selectedFile.size)}</p>
+              <p className="text-sm text-gray-500">
+                {formatFileSize(selectedFile.size)}
+              </p>
             </div>
           </div>
         ) : (
@@ -202,13 +223,15 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
             </div>
             <div>
               <p className="text-lg font-medium text-gray-900">
-                {isDragActive ? 'Drop your photo here' : 'Upload your fridge photo'}
+                {isDragActive
+                  ? 'Drop your photo here'
+                  : 'Upload your fridge photo'}
               </p>
               <p className="text-sm text-gray-500 mt-1">
                 Drag & drop or click to browse (JPEG, PNG, WebP up to 10MB)
               </p>
             </div>
-            
+
             {/* Camera option for mobile */}
             <div className="pt-4 border-t border-gray-200">
               <Button
@@ -216,19 +239,19 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
                 size="sm"
                 icon={<Camera size={16} />}
                 onClick={(e) => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   // Trigger camera input
-                  const input = document.createElement('input')
-                  input.type = 'file'
-                  input.accept = 'image/*'
-                  input.capture = 'environment'
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = 'image/*';
+                  input.capture = 'environment';
                   input.onchange = (e) => {
-                    const files = (e.target as HTMLInputElement).files
+                    const files = (e.target as HTMLInputElement).files;
                     if (files && files[0]) {
-                      onDrop([files[0]])
+                      onDrop([files[0]]);
                     }
-                  }
-                  input.click()
+                  };
+                  input.click();
                 }}
               >
                 Take Photo
@@ -294,5 +317,5 @@ export function FridgeUploader({ onRecipeGenerated, onError, className }: Fridge
         </div>
       )}
     </div>
-  )
+  );
 }

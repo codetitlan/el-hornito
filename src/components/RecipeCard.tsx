@@ -1,24 +1,26 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Clock, Users, ChefHat } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Recipe } from '@/types'
-import { APP_CONFIG } from '@/lib/constants'
+import React from 'react';
+import { Clock, Users, ChefHat } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Recipe } from '@/types';
+import { APP_CONFIG } from '@/lib/constants';
 
 interface RecipeCardProps {
-  recipe: Recipe
-  onClick: () => void
-  className?: string
+  recipe: Recipe;
+  onClick: () => void;
+  className?: string;
 }
 
 export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
   const getDifficultyColor = (difficulty: Recipe['difficulty']) => {
-    return APP_CONFIG.DIFFICULTY_COLORS[difficulty] || 'text-gray-600 bg-gray-50'
-  }
+    return (
+      APP_CONFIG.DIFFICULTY_COLORS[difficulty] || 'text-gray-600 bg-gray-50'
+    );
+  };
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className={cn(
         'bg-white rounded-xl shadow-sm border hover:shadow-md transition-all duration-200 cursor-pointer group',
@@ -36,7 +38,7 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
               {recipe.description}
             </p>
           </div>
-          
+
           {/* Recipe Icon */}
           <div className="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
             <ChefHat className="w-6 h-6 text-orange-600" />
@@ -54,19 +56,21 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
               <span>{recipe.cookingTime}</span>
             </div>
           )}
-          
+
           {recipe.servings && (
             <div className="flex items-center gap-1">
               <Users size={14} />
               <span>{recipe.servings}</span>
             </div>
           )}
-          
+
           {recipe.difficulty && (
-            <span className={cn(
-              'px-2 py-0.5 rounded-full text-xs font-medium',
-              getDifficultyColor(recipe.difficulty)
-            )}>
+            <span
+              className={cn(
+                'px-2 py-0.5 rounded-full text-xs font-medium',
+                getDifficultyColor(recipe.difficulty)
+              )}
+            >
               {recipe.difficulty}
             </span>
           )}
@@ -79,11 +83,13 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
           </h4>
           <div className="flex flex-wrap gap-1">
             {recipe.ingredients.slice(0, 3).map((ingredient, index) => (
-              <span 
+              <span
                 key={index}
                 className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
               >
-                {ingredient.length > 20 ? `${ingredient.substring(0, 17)}...` : ingredient}
+                {ingredient.length > 20
+                  ? `${ingredient.substring(0, 17)}...`
+                  : ingredient}
               </span>
             ))}
             {recipe.ingredients.length > 3 && (
@@ -112,22 +118,22 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
             Click to view full recipe
           </span>
           <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:bg-orange-600 transition-colors">
-            <svg 
-              className="w-3 h-3 text-white" 
-              fill="none" 
-              viewBox="0 0 24 24" 
+            <svg
+              className="w-3 h-3 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M9 5l7 7-7 7" 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
               />
             </svg>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
