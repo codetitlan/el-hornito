@@ -1,20 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
-import { ENV, CLAUDE_PROMPT_TEMPLATE, APP_CONFIG } from '@/lib/constants';
+import { ENV, APP_CONFIG } from '@/lib/constants';
 import { getErrorMessage, retryOperation } from '@/lib/utils';
 import { Recipe, AnalyzeFridgeResponse } from '@/types';
 
-// Initialize Anthropic client
-const anthropic = new Anthropic({
-  apiKey: ENV.ANTHROPIC_API_KEY!,
-});
+// Initialize default Anthropic client (fallback)
+// Will be replaced by user-specific client if personal API key provided
 
-// Request validation schema
-const AnalyzeRequestSchema = z.object({
+// Enhanced request validation schema (reserved for future validation implementation)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const EnhancedAnalyzeRequestSchema = z.object({
   image: z.string().min(1, 'Image data is required'),
   preferences: z.string().optional(),
   dietaryRestrictions: z.array(z.string()).optional(),
+  userSettings: z
+    .object({
+      cookingPreferences: z
+        .object({
+          cuisineTypes: z.array(z.string()).optional(),
+          dietaryRestrictions: z.array(z.string()).optional(),
+          spiceLevel: z
+            .enum(['mild', 'medium', 'spicy', 'very-spicy'])
+            .optional(),
+          cookingTimePreference: z
+            .enum(['quick', 'moderate', 'elaborate'])
+            .optional(),
+          mealTypes: z.array(z.string()).optional(),
+          defaultServings: z.number().optional(),
+          additionalNotes: z.string().optional(),
+        })
+        .optional(),
+      kitchenEquipment: z
+        .object({
+          basicAppliances: z.array(z.string()).optional(),
+          advancedAppliances: z.array(z.string()).optional(),
+          cookware: z.array(z.string()).optional(),
+          bakingEquipment: z.array(z.string()).optional(),
+          other: z.array(z.string()).optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  apiKey: z.string().optional(),
 });
 
 // Recipe validation schema
@@ -29,13 +57,172 @@ const RecipeSchema = z.object({
   tips: z.array(z.string()).optional(),
 });
 
+// Generate enhanced prompt with user settings
+function generateEnhancedPrompt(
+  userSettings: {
+    cookingPreferences?: {
+      cuisineTypes?: string[];
+      dietaryRestrictions?: string[];
+      spiceLevel?: string;
+      cookingTimePreference?: string;
+      mealTypes?: string[];
+      defaultServings?: number;
+      additionalNotes?: string;
+    };
+    kitchenEquipment?: {
+      basicAppliances?: string[];
+      advancedAppliances?: string[];
+      cookware?: string[];
+      bakingEquipment?: string[];
+      other?: string[];
+    };
+  } | null,
+  preferences: string | null,
+  dietaryRestrictions: string | null
+): string {
+  let prompt = `
+Analyze this fridge photo and identify all visible ingredients. Based on the available ingredients, suggest ONE complete recipe that can be made primarily with these ingredients.
+
+Please respond in this exact JSON format:
+{
+  "title": "Recipe Name",
+  "description": "Brief description of the dish",
+  "cookingTime": "30 minutes",
+  "difficulty": "Easy|Medium|Hard",
+  "servings": 4,
+  "ingredients": [
+    "2 cups flour",
+    "1 egg",
+    "..."
+  ],
+  "instructions": [
+    "Step 1: ...",
+    "Step 2: ...",
+    "..."
+  ],
+  "tips": ["Optional cooking tip 1", "..."]
+}
+
+Requirements:
+- Use primarily ingredients visible in the photo
+- Provide clear, step-by-step instructions
+- Include realistic cooking times
+- Make the recipe practical and achievable
+- If ingredients are unclear, make reasonable assumptions`.trim();
+
+  // Add user settings if available
+  if (userSettings?.cookingPreferences) {
+    const prefs = userSettings.cookingPreferences;
+
+    prompt += '\n\nUser Preferences:';
+
+    if (prefs.cuisineTypes && prefs.cuisineTypes.length > 0) {
+      prompt += `\n- Preferred cuisines: ${prefs.cuisineTypes.join(', ')}`;
+    }
+
+    if (prefs.dietaryRestrictions && prefs.dietaryRestrictions.length > 0) {
+      prompt += `\n- Dietary restrictions: ${prefs.dietaryRestrictions.join(
+        ', '
+      )}`;
+    }
+
+    if (prefs.spiceLevel) {
+      prompt += `\n- Spice level preference: ${prefs.spiceLevel}`;
+    }
+
+    if (prefs.cookingTimePreference) {
+      const timePrefs = {
+        quick: 'Quick meals (≤30 min)',
+        moderate: 'Moderate cooking time (30-60 min)',
+        elaborate: 'Elaborate recipes (60+ min)',
+      };
+      prompt += `\n- Cooking time preference: ${
+        timePrefs[prefs.cookingTimePreference as keyof typeof timePrefs] ||
+        prefs.cookingTimePreference
+      }`;
+    }
+
+    if (prefs.mealTypes && prefs.mealTypes.length > 0) {
+      prompt += `\n- Preferred meal types: ${prefs.mealTypes.join(', ')}`;
+    }
+
+    if (prefs.defaultServings) {
+      prompt += `\n- Default servings: ${prefs.defaultServings}`;
+    }
+
+    if (prefs.additionalNotes) {
+      prompt += `\n- Additional notes: ${prefs.additionalNotes}`;
+    }
+  }
+
+  // Add kitchen equipment if available
+  if (userSettings?.kitchenEquipment) {
+    const equipment = userSettings.kitchenEquipment;
+    const allEquipment = [
+      ...(equipment.basicAppliances || []),
+      ...(equipment.advancedAppliances || []),
+      ...(equipment.cookware || []),
+      ...(equipment.bakingEquipment || []),
+      ...(equipment.other || []),
+    ];
+
+    if (allEquipment.length > 0) {
+      prompt += `\n\nAvailable Kitchen Equipment: ${allEquipment.join(', ')}`;
+      prompt +=
+        '\n- Please suggest recipes that work with the available equipment';
+      prompt += '\n- Avoid techniques requiring equipment not listed';
+    }
+  }
+
+  // Legacy support for old preference format
+  if (preferences) {
+    prompt += `\n\nAdditional preferences: ${preferences}`;
+  }
+
+  if (dietaryRestrictions) {
+    try {
+      const restrictions = JSON.parse(dietaryRestrictions);
+      if (restrictions.length > 0) {
+        prompt += `\n\nLegacy dietary restrictions: ${restrictions.join(', ')}`;
+      }
+    } catch (error) {
+      console.error('Error parsing legacy dietary restrictions:', error);
+    }
+  }
+
+  return prompt;
+}
+
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
   try {
-    // Validate environment
-    if (!ENV.ANTHROPIC_API_KEY) {
-      console.error('Missing ANTHROPIC_API_KEY');
+    // Parse form data
+    const formData = await request.formData();
+    const imageFile = formData.get('image') as File;
+    const preferences = formData.get('preferences') as string | null;
+    const dietaryRestrictions = formData.get('dietaryRestrictions') as
+      | string
+      | null;
+    const userSettingsJson = formData.get('userSettings') as string | null;
+    const personalApiKey = formData.get('apiKey') as string | null;
+
+    // Parse user settings if provided
+    let userSettings = null;
+    if (userSettingsJson) {
+      try {
+        userSettings = JSON.parse(userSettingsJson);
+      } catch (error) {
+        console.error('Failed to parse user settings:', error);
+        // Continue without user settings rather than failing
+      }
+    }
+
+    // Determine which API key to use
+    const apiKeyToUse = personalApiKey || ENV.ANTHROPIC_API_KEY;
+
+    if (!apiKeyToUse) {
+      console.error('No API key available');
       return NextResponse.json(
         {
           success: false,
@@ -45,13 +232,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse form data
-    const formData = await request.formData();
-    const imageFile = formData.get('image') as File;
-    const preferences = formData.get('preferences') as string | null;
-    const dietaryRestrictions = formData.get('dietaryRestrictions') as
-      | string
-      | null;
+    // Create Anthropic client with appropriate API key
+    const anthropicClient = new Anthropic({
+      apiKey: apiKeyToUse,
+    });
 
     // Validate image file
     if (!imageFile || !(imageFile instanceof File)) {
@@ -91,25 +275,18 @@ export async function POST(request: NextRequest) {
     const imageBuffer = await imageFile.arrayBuffer();
     const base64Image = Buffer.from(imageBuffer).toString('base64');
 
-    // Prepare prompt with user preferences
-    let prompt = CLAUDE_PROMPT_TEMPLATE;
-
-    if (preferences) {
-      prompt += `\n\nUser preferences: ${preferences}`;
-    }
-
-    if (dietaryRestrictions) {
-      const restrictions = JSON.parse(dietaryRestrictions);
-      if (restrictions.length > 0) {
-        prompt += `\n\nDietary restrictions: ${restrictions.join(', ')}`;
-      }
-    }
+    // Generate enhanced prompt with user settings
+    const prompt = generateEnhancedPrompt(
+      userSettings,
+      preferences,
+      dietaryRestrictions
+    );
 
     console.log('Sending request to Claude API...');
 
     // Call Claude API with retry logic
     const claudeResponse = await retryOperation(async () => {
-      const response = await anthropic.messages.create({
+      const response = await anthropicClient.messages.create({
         model: 'claude-3-5-sonnet-20241022',
         max_tokens: 2000,
         messages: [

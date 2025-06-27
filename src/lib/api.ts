@@ -1,5 +1,5 @@
 // API client utilities for frontend components
-import { AnalyzeFridgeResponse, Recipe } from '@/types';
+import { AnalyzeFridgeResponse, Recipe, UserSettings } from '@/types';
 import { getErrorMessage } from '@/lib/utils';
 
 export interface UploadOptions {
@@ -9,8 +9,7 @@ export interface UploadOptions {
 
 export const analyzeImage = async (
   file: File,
-  preferences?: string,
-  dietaryRestrictions?: string[],
+  userSettings?: UserSettings,
   options?: UploadOptions
 ): Promise<Recipe> => {
   const { onProgress, onStatusUpdate } = options || {};
@@ -23,15 +22,8 @@ export const analyzeImage = async (
     const formData = new FormData();
     formData.append('image', file);
 
-    if (preferences) {
-      formData.append('preferences', preferences);
-    }
-
-    if (dietaryRestrictions && dietaryRestrictions.length > 0) {
-      formData.append(
-        'dietaryRestrictions',
-        JSON.stringify(dietaryRestrictions)
-      );
+    if (userSettings) {
+      formData.append('userSettings', JSON.stringify(userSettings));
     }
 
     onStatusUpdate?.('Uploading to server...');
@@ -114,8 +106,7 @@ export const mockRecipe: Recipe = {
 // Development mode API that returns mock data
 export const analyzeFridgeMock = async (
   file: File,
-  preferences?: string,
-  dietaryRestrictions?: string[],
+  userSettings?: UserSettings,
   options?: UploadOptions
 ): Promise<Recipe> => {
   const { onProgress, onStatusUpdate } = options || {};
@@ -135,10 +126,10 @@ export const analyzeFridgeMock = async (
     await new Promise((resolve) => setTimeout(resolve, step.delay));
   }
 
-  // Customize mock recipe based on preferences
+  // Customize mock recipe based on user settings
   let customizedRecipe = { ...mockRecipe };
 
-  if (preferences?.toLowerCase().includes('vegetarian')) {
+  if (userSettings?.cookingPreferences.cuisineTypes.includes('vegetarian')) {
     customizedRecipe = {
       ...customizedRecipe,
       title: 'Vegetarian Garden Pasta',
@@ -147,7 +138,9 @@ export const analyzeFridgeMock = async (
     };
   }
 
-  if (dietaryRestrictions?.includes('gluten-free')) {
+  if (
+    userSettings?.cookingPreferences.dietaryRestrictions.includes('gluten-free')
+  ) {
     customizedRecipe = {
       ...customizedRecipe,
       ingredients: customizedRecipe.ingredients.map((ingredient) =>

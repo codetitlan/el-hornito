@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChefHat, Sparkles, Camera, Utensils } from 'lucide-react';
+import { ChefHat, Sparkles, Camera, Utensils, Settings } from 'lucide-react';
 import { FridgeUploader } from '@/components/FridgeUploader';
 import { RecipeDisplay } from '@/components/RecipeDisplay';
+import { OnboardingBanner } from '@/components/OnboardingBanner';
 import { Recipe } from '@/types';
+import Link from 'next/link';
 
 export default function Home() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -50,14 +52,24 @@ export default function Home() {
               </div>
             </div>
 
-            {recipe && (
-              <button
-                onClick={handleStartOver}
-                className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+            <div className="flex items-center gap-4">
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
               >
-                Start Over
-              </button>
-            )}
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">Settings</span>
+              </Link>
+
+              {recipe && (
+                <button
+                  onClick={handleStartOver}
+                  className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+                >
+                  Start Over
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -107,6 +119,11 @@ export default function Home() {
                   </span>
                 </div>
               </div>
+            </div>
+
+            {/* Onboarding Banner */}
+            <div className="max-w-2xl mx-auto mb-8">
+              <OnboardingBanner />
             </div>
 
             {/* Upload Section */}

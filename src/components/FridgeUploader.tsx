@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { cn, validateFile, formatFileSize } from '@/lib/utils';
@@ -8,7 +8,8 @@ import { APP_CONFIG } from '@/lib/constants';
 import { Button } from './ui/Button';
 import { ProgressSpinner } from './ui/LoadingSpinner';
 import { analyzeFridge } from '@/lib/api';
-import { Recipe } from '@/types';
+import { Recipe, UserSettings } from '@/types';
+import { SettingsManager } from '@/lib/settings';
 
 interface FridgeUploaderProps {
   onRecipeGenerated: (recipe: Recipe) => void;
@@ -35,8 +36,14 @@ export function FridgeUploader({
     status: '',
     error: null,
   });
-  const [preferences, setPreferences] = useState('');
-  const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+
+  // Load user settings on component mount
+  useEffect(() => {
+    const settingsManager = SettingsManager.getInstance();
+    const settings = settingsManager.loadSettings();
+    setUserSettings(settings);
+  }, []);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -90,8 +97,7 @@ export function FridgeUploader({
     try {
       const recipe = await analyzeFridge(
         selectedFile,
-        preferences || undefined,
-        dietaryRestrictions.length > 0 ? dietaryRestrictions : undefined,
+        userSettings || undefined,
         {
           onProgress: (progress) => {
             setUploadState((prev) => ({ ...prev, progress }));
@@ -106,8 +112,6 @@ export function FridgeUploader({
 
       // Reset form
       setSelectedFile(null);
-      setPreferences('');
-      setDietaryRestrictions([]);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Analysis failed';
@@ -127,25 +131,6 @@ export function FridgeUploader({
     setSelectedFile(null);
     setUploadState((prev) => ({ ...prev, error: null }));
   };
-
-  const toggleDietaryRestriction = (restriction: string) => {
-    setDietaryRestrictions((prev) =>
-      prev.includes(restriction)
-        ? prev.filter((r) => r !== restriction)
-        : [...prev, restriction]
-    );
-  };
-
-  const commonRestrictions = [
-    'Vegetarian',
-    'Vegan',
-    'Gluten-free',
-    'Dairy-free',
-    'Nut-free',
-    'Low-carb',
-    'Keto',
-    'Paleo',
-  ];
 
   if (uploadState.isUploading) {
     return (
@@ -261,43 +246,163 @@ export function FridgeUploader({
         )}
       </div>
 
-      {/* Preferences Section */}
+      {/* Settings Preview and Generate Button */}
       {selectedFile && (
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cooking Preferences (Optional)
-            </label>
-            <textarea
-              value={preferences}
-              onChange={(e) => setPreferences(e.target.value)}
-              placeholder="e.g., I prefer quick meals, spicy food, Italian cuisine..."
-              className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              rows={2}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Dietary Restrictions
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {commonRestrictions.map((restriction) => (
-                <button
-                  key={restriction}
-                  onClick={() => toggleDietaryRestriction(restriction)}
-                  className={cn(
-                    'px-3 py-1 rounded-full text-sm border transition-all',
-                    dietaryRestrictions.includes(restriction)
-                      ? 'bg-orange-500 text-white border-orange-500'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-orange-400'
-                  )}
+          {/* Settings Preview */}
+          {userSettings && (
+            <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg">
+              <div className="flex items-start justify-between mb-3">
+                <h3 className="font-medium text-orange-900">
+                  Your Recipe Preferences
+                </h3>
+                <a
+                  href="/settings"
+                  className="text-xs text-orange-600 hover:text-orange-800 underline transition-colors"
                 >
-                  {restriction}
-                </button>
-              ))}
+                  Edit
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                {/* Dietary Preferences */}
+                {userSettings.cookingPreferences.dietaryRestrictions.length >
+                  0 && (
+                  <div>
+                    <span className="font-medium text-orange-800">
+                      Dietary:
+                    </span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {userSettings.cookingPreferences.dietaryRestrictions
+                        .slice(0, 3)
+                        .map((restriction) => (
+                          <span
+                            key={restriction}
+                            className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full text-xs"
+                          >
+                            {restriction}
+                          </span>
+                        ))}
+                      {userSettings.cookingPreferences.dietaryRestrictions
+                        .length > 3 && (
+                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-full text-xs">
+                          +
+                          {userSettings.cookingPreferences.dietaryRestrictions
+                            .length - 3}{' '}
+                          more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cuisine Preferences */}
+                {userSettings.cookingPreferences.cuisineTypes.length > 0 && (
+                  <div>
+                    <span className="font-medium text-orange-800">
+                      Cuisines:
+                    </span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {userSettings.cookingPreferences.cuisineTypes
+                        .slice(0, 3)
+                        .map((cuisine) => (
+                          <span
+                            key={cuisine}
+                            className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs"
+                          >
+                            {cuisine}
+                          </span>
+                        ))}
+                      {userSettings.cookingPreferences.cuisineTypes.length >
+                        3 && (
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-xs">
+                          +
+                          {userSettings.cookingPreferences.cuisineTypes.length -
+                            3}{' '}
+                          more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cooking Time & Spice Level */}
+                <div>
+                  <span className="font-medium text-orange-800">
+                    Preferences:
+                  </span>
+                  <div className="text-orange-700 mt-1">
+                    {userSettings.cookingPreferences.cookingTimePreference && (
+                      <span className="capitalize">
+                        {userSettings.cookingPreferences.cookingTimePreference}{' '}
+                        meals
+                      </span>
+                    )}
+                    {userSettings.cookingPreferences.spiceLevel &&
+                      userSettings.cookingPreferences.cookingTimePreference &&
+                      ', '}
+                    {userSettings.cookingPreferences.spiceLevel && (
+                      <span className="capitalize">
+                        {userSettings.cookingPreferences.spiceLevel} spice
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Equipment */}
+                {(userSettings.kitchenEquipment.basicAppliances.length > 0 ||
+                  userSettings.kitchenEquipment.cookware.length > 0) && (
+                  <div>
+                    <span className="font-medium text-orange-800">
+                      Equipment:
+                    </span>
+                    <div className="text-orange-700 mt-1">
+                      {userSettings.kitchenEquipment.basicAppliances
+                        .slice(0, 2)
+                        .join(', ')}
+                      {userSettings.kitchenEquipment.cookware.length > 0 &&
+                        userSettings.kitchenEquipment.basicAppliances.length >
+                          0 &&
+                        ', '}
+                      {userSettings.kitchenEquipment.cookware
+                        .slice(0, 1)
+                        .join(', ')}
+                      {userSettings.kitchenEquipment.basicAppliances.length +
+                        userSettings.kitchenEquipment.cookware.length >
+                        3 && '...'}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Empty state */}
+              {userSettings.cookingPreferences.dietaryRestrictions.length ===
+                0 &&
+                userSettings.cookingPreferences.cuisineTypes.length === 0 && (
+                  <div className="text-orange-600 text-sm">
+                    🍳 <strong>Tip:</strong> Set your preferences in settings to
+                    get more personalized recipes!
+                  </div>
+                )}
             </div>
-          </div>
+          )}
+
+          {/* Fallback notice if no settings loaded */}
+          {!userSettings && (
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700">
+                <strong>Personalized Recipe Generation:</strong> The AI will use
+                your saved preferences and dietary restrictions from your
+                settings to create a customized recipe.{' '}
+                <a
+                  href="/settings"
+                  className="underline hover:text-blue-800 transition-colors"
+                >
+                  Set up your preferences →
+                </a>
+              </p>
+            </div>
+          )}
 
           <Button
             onClick={handleAnalyze}
@@ -305,7 +410,7 @@ export function FridgeUploader({
             size="lg"
             loading={uploadState.isUploading}
           >
-            Generate Recipe with AI
+            Generate Personalized Recipe
           </Button>
         </div>
       )}
