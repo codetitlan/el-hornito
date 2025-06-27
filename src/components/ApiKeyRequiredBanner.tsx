@@ -17,7 +17,7 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
     // Check if user has configured a personal API key
     const hasKey = hasPersonalApiKey();
     setHasApiKey(hasKey);
-    
+
     // Check if user dismissed this banner for this session
     const dismissed = sessionStorage.getItem('api-key-banner-dismissed');
     setIsDismissed(!!dismissed);
@@ -45,13 +45,13 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
-            <h3 className="font-medium text-amber-900">
-              API Key Required
-            </h3>
+            <h3 className="font-medium text-amber-900">API Key Required</h3>
           </div>
 
           <p className="text-sm text-amber-700 mb-3">
-            This app requires a personal Anthropic API key to function. You&apos;ll need to configure your own API key in settings to generate recipes.
+            This app requires a personal Anthropic API key to function.
+            You&apos;ll need to configure your own API key in settings to
+            generate recipes.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-2 mb-3">
@@ -67,7 +67,9 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => window.open('https://console.anthropic.com/', '_blank')}
+              onClick={() =>
+                window.open('https://console.anthropic.com/', '_blank')
+              }
               className="border-amber-300 text-amber-700 hover:bg-amber-50"
             >
               <ExternalLink size={14} className="mr-1" />
@@ -76,7 +78,8 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
           </div>
 
           <p className="text-xs text-amber-600">
-            Don&apos;t have an API key? Visit Anthropic Console to create one. API keys are stored securely in your browser.
+            Don&apos;t have an API key? Visit Anthropic Console to create one.
+            API keys are stored securely in your browser.
           </p>
         </div>
 

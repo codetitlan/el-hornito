@@ -50,7 +50,9 @@ export const validateEnvironment = () => {
 
   // ANTHROPIC_API_KEY is now optional - if not provided, users must use their own API keys
   if (!ENV.ANTHROPIC_API_KEY) {
-    console.log('No shared ANTHROPIC_API_KEY found - users will need to provide their own API keys');
+    console.log(
+      'No shared ANTHROPIC_API_KEY found - users will need to provide their own API keys'
+    );
   }
 
   if (errors.length > 0) {
@@ -267,6 +269,6 @@ export const getApiKeyStatus = () => {
   return {
     hasSharedKey: !!ENV.ANTHROPIC_API_KEY,
     requiresPersonalKey: !ENV.ANTHROPIC_API_KEY,
-    mode: ENV.ANTHROPIC_API_KEY ? 'shared' : 'personal-only'
+    mode: ENV.ANTHROPIC_API_KEY ? 'shared' : 'personal-only',
   };
 };

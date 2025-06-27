@@ -264,11 +264,16 @@ export async function POST(request: NextRequest) {
     const apiKeyToUse = personalApiKey || ENV.ANTHROPIC_API_KEY;
 
     if (!apiKeyToUse) {
-      console.error('No API key available - personalApiKey:', !!personalApiKey, 'ENV.ANTHROPIC_API_KEY:', !!ENV.ANTHROPIC_API_KEY);
+      console.error(
+        'No API key available - personalApiKey:',
+        !!personalApiKey,
+        'ENV.ANTHROPIC_API_KEY:',
+        !!ENV.ANTHROPIC_API_KEY
+      );
       return NextResponse.json(
         {
           success: false,
-          error: ENV.ANTHROPIC_API_KEY 
+          error: ENV.ANTHROPIC_API_KEY
             ? 'API configuration error: No API key available'
             : 'Personal API key required. Please configure your Anthropic API key in settings.',
         } as AnalyzeFridgeResponse,
@@ -278,7 +283,10 @@ export async function POST(request: NextRequest) {
 
     // Validate API key format
     if (!apiKeyToUse.startsWith('sk-ant-api')) {
-      console.error('Invalid API key format:', apiKeyToUse.substring(0, 10) + '...');
+      console.error(
+        'Invalid API key format:',
+        apiKeyToUse.substring(0, 10) + '...'
+      );
       return NextResponse.json(
         {
           success: false,
@@ -444,12 +452,17 @@ export async function POST(request: NextRequest) {
     // Handle specific Anthropic API errors
     if (error instanceof Error) {
       // Check for authentication errors (invalid API key)
-      if (error.message.includes('401') || error.message.includes('unauthorized') || error.message.includes('authentication') || error.message.includes('invalid_api_key')) {
+      if (
+        error.message.includes('401') ||
+        error.message.includes('unauthorized') ||
+        error.message.includes('authentication') ||
+        error.message.includes('invalid_api_key')
+      ) {
         return NextResponse.json(
           {
             success: false,
-            error: personalApiKey 
-              ? 'Invalid personal API key. Please check your Anthropic API key in settings.' 
+            error: personalApiKey
+              ? 'Invalid personal API key. Please check your Anthropic API key in settings.'
               : 'Authentication failed. Please configure a valid API key.',
             processingTime,
           } as AnalyzeFridgeResponse,
@@ -480,7 +493,10 @@ export async function POST(request: NextRequest) {
       }
 
       // Check for permission denied errors
-      if (error.message.includes('403') || error.message.includes('forbidden')) {
+      if (
+        error.message.includes('403') ||
+        error.message.includes('forbidden')
+      ) {
         return NextResponse.json(
           {
             success: false,
