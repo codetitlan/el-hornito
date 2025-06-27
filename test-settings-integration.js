@@ -81,42 +81,51 @@ async function testRecipeGeneration() {
     ctx.fillStyle = 'red';
     ctx.fillRect(0, 0, 1, 1);
 
-    canvas.toBlob(async (blob) => {
-      formData.append('image', blob, 'test.png');
-
-      // Add test user settings
-      const testUserSettings = {
-        cookingPreferences: {
-          cuisineTypes: ['italian'],
-          dietaryRestrictions: ['vegetarian'],
-          spiceLevel: 'mild',
-          cookingTimePreference: 'quick',
-          defaultServings: 4
-        },
-        kitchenEquipment: {
-          basicAppliances: ['oven', 'stovetop'],
-          cookware: ['pan', 'pot']
+    // Wrap toBlob in a Promise and await it
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('Failed to create blob from canvas'));
         }
-      };
+      }, 'image/png');
+    });
 
-      formData.append('userSettings', JSON.stringify(testUserSettings));
+    formData.append('image', blob, 'test.png');
 
-      try {
-        const response = await fetch('/api/analyze-fridge', {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json();
-        console.log('✅ Recipe generation with settings:', result.success ? 'SUCCESS' : 'FAILED');
-        console.log('Recipe title:', result.recipe?.title);
-
-      } catch (error) {
-        console.error('❌ Recipe generation test failed:', error);
+    // Add test user settings
+    const testUserSettings = {
+      cookingPreferences: {
+        cuisineTypes: ['italian'],
+        dietaryRestrictions: ['vegetarian'],
+        spiceLevel: 'mild',
+        cookingTimePreference: 'quick',
+        defaultServings: 4
+      },
+      kitchenEquipment: {
+        basicAppliances: ['oven', 'stovetop'],
+        cookware: ['pan', 'pot']
       }
-    }, 'image/png');
+    };
 
-    return true;
+    formData.append('userSettings', JSON.stringify(testUserSettings));
+
+    try {
+      const response = await fetch('/api/analyze-fridge', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      console.log('✅ Recipe generation with settings:', result.success ? 'SUCCESS' : 'FAILED');
+      console.log('Recipe title:', result.recipe?.title);
+      return result.success;
+    } catch (error) {
+      console.error('❌ Recipe generation test failed:', error);
+      return false;
+    }
+
   } catch (error) {
     console.error('❌ Recipe generation test failed:', error);
     return false;

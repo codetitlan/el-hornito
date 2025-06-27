@@ -8,10 +8,9 @@ import { Recipe, AnalyzeFridgeResponse } from '@/types';
 // Initialize default Anthropic client (fallback)
 // Will be replaced by user-specific client if personal API key provided
 
-// Enhanced request validation schema (reserved for future validation implementation)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// Enhanced request validation schema
 const EnhancedAnalyzeRequestSchema = z.object({
-  image: z.string().min(1, 'Image data is required'),
+  image: z.any(), // File object validation handled separately
   preferences: z.string().optional(),
   dietaryRestrictions: z.array(z.string()).optional(),
   userSettings: z
@@ -214,7 +213,49 @@ export async function POST(request: NextRequest) {
         userSettings = JSON.parse(userSettingsJson);
       } catch (error) {
         console.error('Failed to parse user settings:', error);
-        // Continue without user settings rather than failing
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Invalid user settings format',
+          } as AnalyzeFridgeResponse,
+          { status: 400 }
+        );
+      }
+    }
+
+    // Prepare validation data for schema
+    const validationData = {
+      image: imageFile,
+      preferences: preferences || undefined,
+      dietaryRestrictions: dietaryRestrictions
+        ? (() => {
+            try {
+              return JSON.parse(dietaryRestrictions);
+            } catch {
+              return undefined;
+            }
+          })()
+        : undefined,
+      userSettings: userSettings || undefined,
+      apiKey: personalApiKey || undefined,
+    };
+
+    // Validate request structure using our schema
+    try {
+      EnhancedAnalyzeRequestSchema.parse(validationData);
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        const errorMessages = validationError.errors
+          .map((e) => `${e.path.join('.')}: ${e.message}`)
+          .join(', ');
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Request validation failed: ${errorMessages}`,
+          } as AnalyzeFridgeResponse,
+          { status: 400 }
+        );
       }
     }
 
