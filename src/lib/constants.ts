@@ -91,3 +91,167 @@ Requirements:
 - Make the recipe practical and achievable
 - If ingredients are unclear, make reasonable assumptions
 `.trim();
+
+// User Settings Constants
+export const SETTINGS_CONFIG = {
+  // Storage Configuration
+  STORAGE_KEY: 'elhornito-user-settings',
+  CURRENT_VERSION: '1.0.0',
+
+  // Default Values
+  DEFAULT_SERVINGS: 4,
+  DEFAULT_SPICE_LEVEL: 'medium' as const,
+  DEFAULT_COOKING_TIME: 'moderate' as const,
+
+  // Available Options
+  CUISINE_TYPES: [
+    'Italian',
+    'Asian',
+    'Mexican',
+    'Mediterranean',
+    'American',
+    'French',
+    'Indian',
+    'Thai',
+    'Japanese',
+    'Greek',
+    'Spanish',
+    'Middle Eastern',
+    'Korean',
+    'Vietnamese',
+    'Chinese',
+    'German',
+    'Brazilian',
+    'Other',
+  ],
+
+  DIETARY_RESTRICTIONS: [
+    'Vegetarian',
+    'Vegan',
+    'Gluten-free',
+    'Dairy-free',
+    'Nut-free',
+    'Keto',
+    'Paleo',
+    'Low-carb',
+    'Low-sodium',
+    'Sugar-free',
+    'Halal',
+    'Kosher',
+    'Pescatarian',
+    'Raw food',
+  ],
+
+  SPICE_LEVELS: [
+    { value: 'mild', label: 'Mild', description: 'Little to no heat' },
+    { value: 'medium', label: 'Medium', description: 'Moderate spice level' },
+    { value: 'spicy', label: 'Spicy', description: 'Hot and flavorful' },
+    { value: 'very-spicy', label: 'Very Spicy', description: 'Intense heat' },
+  ],
+
+  COOKING_TIME_PREFERENCES: [
+    {
+      value: 'quick',
+      label: 'Quick (≤30 min)',
+      description: 'Fast meals for busy days',
+    },
+    {
+      value: 'moderate',
+      label: 'Moderate (30-60 min)',
+      description: 'Balanced cooking time',
+    },
+    {
+      value: 'elaborate',
+      label: 'Elaborate (60+ min)',
+      description: 'Detailed, complex recipes',
+    },
+  ],
+
+  MEAL_TYPES: [
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Snacks',
+    'Desserts',
+    'Appetizers',
+    'Salads',
+    'Soups',
+    'Sandwiches',
+    'Beverages',
+  ],
+
+  // Kitchen Equipment Categories
+  BASIC_APPLIANCES: [
+    'Oven',
+    'Stovetop',
+    'Microwave',
+    'Refrigerator',
+    'Freezer',
+    'Toaster',
+  ],
+
+  ADVANCED_APPLIANCES: [
+    'Air Fryer',
+    'Instant Pot',
+    'Slow Cooker',
+    'Food Processor',
+    'Blender',
+    'Stand Mixer',
+    'Rice Cooker',
+    'Bread Maker',
+    'Dehydrator',
+    'Sous Vide',
+  ],
+
+  COOKWARE: [
+    'Non-stick pans',
+    'Cast iron skillet',
+    'Stainless steel pots',
+    'Wok',
+    'Dutch oven',
+    'Grill pan',
+    'Steamer',
+    'Roasting pan',
+    'Stockpot',
+  ],
+
+  BAKING_EQUIPMENT: [
+    'Baking sheets',
+    'Cake pans',
+    'Muffin tins',
+    'Loaf pans',
+    'Pie dishes',
+    'Cookie cutters',
+    'Rolling pin',
+    'Measuring cups',
+    'Kitchen scale',
+  ],
+} as const;
+
+// Default Settings Object Factory
+export const createDefaultUserSettings = () => ({
+  version: SETTINGS_CONFIG.CURRENT_VERSION,
+  lastUpdated: new Date().toISOString(),
+  cookingPreferences: {
+    cuisineTypes: [] as string[],
+    dietaryRestrictions: [] as string[],
+    spiceLevel: SETTINGS_CONFIG.DEFAULT_SPICE_LEVEL,
+    cookingTimePreference: SETTINGS_CONFIG.DEFAULT_COOKING_TIME,
+    mealTypes: [] as string[],
+    defaultServings: SETTINGS_CONFIG.DEFAULT_SERVINGS,
+    additionalNotes: undefined,
+  },
+  kitchenEquipment: {
+    basicAppliances: ['Oven', 'Stovetop', 'Microwave'] as string[], // Common defaults
+    advancedAppliances: [] as string[],
+    cookware: [] as string[],
+    bakingEquipment: [] as string[],
+    other: [] as string[],
+  },
+  apiConfiguration: {
+    hasPersonalKey: false,
+    keyValidated: false,
+    usageTracking: false,
+    lastValidation: undefined,
+  },
+});

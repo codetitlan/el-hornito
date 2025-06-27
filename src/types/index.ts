@@ -74,3 +74,59 @@ export interface AppConfig {
   apiTimeout: number;
   retryAttempts: number;
 }
+
+// User Settings Types
+export interface UserSettings {
+  version: string; // For future migrations
+  lastUpdated: string;
+  cookingPreferences: CookingPreferences;
+  kitchenEquipment: KitchenEquipment;
+  apiConfiguration: ApiConfiguration;
+}
+
+export interface CookingPreferences {
+  cuisineTypes: string[];
+  dietaryRestrictions: string[];
+  spiceLevel: 'mild' | 'medium' | 'spicy' | 'very-spicy';
+  cookingTimePreference: 'quick' | 'moderate' | 'elaborate';
+  mealTypes: string[];
+  defaultServings: number;
+  additionalNotes?: string;
+}
+
+export interface KitchenEquipment {
+  basicAppliances: string[];
+  advancedAppliances: string[];
+  cookware: string[];
+  bakingEquipment: string[];
+  other: string[];
+}
+
+export interface ApiConfiguration {
+  hasPersonalKey: boolean;
+  keyValidated: boolean;
+  usageTracking: boolean;
+  lastValidation?: string;
+}
+
+// Settings Management Types
+export interface SettingsValidation {
+  isValid: boolean;
+  errors: string[];
+  warnings?: string[];
+}
+
+export interface SettingsExport {
+  settings: UserSettings;
+  exportDate: string;
+  version: string;
+}
+
+// Enhanced API Types with Settings Support
+export interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
+  userSettings?: {
+    cookingPreferences?: CookingPreferences;
+    kitchenEquipment?: KitchenEquipment;
+  };
+  apiKey?: string; // User's personal API key
+}
