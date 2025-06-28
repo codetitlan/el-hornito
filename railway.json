@@ -15,7 +15,7 @@
     ]
   },
   "deploy": {
-    "startCommand": "npm start",
+    "startCommand": "node server.js",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 60,
     "restartPolicyType": "ON_FAILURE",
@@ -35,7 +35,7 @@
     },
     "staging": {
       "deploy": {
-        "startCommand": "npm start",
+        "startCommand": "node server.js",
         "healthcheckTimeout": 45,
         "overlapSeconds": 30,
         "restartPolicyMaxRetries": 2

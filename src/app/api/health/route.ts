@@ -9,6 +9,9 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       environment: ENV.NODE_ENV,
       apiKeyMode: ENV.ANTHROPIC_API_KEY ? 'shared' : 'personal-only',
+      port: process.env.PORT || '3000',
+      hostname: process.env.HOSTNAME || 'localhost',
+      nodeEnv: process.env.NODE_ENV,
       services: {
         api: 'operational',
         settings: 'operational',

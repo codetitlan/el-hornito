@@ -45,7 +45,8 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+# Use Railway's PORT environment variable if available, otherwise default to 3000
+ENV PORT ${PORT:-3000}
 ENV HOSTNAME "0.0.0.0"
 
 # Runtime environment variables will be injected here

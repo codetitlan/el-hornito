@@ -31,7 +31,7 @@
     }
   },
   "deploy": {
-    "startCommand": "npm start",
+    "startCommand": "node server.js",
     "preDeployCommand": "npm run db:check && npm run cache:warm",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 90,
@@ -57,7 +57,7 @@
     },
     "staging": {
       "deploy": {
-        "startCommand": "npm start",
+        "startCommand": "node server.js",
         "healthcheckTimeout": 60,
         "overlapSeconds": 30,
         "restartPolicyMaxRetries": 3,
@@ -90,7 +90,7 @@
         "watchPatterns": ["src/**", "public/**", "package.json"]
       },
       "deploy": {
-        "startCommand": "npm start",
+        "startCommand": "node server.js",
         "healthcheckTimeout": 45,
         "restartPolicyMaxRetries": 2,
         "overlapSeconds": 20,
@@ -99,7 +99,7 @@
     },
     "performance-test": {
       "deploy": {
-        "startCommand": "npm start",
+        "startCommand": "node server.js",
         "healthcheckTimeout": 120,
         "multiRegionConfig": {
           "us-west2": { "numReplicas": 3 },
