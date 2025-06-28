@@ -1,0 +1,41 @@
+{
+  "app": {
+    "title": "El Hornito - Fridge to Recipe AI",
+    "tagline": "Fridge to Recipe AI"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "startOver": "Start Over",
+    "saveChanges": "Save Changes",
+    "allSaved": "All Saved",
+    "saving": "Saving...",
+    "resetToDefaults": "Reset to Defaults"
+  },
+  "navigation": {
+    "home": "Home",
+    "settings": "Settings",
+    "backToHome": "Back to Home"
+  },
+  "status": {
+    "poweredBy": "Powered by Claude AI",
+    "unsavedChanges": "Unsaved changes",
+    "loading": "Loading...",
+    "ready": "Ready"
+  },
+  "upload": {
+    "steps": {
+      "preparing": "Preparing image...",
+      "uploading": "Uploading to server...",
+      "analyzing": "Analyzing ingredients...",
+      "generating": "Generating recipe...",
+      "complete": "Complete!"
+    }
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  }
+}
