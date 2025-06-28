@@ -7,6 +7,27 @@ export interface UploadOptions {
   onStatusUpdate?: (status: string) => void;
 }
 
+// Check if user has a personal API key configured
+export const hasPersonalApiKey = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const storedApiKey = localStorage.getItem('elhornito-api-key');
+  return !!storedApiKey;
+};
+
+// Get the personal API key if available
+export const getPersonalApiKey = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  const storedApiKey = localStorage.getItem('elhornito-api-key');
+  if (!storedApiKey) return null;
+
+  try {
+    return atob(storedApiKey);
+  } catch (error) {
+    console.error('Failed to decode stored API key:', error);
+    return null;
+  }
+};
+
 export const analyzeImage = async (
   file: File,
   userSettings?: UserSettings,
@@ -18,12 +39,20 @@ export const analyzeImage = async (
     onStatusUpdate?.('Preparing image...');
     onProgress?.(10);
 
+    // Check if we have a personal API key available
+    const personalApiKey = getPersonalApiKey();
+
     // Create form data
     const formData = new FormData();
     formData.append('image', file);
 
     if (userSettings) {
       formData.append('userSettings', JSON.stringify(userSettings));
+    }
+
+    // Add personal API key if available
+    if (personalApiKey) {
+      formData.append('apiKey', personalApiKey);
     }
 
     onStatusUpdate?.('Uploading to server...');
@@ -42,6 +71,15 @@ export const analyzeImage = async (
       const errorData = await response
         .json()
         .catch(() => ({ error: 'Network error' }));
+
+      // Handle specific API key related errors
+      if (response.status === 401) {
+        throw new Error(
+          errorData.error ||
+            'Authentication failed. Please check your API key configuration.'
+        );
+      }
+
       throw new Error(errorData.error || `HTTP ${response.status}`);
     }
 
@@ -152,8 +190,19 @@ export const analyzeFridgeMock = async (
   return customizedRecipe;
 };
 
-// Choose API function based on environment
-export const analyzeFridge =
-  process.env.NODE_ENV === 'development' && !process.env.ANTHROPIC_API_KEY
-    ? analyzeFridgeMock
-    : analyzeImage;
+// Choose API function based on environment and API key availability
+export const analyzeFridge = (() => {
+  // In development, use mock if no ANTHROPIC_API_KEY is set
+  if (
+    process.env.NODE_ENV === 'development' &&
+    !process.env.ANTHROPIC_API_KEY
+  ) {
+    console.log(
+      'Using mock API in development mode - no ANTHROPIC_API_KEY found'
+    );
+    return analyzeFridgeMock;
+  }
+
+  // In production or development with API key, use real API
+  return analyzeImage;
+})();
