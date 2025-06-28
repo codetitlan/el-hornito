@@ -192,17 +192,23 @@ export const analyzeFridgeMock = async (
 
 // Choose API function based on environment and API key availability
 export const analyzeFridge = (() => {
-  // In development, use mock if no ANTHROPIC_API_KEY is set
-  if (
-    process.env.NODE_ENV === 'development' &&
-    !process.env.ANTHROPIC_API_KEY
-  ) {
+  // Check if we have an environment API key at runtime
+  const hasEnvApiKey = !!process.env.ANTHROPIC_API_KEY;
+
+  // In development without environment API key, use mock
+  if (process.env.NODE_ENV === 'development' && !hasEnvApiKey) {
     console.log(
-      'Using mock API in development mode - no ANTHROPIC_API_KEY found'
+      '🔧 Using mock API in development mode - no ANTHROPIC_API_KEY found'
     );
     return analyzeFridgeMock;
   }
 
-  // In production or development with API key, use real API
+  // In all other cases (production or development with API key), use real API
+  // The real API will handle personal API key fallback if environment key is missing
+  console.log(
+    `🚀 Using real API - Environment key: ${
+      hasEnvApiKey ? 'Available' : 'Not available'
+    }`
+  );
   return analyzeImage;
 })();

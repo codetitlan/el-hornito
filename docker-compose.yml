@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  elhornito:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      # Runtime environment variables
+      # Uncomment and set these for shared API key mode:
+      # - ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
+
+      # Public environment variables
+      - NEXT_PUBLIC_MAX_FILE_SIZE=10485760
+      - NEXT_PUBLIC_ALLOWED_FORMATS=image/jpeg,image/png,image/webp
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+      # System environment
+      - NODE_ENV=production
+
+    # Alternative: Use env_file for sensitive variables
+    # env_file:
+    #   - .env.production
+
+    restart: unless-stopped
+
+  # Example for production with secrets management
+  elhornito-production:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_MAX_FILE_SIZE=10485760
+      - NEXT_PUBLIC_ALLOWED_FORMATS=image/jpeg,image/png,image/webp
+      - NODE_ENV=production
+      - ANTHROPIC_API_KEY_FILE=/run/secrets/anthropic_api_key
+    secrets:
+      - anthropic_api_key
+    profiles:
+      - production
+
+secrets:
+  anthropic_api_key:
+    external: true

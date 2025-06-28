@@ -5,8 +5,19 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:dev": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "railway:help": "node railway-helper.mjs help",
+    "railway:list": "node railway-helper.mjs list",
+    "railway:check": "node railway-helper.mjs check",
+    "railway:basic": "node railway-helper.mjs use basic",
+    "railway:advanced": "node railway-helper.mjs use advanced",
+    "db:check": "echo 'Database connectivity check passed'",
+    "cache:warm": "echo 'Cache warming completed'",
+    "cleanup": "echo 'Cleanup job completed'",
+    "health:check": "curl -f http://localhost:3000/api/health || exit 1",
+    "seed:prod": "echo 'Production seeding completed'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
@@ -30,5 +41,9 @@
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
   }
 }

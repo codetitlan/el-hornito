@@ -36,7 +36,7 @@ export const APP_CONFIG = {
   },
 } as const;
 
-// Environment Configuration
+// Environment Configuration (Runtime-aware)
 export const ENV = {
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

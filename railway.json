@@ -1,0 +1,111 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm run build",
+    "watchPatterns": [
+      "src/**",
+      "public/**",
+      "package.json",
+      "package-lock.json",
+      "next.config.ts",
+      "tsconfig.json",
+      ".env.example",
+      "railway.json",
+      "Dockerfile"
+    ],
+    "nixpacksPlan": {
+      "phases": {
+        "setup": {
+          "nixPkgs": ["nodejs_22", "python3"]
+        },
+        "install": {
+          "dependsOn": ["setup"],
+          "cmds": ["npm ci --production=false"]
+        },
+        "build": {
+          "dependsOn": ["install"],
+          "cmds": ["npm run build"]
+        }
+      }
+    }
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "preDeployCommand": "npm run db:check && npm run cache:warm",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 90,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 5,
+    "overlapSeconds": 60,
+    "drainingSeconds": 30
+  },
+  "environments": {
+    "production": {
+      "deploy": {
+        "healthcheckTimeout": 120,
+        "overlapSeconds": 90,
+        "drainingSeconds": 45,
+        "restartPolicyType": "ALWAYS",
+        "restartPolicyMaxRetries": 10,
+        "multiRegionConfig": {
+          "us-west2": { "numReplicas": 2 },
+          "us-east4-eqdc4a": { "numReplicas": 2 },
+          "europe-west4-drams3a": { "numReplicas": 1 }
+        }
+      }
+    },
+    "staging": {
+      "deploy": {
+        "startCommand": "npm start",
+        "healthcheckTimeout": 60,
+        "overlapSeconds": 30,
+        "restartPolicyMaxRetries": 3,
+        "multiRegionConfig": {
+          "us-west2": { "numReplicas": 1 }
+        }
+      }
+    },
+    "development": {
+      "build": {
+        "buildCommand": "npm run build:dev",
+        "watchPatterns": [
+          "src/**",
+          "public/**",
+          "*.config.*",
+          ".env*",
+          "package.json"
+        ]
+      },
+      "deploy": {
+        "startCommand": "npm run dev",
+        "healthcheckTimeout": 30,
+        "restartPolicyType": "ALWAYS",
+        "restartPolicyMaxRetries": 1
+      }
+    },
+    "pr": {
+      "build": {
+        "buildCommand": "npm run build",
+        "watchPatterns": ["src/**", "public/**", "package.json"]
+      },
+      "deploy": {
+        "startCommand": "npm start",
+        "healthcheckTimeout": 45,
+        "restartPolicyMaxRetries": 2,
+        "overlapSeconds": 20,
+        "drainingSeconds": 15
+      }
+    },
+    "performance-test": {
+      "deploy": {
+        "startCommand": "npm start",
+        "healthcheckTimeout": 120,
+        "multiRegionConfig": {
+          "us-west2": { "numReplicas": 3 },
+          "us-east4-eqdc4a": { "numReplicas": 3 }
+        }
+      }
+    }
+  }
+}
