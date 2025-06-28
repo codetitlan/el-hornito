@@ -8,10 +8,13 @@ import { OnboardingBanner } from '@/components/OnboardingBanner';
 import { ApiKeyRequiredBanner } from '@/components/ApiKeyRequiredBanner';
 import { Recipe } from '@/types';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations('common');
+  const tErrors = useTranslations('errors');
 
   const handleRecipeGenerated = (newRecipe: Recipe) => {
     setRecipe(newRecipe);
@@ -48,8 +51,10 @@ export default function Home() {
                 <ChefHat className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">El Hornito</h1>
-                <p className="text-xs text-gray-500">Fridge to Recipe AI</p>
+                <h1 className="text-xl font-bold text-gray-900">
+                  {t('app.title').split(' - ')[0]}
+                </h1>
+                <p className="text-xs text-gray-500">{t('app.tagline')}</p>
               </div>
             </div>
 
@@ -59,7 +64,9 @@ export default function Home() {
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
               >
                 <Settings className="w-4 h-4" />
-                <span className="hidden sm:inline">Settings</span>
+                <span className="hidden sm:inline">
+                  {t('navigation.settings')}
+                </span>
               </Link>
 
               {recipe && (
@@ -67,7 +74,7 @@ export default function Home() {
                   onClick={handleStartOver}
                   className="text-sm text-orange-600 hover:text-orange-700 font-medium"
                 >
-                  Start Over
+                  {t('actions.startOver')}
                 </button>
               )}
             </div>
@@ -82,21 +89,19 @@ export default function Home() {
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <Sparkles size={16} />
-                Powered by Claude AI
+                {t('hero.poweredByBadge')}
               </div>
 
               <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Transform Your{' '}
+                {t('hero.title').split(t('hero.titleHighlight'))[0]}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-                  Fridge
-                </span>{' '}
-                Into Amazing Recipes
+                  {t('hero.titleHighlight')}
+                </span>
+                {t('hero.title').split(t('hero.titleHighlight'))[1]}
               </h1>
 
               <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Upload a photo of your fridge contents and let our AI chef
-                create personalized recipes that make the most of what you
-                already have. No more food waste, just delicious meals!
+                {t('hero.subtitle')}
               </p>
 
               {/* Feature Pills */}
@@ -104,19 +109,19 @@ export default function Home() {
                 <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border">
                   <Camera className="w-4 h-4 text-orange-500" />
                   <span className="text-sm font-medium text-gray-700">
-                    Photo Analysis
+                    {t('hero.features.photoAnalysis')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border">
                   <Sparkles className="w-4 h-4 text-orange-500" />
                   <span className="text-sm font-medium text-gray-700">
-                    AI-Powered
+                    {t('hero.features.aiPowered')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border">
                   <Utensils className="w-4 h-4 text-orange-500" />
                   <span className="text-sm font-medium text-gray-700">
-                    Custom Recipes
+                    {t('hero.features.customRecipes')}
                   </span>
                 </div>
               </div>
@@ -161,7 +166,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-red-800">
-                        Something went wrong
+                        {tErrors('mainPage.errorTitle')}
                       </h3>
                       <p className="text-sm text-red-700 mt-1">{error}</p>
                     </div>
@@ -173,7 +178,7 @@ export default function Home() {
             {/* How It Works Section */}
             <div className="mt-20 text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-12">
-                How It Works
+                {t('howItWorks.title')}
               </h2>
 
               <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -182,10 +187,10 @@ export default function Home() {
                     <Camera className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    1. Take a Photo
+                    {t('howItWorks.steps.takePhoto.title')}
                   </h3>
                   <p className="text-gray-600">
-                    Snap a clear photo of your fridge contents or pantry items
+                    {t('howItWorks.steps.takePhoto.description')}
                   </p>
 
                   {/* Connection Line */}
@@ -197,10 +202,10 @@ export default function Home() {
                     <Sparkles className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    2. AI Analysis
+                    {t('howItWorks.steps.aiAnalysis.title')}
                   </h3>
                   <p className="text-gray-600">
-                    Our AI identifies ingredients and considers your preferences
+                    {t('howItWorks.steps.aiAnalysis.description')}
                   </p>
 
                   {/* Connection Line */}
@@ -212,10 +217,10 @@ export default function Home() {
                     <ChefHat className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    3. Get Recipe
+                    {t('howItWorks.steps.getRecipe.title')}
                   </h3>
                   <p className="text-gray-600">
-                    Receive a personalized recipe with step-by-step instructions
+                    {t('howItWorks.steps.getRecipe.description')}
                   </p>
                 </div>
               </div>
@@ -237,14 +242,12 @@ export default function Home() {
               <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
                 <ChefHat className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-gray-900">El Hornito</span>
+              <span className="font-bold text-gray-900">
+                {t('app.title').split(' - ')[0]}
+              </span>
             </div>
-            <p className="text-gray-600 text-sm">
-              Transforming fridges into feasts with the power of AI
-            </p>
-            <p className="text-gray-400 text-xs mt-2">
-              Powered by Claude AI • Made with ❤️ for food lovers
-            </p>
+            <p className="text-gray-600 text-sm">{t('footer.tagline')}</p>
+            <p className="text-gray-400 text-xs mt-2">{t('footer.credits')}</p>
           </div>
         </div>
       </footer>

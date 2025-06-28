@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { SettingsManager } from '@/lib/settings';
+import { useTranslations } from 'next-intl';
 
 interface OnboardingBannerProps {
   className?: string;
@@ -12,6 +13,7 @@ interface OnboardingBannerProps {
 export function OnboardingBanner({ className }: OnboardingBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
+  const t = useTranslations('common');
 
   useEffect(() => {
     const settingsManager = SettingsManager.getInstance();
@@ -66,7 +68,7 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
       <button
         onClick={handleDismiss}
         className="absolute top-2 right-2 p-1 text-purple-400 hover:text-purple-600 transition-colors"
-        title="Dismiss"
+        title={t('actions.dismiss')}
       >
         <X size={16} />
       </button>
@@ -79,14 +81,14 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
         <div className="flex-1">
           <h3 className="font-medium text-purple-900 mb-1">
             {isNewUser
-              ? '🎉 Welcome to El Hornito!'
-              : '✨ Enhance Your Experience'}
+              ? t('onboarding.welcomeTitle')
+              : t('onboarding.enhanceTitle')}
           </h3>
 
           <p className="text-sm text-purple-700 mb-3">
             {isNewUser
-              ? 'Get personalized recipe recommendations by setting up your cooking preferences and dietary restrictions.'
-              : 'Complete your profile to get even better recipe suggestions tailored to your tastes and equipment.'}
+              ? t('onboarding.welcomeDescription')
+              : t('onboarding.enhanceDescription')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-2">
@@ -97,7 +99,7 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
               className="border-purple-300 text-purple-700 hover:bg-purple-50"
             >
               <Sparkles size={14} className="mr-1" />
-              Use Smart Defaults
+              {t('actions.useSmartDefaults')}
             </Button>
 
             <Button
@@ -106,7 +108,7 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
               className="bg-purple-600 hover:bg-purple-700 text-white"
             >
               <Settings size={14} className="mr-1" />
-              Customize Settings
+              {t('actions.customizeSettings')}
             </Button>
           </div>
         </div>

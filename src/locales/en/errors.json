@@ -28,6 +28,16 @@
     "unexpectedError": "An unexpected error occurred",
     "tryAgain": "Please try again"
   },
+  "errorBoundary": {
+    "title": "Oops! Something went wrong",
+    "description": "We encountered an unexpected error. Our team has been notified and we're working on a fix.",
+    "tryAgainButton": "Try Again",
+    "goHomeButton": "Go Home",
+    "errorDetailsTitle": "Error Details (Development)"
+  },
+  "mainPage": {
+    "errorTitle": "Something went wrong"
+  },
   "apiKeyBanner": {
     "title": "API Key Required",
     "description": "This app requires a personal Anthropic API key to function. You'll need to configure your own API key in settings to generate recipes.",

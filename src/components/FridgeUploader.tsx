@@ -3,6 +3,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react';
+import Link from 'next/link';
 import { cn, validateFile, formatFileSize } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
 import { Button } from './ui/Button';
@@ -10,6 +11,7 @@ import { ProgressSpinner } from './ui/LoadingSpinner';
 import { analyzeFridge } from '@/lib/api';
 import { Recipe, UserSettings } from '@/types';
 import { SettingsManager } from '@/lib/settings';
+import { useTranslations } from 'next-intl';
 
 interface FridgeUploaderProps {
   onRecipeGenerated: (recipe: Recipe) => void;
@@ -37,6 +39,7 @@ export function FridgeUploader({
     error: null,
   });
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+  const t = useTranslations('common.fridgeUploader');
 
   // Load user settings on component mount
   useEffect(() => {
@@ -52,14 +55,14 @@ export function FridgeUploader({
 
       const validation = validateFile(file);
       if (!validation.isValid) {
-        onError(validation.error || 'Invalid file');
+        onError(validation.error || t('invalidFile'));
         return;
       }
 
       setSelectedFile(file);
       setUploadState((prev) => ({ ...prev, error: null }));
     },
-    [onError]
+    [onError, t]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -90,7 +93,7 @@ export function FridgeUploader({
     setUploadState({
       isUploading: true,
       progress: 0,
-      status: 'Preparing...',
+      status: t('preparing'),
       error: null,
     });
 
@@ -114,7 +117,7 @@ export function FridgeUploader({
       setSelectedFile(null);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Analysis failed';
+        error instanceof Error ? error.message : t('analysisFailed');
       onError(errorMessage);
       setUploadState((prev) => ({ ...prev, error: errorMessage }));
     } finally {
@@ -146,8 +149,7 @@ export function FridgeUploader({
           message={uploadState.status}
         />
         <p className="text-center text-gray-600 max-w-md">
-          Our AI is analyzing your fridge contents and creating a perfect recipe
-          just for you!
+          {t('analyzingMessage')}
         </p>
       </div>
     );
@@ -183,8 +185,8 @@ export function FridgeUploader({
                   e.stopPropagation();
                   removeFile();
                 }}
-                title="Remove image"
-                aria-label="Remove selected image"
+                title={t('removeImage')}
+                aria-label={t('removeSelectedImage')}
                 className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
               >
                 <X size={12} />
@@ -208,13 +210,9 @@ export function FridgeUploader({
             </div>
             <div>
               <p className="text-lg font-medium text-gray-900">
-                {isDragActive
-                  ? 'Drop your photo here'
-                  : 'Upload your fridge photo'}
+                {isDragActive ? t('dropPhoto') : t('uploadPhoto')}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
-                Drag & drop or click to browse (JPEG, PNG, WebP up to 10MB)
-              </p>
+              <p className="text-sm text-gray-500 mt-1">{t('dragDrop')}</p>
             </div>
 
             {/* Camera option for mobile */}
@@ -239,7 +237,7 @@ export function FridgeUploader({
                   input.click();
                 }}
               >
-                Take Photo
+                {t('takePhoto')}
               </Button>
             </div>
           </div>
@@ -254,14 +252,14 @@ export function FridgeUploader({
             <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-medium text-orange-900">
-                  Your Recipe Preferences
+                  {t('yourRecipePreferences')}
                 </h3>
-                <a
+                <Link
                   href="/settings"
                   className="text-xs text-orange-600 hover:text-orange-800 underline transition-colors"
                 >
-                  Edit
-                </a>
+                  {t('edit')}
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -270,7 +268,7 @@ export function FridgeUploader({
                   0 && (
                   <div>
                     <span className="font-medium text-orange-800">
-                      Dietary:
+                      {t('dietary')}
                     </span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {userSettings.cookingPreferences.dietaryRestrictions
@@ -300,7 +298,7 @@ export function FridgeUploader({
                 {userSettings.cookingPreferences.cuisineTypes.length > 0 && (
                   <div>
                     <span className="font-medium text-orange-800">
-                      Cuisines:
+                      {t('cuisines')}
                     </span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {userSettings.cookingPreferences.cuisineTypes
@@ -329,13 +327,13 @@ export function FridgeUploader({
                 {/* Cooking Time & Spice Level */}
                 <div>
                   <span className="font-medium text-orange-800">
-                    Preferences:
+                    {t('preferences')}
                   </span>
                   <div className="text-orange-700 mt-1">
                     {userSettings.cookingPreferences.cookingTimePreference && (
                       <span className="capitalize">
                         {userSettings.cookingPreferences.cookingTimePreference}{' '}
-                        meals
+                        {t('meals')}
                       </span>
                     )}
                     {userSettings.cookingPreferences.spiceLevel &&
@@ -343,7 +341,8 @@ export function FridgeUploader({
                       ', '}
                     {userSettings.cookingPreferences.spiceLevel && (
                       <span className="capitalize">
-                        {userSettings.cookingPreferences.spiceLevel} spice
+                        {userSettings.cookingPreferences.spiceLevel}{' '}
+                        {t('spice')}
                       </span>
                     )}
                   </div>
@@ -354,7 +353,7 @@ export function FridgeUploader({
                   userSettings.kitchenEquipment.cookware.length > 0) && (
                   <div>
                     <span className="font-medium text-orange-800">
-                      Equipment:
+                      {t('equipment')}
                     </span>
                     <div className="text-orange-700 mt-1">
                       {userSettings.kitchenEquipment.basicAppliances
@@ -380,8 +379,7 @@ export function FridgeUploader({
                 0 &&
                 userSettings.cookingPreferences.cuisineTypes.length === 0 && (
                   <div className="text-orange-600 text-sm">
-                    🍳 <strong>Tip:</strong> Set your preferences in settings to
-                    get more personalized recipes!
+                    {t('tip')} <strong>{t('tipText')}</strong>
                   </div>
                 )}
             </div>
@@ -391,15 +389,14 @@ export function FridgeUploader({
           {!userSettings && (
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-700">
-                <strong>Personalized Recipe Generation:</strong> The AI will use
-                your saved preferences and dietary restrictions from your
-                settings to create a customized recipe.{' '}
-                <a
+                <strong>{t('personalizedRecipeGeneration')}</strong>{' '}
+                {t('personalizedRecipeDescription')}{' '}
+                <Link
                   href="/settings"
                   className="underline hover:text-blue-800 transition-colors"
                 >
-                  Set up your preferences →
-                </a>
+                  {t('setUpPreferences')}
+                </Link>
               </p>
             </div>
           )}
@@ -410,7 +407,7 @@ export function FridgeUploader({
             size="lg"
             loading={uploadState.isUploading}
           >
-            Generate Personalized Recipe
+            {t('generateRecipe')}
           </Button>
         </div>
       )}

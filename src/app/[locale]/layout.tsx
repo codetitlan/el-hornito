@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -22,51 +22,50 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  title: 'El Hornito - Fridge to Recipe AI',
-  description:
-    'Transform your fridge contents into delicious recipes with AI. Upload a photo of your fridge and get personalized recipe suggestions instantly.',
-  keywords: [
-    'recipe',
-    'AI',
-    'cooking',
-    'fridge',
-    'ingredients',
-    'food',
-    'Claude AI',
-  ],
-  authors: [{ name: 'El Hornito Team' }],
-  creator: 'El Hornito',
-  publisher: 'El Hornito',
-  openGraph: {
-    title: 'El Hornito - Fridge to Recipe AI',
-    description:
-      'Transform your fridge contents into delicious recipes with AI',
-    url: 'https://elhornito.vercel.app',
-    siteName: 'El Hornito',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'El Hornito - Fridge to Recipe AI',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'El Hornito - Fridge to Recipe AI',
-    description:
-      'Transform your fridge contents into delicious recipes with AI',
-    images: ['/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'common' });
+
+  return {
+    metadataBase: new URL('https://elhornito.vercel.app'),
+    title: t('app.title'),
+    description: t('app.description'),
+    keywords: t('app.keywords').split(', '),
+    authors: [{ name: t('app.author') }],
+    creator: t('app.publisher'),
+    publisher: t('app.publisher'),
+    openGraph: {
+      title: t('app.title'),
+      description: t('app.ogDescription'),
+      url: 'https://elhornito.vercel.app',
+      siteName: t('app.title').split(' - ')[0],
+      images: [
+        {
+          url: '/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: t('app.ogAlt'),
+        },
+      ],
+      locale: locale === 'en' ? 'en_US' : locale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('app.title'),
+      description: t('app.twitterDescription'),
+      images: ['/og-image.jpg'],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,

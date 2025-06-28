@@ -12,9 +12,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
   return {
     locale,
     messages: {
-      ...(await import(`../locales/${locale}/common.json`)).default,
-      ...(await import(`../locales/${locale}/errors.json`)).default,
-      ...(await import(`../locales/${locale}/settings.json`)).default,
+      common: (await import(`../locales/${locale}/common.json`)).default,
+      errors: (await import(`../locales/${locale}/errors.json`)).default,
+      settings: (await import(`../locales/${locale}/settings.json`)).default,
     },
   };
 });

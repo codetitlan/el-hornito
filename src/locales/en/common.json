@@ -1,7 +1,14 @@
 {
   "app": {
     "title": "El Hornito - Fridge to Recipe AI",
-    "tagline": "Fridge to Recipe AI"
+    "tagline": "Fridge to Recipe AI",
+    "description": "Transform your fridge contents into delicious recipes with AI. Upload a photo of your fridge and get personalized recipe suggestions instantly.",
+    "keywords": "recipe, AI, cooking, fridge, ingredients, food, Claude AI",
+    "author": "El Hornito Team",
+    "publisher": "El Hornito",
+    "ogDescription": "Transform your fridge contents into delicious recipes with AI",
+    "ogAlt": "El Hornito - Fridge to Recipe AI",
+    "twitterDescription": "Transform your fridge contents into delicious recipes with AI"
   },
   "actions": {
     "save": "Save",
@@ -11,7 +18,12 @@
     "saveChanges": "Save Changes",
     "allSaved": "All Saved",
     "saving": "Saving...",
-    "resetToDefaults": "Reset to Defaults"
+    "resetToDefaults": "Reset to Defaults",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home",
+    "dismiss": "Dismiss",
+    "useSmartDefaults": "Use Smart Defaults",
+    "customizeSettings": "Customize Settings"
   },
   "navigation": {
     "home": "Home",
@@ -23,6 +35,44 @@
     "unsavedChanges": "Unsaved changes",
     "loading": "Loading...",
     "ready": "Ready"
+  },
+  "hero": {
+    "poweredByBadge": "Powered by Claude AI",
+    "title": "Transform Your Fridge Into Amazing Recipes",
+    "titleHighlight": "Fridge",
+    "subtitle": "Upload a photo of your fridge contents and let our AI chef create personalized recipes that make the most of what you already have. No more food waste, just delicious meals!",
+    "features": {
+      "photoAnalysis": "Photo Analysis",
+      "aiPowered": "AI-Powered",
+      "customRecipes": "Custom Recipes"
+    }
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "steps": {
+      "takePhoto": {
+        "title": "1. Take a Photo",
+        "description": "Snap a clear photo of your fridge contents or pantry items"
+      },
+      "aiAnalysis": {
+        "title": "2. AI Analysis",
+        "description": "Our AI identifies ingredients and considers your preferences"
+      },
+      "getRecipe": {
+        "title": "3. Get Recipe",
+        "description": "Receive a personalized recipe with step-by-step instructions"
+      }
+    }
+  },
+  "footer": {
+    "tagline": "Transforming fridges into feasts with the power of AI",
+    "credits": "Powered by Claude AI • Made with ❤️ for food lovers"
+  },
+  "onboarding": {
+    "welcomeTitle": "🎉 Welcome to El Hornito!",
+    "enhanceTitle": "✨ Enhance Your Experience",
+    "welcomeDescription": "Get personalized recipe recommendations by setting up your cooking preferences and dietary restrictions.",
+    "enhanceDescription": "Complete your profile to get even better recipe suggestions tailored to your tastes and equipment."
   },
   "upload": {
     "steps": {
@@ -37,5 +87,28 @@
     "easy": "Easy",
     "medium": "Medium",
     "hard": "Hard"
+  },
+  "fridgeUploader": {
+    "analyzingMessage": "Our AI is analyzing your fridge contents and creating a perfect recipe just for you!",
+    "dropPhoto": "Drop your photo here",
+    "uploadPhoto": "Upload your fridge photo",
+    "dragDrop": "Drag & drop or click to browse (JPEG, PNG, WebP up to 10MB)",
+    "takePhoto": "Take Photo",
+    "removeImage": "Remove image",
+    "removeSelectedImage": "Remove selected image",
+    "yourRecipePreferences": "Your Recipe Preferences",
+    "edit": "Edit",
+    "dietary": "Dietary:",
+    "cuisines": "Cuisines:",
+    "preferences": "Preferences:",
+    "meals": "meals",
+    "spice": "spice",
+    "equipment": "Equipment:",
+    "tip": "🍳 Tip:",
+    "tipText": "Set your preferences in settings to get more personalized recipes!",
+    "personalizedRecipeGeneration": "Personalized Recipe Generation:",
+    "personalizedRecipeDescription": "The AI will use your saved preferences and dietary restrictions from your settings to create a customized recipe.",
+    "setUpPreferences": "Set up your preferences →",
+    "generateRecipe": "Generate Personalized Recipe"
   }
 }
