@@ -18,13 +18,14 @@ const configs = {
   basic: {
     name: 'Basic Configuration',
     description: 'Standard production-ready setup with health checks and zero-downtime deployment',
-    file: 'railway.json',
+    file: 'railway.basic.json',
     features: [
       '✅ Health checks (/api/health)',
       '✅ Zero-downtime deployment (30s overlap)',
       '✅ Environment-specific settings',
       '✅ Smart watch patterns',
-      '✅ Restart policies'
+      '✅ Restart policies',
+      '🚫 No multi-region (Railway free tier compatible)'
     ]
   },
   advanced: {
@@ -32,7 +33,7 @@ const configs = {
     description: 'Enterprise-grade setup with multi-region, pre-deploy commands, and custom Nixpacks',
     file: 'railway.advanced.json',
     features: [
-      '🌍 Multi-region deployment',
+      '🌍 Multi-region deployment (requires Railway Pro)',
       '🔄 Pre-deploy commands',
       '⚙️ Custom Nixpacks configuration',
       '📊 Performance testing environment',
