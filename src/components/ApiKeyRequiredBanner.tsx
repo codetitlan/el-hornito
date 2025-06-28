@@ -13,7 +13,7 @@ interface ApiKeyRequiredBannerProps {
 export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
   const [hasApiKey, setHasApiKey] = useState(true); // Start with true to avoid flash
   const [isDismissed, setIsDismissed] = useState(false);
-  const t = useTranslations('errors.apiKeyBanner');
+  const t = useTranslations('apiKeyBanner');
 
   useEffect(() => {
     // Check if user has configured a personal API key
