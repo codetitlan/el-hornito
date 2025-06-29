@@ -1,5 +1,5 @@
 // Test script to validate the enhanced schema validation
-// Run this in the browser console on http://localhost:3001
+// Run this in the browser console on http://localhost:3000
 
 async function testSchemaValidation() {
   console.log('🧪 Testing Enhanced Schema Validation\n');

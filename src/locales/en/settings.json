@@ -80,7 +80,9 @@
       "step4": "4. Create a new API key",
       "step5": "5. Copy and paste it here",
       "note": "Note: Your API key is stored securely in your browser and never sent to our servers."
-    }
+    },
+    "usageTracking": "Usage Tracking",
+    "usageTrackingDescription": "Track API usage and estimated costs (personal key only)"
   },
   "dataManagement": {
     "title": "Data Management",
