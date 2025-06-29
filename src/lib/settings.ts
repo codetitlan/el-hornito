@@ -393,7 +393,7 @@ export class SettingsManager {
 export const settingsManager = SettingsManager.getInstance();
 
 // Helper hooks and utilities
-export const useSettings = () => {
+const useSettings = () => {
   if (typeof window === 'undefined') {
     return createDefaultUserSettings();
   }
@@ -401,10 +401,10 @@ export const useSettings = () => {
   return settingsManager.loadSettings();
 };
 
-export const saveUserSettings = (settings: UserSettings): boolean => {
+const saveUserSettings = (settings: UserSettings): boolean => {
   return settingsManager.saveSettings(settings);
 };
 
-export const clearUserSettings = (): boolean => {
+const clearUserSettings = (): boolean => {
   return settingsManager.clearSettings();
 };

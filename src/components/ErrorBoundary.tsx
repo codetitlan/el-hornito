@@ -147,7 +147,7 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 // Hook for handling async errors in functional components
-export function useErrorHandler() {
+function useErrorHandler() {
   const handleError = (error: Error, context?: string) => {
     console.error(`Error ${context ? `in ${context}` : ''}:`, error);
 
@@ -166,7 +166,7 @@ export function useErrorHandler() {
 }
 
 // Enhanced error message extraction
-export function getErrorMessage(error: unknown, context?: string): string {
+function getErrorMessage(error: unknown, context?: string): string {
   if (error instanceof Error) {
     // API errors
     if (error.message.includes('fetch')) {

@@ -11,7 +11,7 @@ export interface Recipe {
 }
 
 // API Request Types
-export interface AnalyzeFridgeRequest {
+interface AnalyzeFridgeRequest {
   image: File;
   preferences?: string;
   dietaryRestrictions?: string[];
@@ -25,7 +25,7 @@ export interface AnalyzeFridgeResponse {
   processingTime?: number;
 }
 
-export interface ErrorResponse {
+interface ErrorResponse {
   success: false;
   error: string;
   code?: string;
@@ -33,28 +33,28 @@ export interface ErrorResponse {
 }
 
 // Upload Progress Types
-export interface UploadProgress {
+interface UploadProgress {
   loaded: number;
   total: number;
   percentage: number;
 }
 
 // Error Handling Types
-export interface ApiError {
+interface ApiError {
   message: string;
   statusCode: number;
   code?: string;
 }
 
 // UI State Types
-export interface UploadState {
+interface UploadState {
   isUploading: boolean;
   isAnalyzing: boolean;
   progress: number;
   error: string | null;
 }
 
-export interface AppState {
+interface AppState {
   recipe: Recipe | null;
   uploadState: UploadState;
   hasUploadedImage: boolean;
@@ -68,7 +68,7 @@ export interface FileValidation {
 }
 
 // Configuration Types
-export interface AppConfig {
+interface AppConfig {
   maxFileSize: number;
   allowedFileTypes: string[];
   apiTimeout: number;
@@ -123,7 +123,7 @@ export interface SettingsExport {
 }
 
 // Enhanced API Types with Settings Support
-export interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
+interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
   userSettings?: {
     cookingPreferences?: CookingPreferences;
     kitchenEquipment?: KitchenEquipment;

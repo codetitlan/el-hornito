@@ -2,7 +2,7 @@
 import { AnalyzeFridgeResponse, Recipe, UserSettings } from '@/types';
 import { getErrorMessage } from '@/lib/utils';
 
-export interface UploadOptions {
+interface UploadOptions {
   onProgress?: (progress: number) => void;
   onStatusUpdate?: (status: string) => void;
 }
@@ -15,7 +15,7 @@ export const hasPersonalApiKey = (): boolean => {
 };
 
 // Get the personal API key if available
-export const getPersonalApiKey = (): string | null => {
+const getPersonalApiKey = (): string | null => {
   if (typeof window === 'undefined') return null;
   const storedApiKey = localStorage.getItem('elhornito-api-key');
   if (!storedApiKey) return null;
@@ -28,7 +28,7 @@ export const getPersonalApiKey = (): string | null => {
   }
 };
 
-export const analyzeImage = async (
+const analyzeImage = async (
   file: File,
   userSettings?: UserSettings,
   options?: UploadOptions
@@ -104,7 +104,7 @@ export const analyzeImage = async (
 };
 
 // Mock recipe for development/testing
-export const mockRecipe: Recipe = {
+const mockRecipe: Recipe = {
   title: 'Mediterranean Vegetable Pasta',
   description:
     'A fresh and healthy pasta dish with vegetables from your fridge',
@@ -142,7 +142,7 @@ export const mockRecipe: Recipe = {
 };
 
 // Development mode API that returns mock data
-export const analyzeFridgeMock = async (
+const analyzeFridgeMock = async (
   file: File,
   userSettings?: UserSettings,
   options?: UploadOptions
