@@ -10,6 +10,7 @@ import { DataManagementSection } from '@/components/settings/DataManagementSecti
 import { ApiConfigurationSection } from '@/components/settings/ApiConfigurationSection';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -19,6 +20,8 @@ export default function SettingsPage() {
     type: 'success' | 'error';
     text: string;
   } | null>(null);
+  const t = useTranslations('settings');
+  const tCommon = useTranslations('common');
 
   // Load settings on component mount
   useEffect(() => {
@@ -38,19 +41,19 @@ export default function SettingsPage() {
         setHasChanges(false);
         setSaveMessage({
           type: 'success',
-          text: 'Settings saved successfully!',
+          text: t('messages.settingsSaved'),
         });
       } else {
         setSaveMessage({
           type: 'error',
-          text: 'Failed to save settings. Please try again.',
+          text: t('messages.saveFailed'),
         });
       }
     } catch (err) {
       console.error('Save error:', err);
       setSaveMessage({
         type: 'error',
-        text: 'An error occurred while saving settings.',
+        text: t('messages.saveError'),
       });
     } finally {
       setSaving(false);
@@ -69,7 +72,7 @@ export default function SettingsPage() {
       const defaultSettings = settingsManager.loadSettings();
       setSettings(defaultSettings);
       setHasChanges(false);
-      setSaveMessage({ type: 'success', text: 'Settings reset to defaults!' });
+      setSaveMessage({ type: 'success', text: t('messages.settingsReset') });
       setTimeout(() => setSaveMessage(null), 3000);
     }
   };
@@ -87,7 +90,7 @@ export default function SettingsPage() {
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading settings...</p>
+          <p className="mt-4 text-gray-600">{tCommon('status.loading')}</p>
         </div>
       </div>
     );
@@ -105,13 +108,13 @@ export default function SettingsPage() {
                 className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <ChevronLeft className="h-5 w-5 mr-1" />
-                Back to Home
+                {tCommon('navigation.backToHome')}
               </Link>
               <div className="border-l border-gray-300 pl-4">
-                <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-                <p className="text-sm text-gray-600">
-                  Customize your cooking experience
-                </p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {t('page.title')}
+                </h1>
+                <p className="text-sm text-gray-600">{t('page.subtitle')}</p>
               </div>
             </div>
 
@@ -120,7 +123,9 @@ export default function SettingsPage() {
               {hasChanges && (
                 <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
                   <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">Unsaved changes</span>
+                  <span className="text-sm font-medium">
+                    {tCommon('status.unsavedChanges')}
+                  </span>
                 </div>
               )}
 
@@ -142,7 +147,7 @@ export default function SettingsPage() {
                 onClick={handleReset}
                 className="text-gray-600 border-gray-300 hover:bg-gray-50"
               >
-                Reset to Defaults
+                {tCommon('actions.resetToDefaults')}
               </Button>
 
               <Button
@@ -155,10 +160,10 @@ export default function SettingsPage() {
                 }`}
               >
                 {saving
-                  ? 'Saving...'
+                  ? tCommon('actions.saving')
                   : hasChanges
-                  ? 'Save Changes'
-                  : 'All Saved'}
+                  ? tCommon('actions.saveChanges')
+                  : tCommon('actions.allSaved')}
               </Button>
             </div>
           </div>
@@ -187,14 +192,10 @@ export default function SettingsPage() {
             </div>
             <div className="ml-4">
               <h3 className="text-lg font-medium text-blue-900">
-                Privacy & Data Storage
+                {t('privacy.title')}
               </h3>
               <div className="mt-2 text-blue-800">
-                <p className="text-sm">
-                  All your settings are stored locally in your browser and never
-                  transmitted to our servers. Your data remains completely
-                  private and under your control.
-                </p>
+                <p className="text-sm">{t('privacy.description')}</p>
                 <ul className="mt-2 text-sm list-disc list-inside space-y-1">
                   <li>
                     Settings are saved in your browser&apos;s local storage

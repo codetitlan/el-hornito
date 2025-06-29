@@ -17,7 +17,8 @@
     "cache:warm": "echo 'Cache warming completed'",
     "cleanup": "echo 'Cleanup job completed'",
     "health:check": "curl -f http://localhost:3000/api/health || exit 1",
-    "seed:prod": "echo 'Production seeding completed'"
+    "seed:prod": "echo 'Production seeding completed'",
+    "test": "jest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
@@ -25,21 +26,27 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.523.0",
     "next": "15.3.4",
+    "next-intl": "^4.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
-    "sharp": "^0.34.2",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4",
     "zod": "^3.25.67"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "engines": {

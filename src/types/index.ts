@@ -11,7 +11,7 @@ export interface Recipe {
 }
 
 // API Request Types
-export interface AnalyzeFridgeRequest {
+interface AnalyzeFridgeRequest {
   image: File;
   preferences?: string;
   dietaryRestrictions?: string[];
@@ -25,7 +25,8 @@ export interface AnalyzeFridgeResponse {
   processingTime?: number;
 }
 
-export interface ErrorResponse {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface ErrorResponse {
   success: false;
   error: string;
   code?: string;
@@ -33,28 +34,31 @@ export interface ErrorResponse {
 }
 
 // Upload Progress Types
-export interface UploadProgress {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface UploadProgress {
   loaded: number;
   total: number;
   percentage: number;
 }
 
 // Error Handling Types
-export interface ApiError {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface ApiError {
   message: string;
   statusCode: number;
   code?: string;
 }
 
 // UI State Types
-export interface UploadState {
+interface UploadState {
   isUploading: boolean;
   isAnalyzing: boolean;
   progress: number;
   error: string | null;
 }
 
-export interface AppState {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface AppState {
   recipe: Recipe | null;
   uploadState: UploadState;
   hasUploadedImage: boolean;
@@ -68,7 +72,8 @@ export interface FileValidation {
 }
 
 // Configuration Types
-export interface AppConfig {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface AppConfig {
   maxFileSize: number;
   allowedFileTypes: string[];
   apiTimeout: number;
@@ -123,7 +128,8 @@ export interface SettingsExport {
 }
 
 // Enhanced API Types with Settings Support
-export interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
   userSettings?: {
     cookingPreferences?: CookingPreferences;
     kitchenEquipment?: KitchenEquipment;

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Clock, Users, ChefHat } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Recipe } from '@/types';
 import { APP_CONFIG } from '@/lib/constants';
@@ -13,6 +14,8 @@ interface RecipeCardProps {
 }
 
 export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
+  const t = useTranslations('common.recipe');
+
   const getDifficultyColor = (difficulty: Recipe['difficulty']) => {
     return (
       APP_CONFIG.DIFFICULTY_COLORS[difficulty] || 'text-gray-600 bg-gray-50'
@@ -79,7 +82,7 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
         {/* Ingredients Preview */}
         <div className="mb-4">
           <h4 className="text-sm font-medium text-gray-700 mb-2">
-            Ingredients ({recipe.ingredients.length})
+            {t('ingredients')} ({recipe.ingredients.length})
           </h4>
           <div className="flex flex-wrap gap-1">
             {recipe.ingredients.slice(0, 3).map((ingredient, index) => (
@@ -94,7 +97,7 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
             ))}
             {recipe.ingredients.length > 3 && (
               <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                +{recipe.ingredients.length - 3} more
+                +{recipe.ingredients.length - 3} {t('more')}
               </span>
             )}
           </div>
@@ -103,7 +106,7 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
         {/* Instructions Preview */}
         <div>
           <h4 className="text-sm font-medium text-gray-700 mb-2">
-            Instructions ({recipe.instructions.length} steps)
+            {t('instructions')} ({recipe.instructions.length} {t('steps')})
           </h4>
           <p className="text-sm text-gray-600 line-clamp-2">
             {recipe.instructions[0]}
@@ -114,9 +117,7 @@ export function RecipeCard({ recipe, onClick, className }: RecipeCardProps) {
       {/* Card Footer */}
       <div className="px-6 py-3 bg-gray-50 rounded-b-xl border-t">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-500">
-            Click to view full recipe
-          </span>
+          <span className="text-sm text-gray-500">{t('clickToView')}</span>
           <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:bg-orange-600 transition-colors">
             <svg
               className="w-3 h-3 text-white"

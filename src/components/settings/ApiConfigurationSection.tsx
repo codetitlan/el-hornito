@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ApiConfiguration } from '@/types';
 import { settingsManager } from '@/lib/settings';
 import { Button } from '@/components/ui/Button';
-import { getErrorMessage } from '@/components/ErrorBoundary';
+import { SettingsToggle } from './SettingsToggle';
 import {
   Eye,
   EyeOff,
@@ -22,6 +23,7 @@ interface ApiConfigurationSectionProps {
 export const ApiConfigurationSection: React.FC<
   ApiConfigurationSectionProps
 > = ({ configuration, onChange, disabled = false, className = '' }) => {
+  const t = useTranslations('settings.apiConfiguration');
   const [apiKey, setApiKey] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -34,7 +36,7 @@ export const ApiConfigurationSection: React.FC<
     if (!apiKey.trim()) {
       setValidationMessage({
         type: 'error',
-        text: 'Please enter an API key',
+        text: t('messages.enterKey'),
       });
       return;
     }
@@ -58,22 +60,21 @@ export const ApiConfigurationSection: React.FC<
 
         setValidationMessage({
           type: 'success',
-          text: 'API key validated and saved successfully!',
+          text: t('messages.validationSuccess'),
         });
 
         setApiKey(''); // Clear the input for security
       } else {
         setValidationMessage({
           type: 'error',
-          text: 'Invalid API key. Please check your key and try again.',
+          text: t('messages.validationError'),
         });
       }
     } catch (error) {
       console.error('Validation error:', error);
-      const errorMessage = getErrorMessage(error, 'API key validation');
       setValidationMessage({
         type: 'error',
-        text: errorMessage,
+        text: t('messages.validationFailed'),
       });
     } finally {
       setIsValidating(false);
@@ -243,48 +244,14 @@ export const ApiConfigurationSection: React.FC<
       )}
 
       {/* Usage Tracking Toggle */}
-      <div className="flex items-center justify-between py-3 border-t border-gray-200">
-        <div>
-          <h4 className="font-medium text-gray-900">Usage Tracking</h4>
-          <p className="text-sm text-gray-500">
-            Track API usage and estimated costs (personal key only)
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={toggleUsageTracking}
-          disabled={disabled || !configuration.hasPersonalKey}
-          aria-label={`${
-            configuration.usageTracking ? 'Disable' : 'Enable'
-          } usage tracking`}
-          className={`
-            relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent 
-            transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2
-            ${
-              configuration.usageTracking && configuration.hasPersonalKey
-                ? 'bg-orange-600'
-                : 'bg-gray-200'
-            }
-            ${
-              disabled || !configuration.hasPersonalKey
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }
-          `}
-        >
-          <span
-            className={`
-              pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 
-              transition duration-200 ease-in-out
-              ${
-                configuration.usageTracking && configuration.hasPersonalKey
-                  ? 'translate-x-5'
-                  : 'translate-x-0'
-              }
-            `}
-          />
-        </button>
-      </div>
+      <SettingsToggle
+        label={t('usageTracking')}
+        description={t('usageTrackingDescription')}
+        checked={configuration.usageTracking}
+        onChange={toggleUsageTracking}
+        disabled={disabled || !configuration.hasPersonalKey}
+        className="border-t border-gray-200"
+      />
 
       {/* Validation Message */}
       {validationMessage && (

@@ -45,7 +45,8 @@ export const ENV = {
 } as const;
 
 // Validation function for environment variables
-export const validateEnvironment = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const validateEnvironment = () => {
   const errors: string[] = [];
 
   // ANTHROPIC_API_KEY is now optional - if not provided, users must use their own API keys
@@ -63,7 +64,8 @@ export const validateEnvironment = () => {
 };
 
 // Claude AI Prompt Template
-export const CLAUDE_PROMPT_TEMPLATE = `
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const CLAUDE_PROMPT_TEMPLATE = `
 Analyze this fridge photo and identify all visible ingredients. Based on the available ingredients, suggest ONE complete recipe that can be made primarily with these ingredients.
 
 Please respond in this exact JSON format:
@@ -260,12 +262,14 @@ export const createDefaultUserSettings = () => ({
 });
 
 // Utility function to check if personal API keys are required
-export const isPersonalApiKeyRequired = (): boolean => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const isPersonalApiKeyRequired = (): boolean => {
   return !ENV.ANTHROPIC_API_KEY;
 };
 
 // Get the API key configuration status
-export const getApiKeyStatus = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getApiKeyStatus = () => {
   return {
     hasSharedKey: !!ENV.ANTHROPIC_API_KEY,
     requiresPersonalKey: !ENV.ANTHROPIC_API_KEY,

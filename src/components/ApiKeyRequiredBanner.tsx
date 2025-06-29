@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Key, Settings, AlertTriangle, ExternalLink, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { hasPersonalApiKey } from '@/lib/api';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 
 interface ApiKeyRequiredBannerProps {
   className?: string;
@@ -12,6 +14,8 @@ interface ApiKeyRequiredBannerProps {
 export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
   const [hasApiKey, setHasApiKey] = useState(true); // Start with true to avoid flash
   const [isDismissed, setIsDismissed] = useState(false);
+  const t = useTranslations('errors.apiKeyBanner');
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user has configured a personal API key
@@ -45,23 +49,19 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
-            <h3 className="font-medium text-amber-900">API Key Required</h3>
+            <h3 className="font-medium text-amber-900">{t('title')}</h3>
           </div>
 
-          <p className="text-sm text-amber-700 mb-3">
-            This app requires a personal Anthropic API key to function.
-            You&apos;ll need to configure your own API key in settings to
-            generate recipes.
-          </p>
+          <p className="text-sm text-amber-700 mb-3">{t('description')}</p>
 
           <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <Button
               size="sm"
-              onClick={() => (window.location.href = '/settings')}
+              onClick={() => router.push('/settings')}
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               <Settings size={14} className="mr-1" />
-              Configure API Key
+              {t('configureButton')}
             </Button>
 
             <Button
@@ -73,20 +73,17 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
               className="border-amber-300 text-amber-700 hover:bg-amber-50"
             >
               <ExternalLink size={14} className="mr-1" />
-              Get API Key
+              {t('getKeyButton')}
             </Button>
           </div>
 
-          <p className="text-xs text-amber-600">
-            Don&apos;t have an API key? Visit Anthropic Console to create one.
-            API keys are stored securely in your browser.
-          </p>
+          <p className="text-xs text-amber-600">{t('helpText')}</p>
         </div>
 
         <button
           onClick={handleDismiss}
           className="flex-shrink-0 p-1 text-amber-400 hover:text-amber-600 transition-colors"
-          title="Dismiss"
+          title={t('dismiss')}
         >
           <X size={16} />
         </button>

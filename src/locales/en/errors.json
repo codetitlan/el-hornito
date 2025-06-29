@@ -1,0 +1,49 @@
+{
+  "file": {
+    "tooLarge": "File size must be less than 10MB",
+    "invalidType": "Please upload a JPEG, PNG, or WebP image"
+  },
+  "api": {
+    "keyRequired": "API key required",
+    "keyInvalid": "Invalid API key",
+    "noKey": "To use El Hornito, you'll need to configure an API key in settings.",
+    "getStarted": "Get started by adding your Anthropic Claude API key in settings.",
+    "limitReached": "API usage limit reached. Please check your API key or try again later."
+  },
+  "network": {
+    "connectionError": "Network error. Please check your connection.",
+    "timeout": "Request timed out. Please try again.",
+    "serverError": "Server error. Please try again later."
+  },
+  "upload": {
+    "failed": "Upload failed. Please try again.",
+    "processing": "Processing image...",
+    "analyzing": "Analyzing your fridge contents...",
+    "analysisFailed": "Failed to analyze image. Please try again.",
+    "noIngredients": "No ingredients detected in the image. Please try a different photo.",
+    "apiError": "Service temporarily unavailable. Please try again later."
+  },
+  "general": {
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred",
+    "tryAgain": "Please try again"
+  },
+  "errorBoundary": {
+    "title": "Oops! Something went wrong",
+    "description": "We encountered an unexpected error. Our team has been notified and we're working on a fix.",
+    "tryAgainButton": "Try Again",
+    "goHomeButton": "Go Home",
+    "errorDetailsTitle": "Error Details (Development)"
+  },
+  "mainPage": {
+    "errorTitle": "Something went wrong"
+  },
+  "apiKeyBanner": {
+    "title": "API Key Required",
+    "description": "This app requires a personal Anthropic API key to function. You'll need to configure your own API key in settings to generate recipes.",
+    "configureButton": "Configure API Key",
+    "getKeyButton": "Get API Key",
+    "helpText": "Don't have an API key? Visit Anthropic Console to create one. API keys are stored securely in your browser.",
+    "dismiss": "Dismiss"
+  }
+}
