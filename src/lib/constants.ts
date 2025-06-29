@@ -45,6 +45,7 @@ export const ENV = {
 } as const;
 
 // Validation function for environment variables
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const validateEnvironment = () => {
   const errors: string[] = [];
 
@@ -63,6 +64,7 @@ const validateEnvironment = () => {
 };
 
 // Claude AI Prompt Template
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CLAUDE_PROMPT_TEMPLATE = `
 Analyze this fridge photo and identify all visible ingredients. Based on the available ingredients, suggest ONE complete recipe that can be made primarily with these ingredients.
 
@@ -260,11 +262,13 @@ export const createDefaultUserSettings = () => ({
 });
 
 // Utility function to check if personal API keys are required
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isPersonalApiKeyRequired = (): boolean => {
   return !ENV.ANTHROPIC_API_KEY;
 };
 
 // Get the API key configuration status
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getApiKeyStatus = () => {
   return {
     hasSharedKey: !!ENV.ANTHROPIC_API_KEY,

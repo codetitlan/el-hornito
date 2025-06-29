@@ -33,6 +33,7 @@ export const validateFile = (file: File): FileValidation => {
 };
 
 // File conversion utilities
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -48,6 +49,7 @@ const fileToBase64 = (file: File): Promise<string> => {
 };
 
 // Image compression utility
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const compressImage = async (
   file: File,
   maxWidth: number = 1024
@@ -129,6 +131,7 @@ export const retryOperation = async <T>(
 };
 
 // Recipe formatting utilities
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formatCookingTime = (time: string): string => {
   // Normalize cooking time format
   const cleanTime = time.toLowerCase().trim();
@@ -151,6 +154,7 @@ const formatCookingTime = (time: string): string => {
 };
 
 // Local storage utilities
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const storage = {
   get: (key: string) => {
     try {

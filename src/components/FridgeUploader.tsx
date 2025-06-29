@@ -177,7 +177,7 @@ export function FridgeUploader({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={URL.createObjectURL(selectedFile)}
-                alt="Selected fridge photo"
+                alt={t('selectedImageAlt')}
                 className="w-32 h-32 object-cover rounded-lg border shadow-sm"
               />
               <button

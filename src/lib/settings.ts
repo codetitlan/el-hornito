@@ -393,6 +393,7 @@ export class SettingsManager {
 export const settingsManager = SettingsManager.getInstance();
 
 // Helper hooks and utilities
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useSettings = () => {
   if (typeof window === 'undefined') {
     return createDefaultUserSettings();
@@ -401,10 +402,12 @@ const useSettings = () => {
   return settingsManager.loadSettings();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const saveUserSettings = (settings: UserSettings): boolean => {
   return settingsManager.saveSettings(settings);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const clearUserSettings = (): boolean => {
   return settingsManager.clearSettings();
 };

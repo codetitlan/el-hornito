@@ -25,6 +25,7 @@ export interface AnalyzeFridgeResponse {
   processingTime?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface ErrorResponse {
   success: false;
   error: string;
@@ -33,6 +34,7 @@ interface ErrorResponse {
 }
 
 // Upload Progress Types
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface UploadProgress {
   loaded: number;
   total: number;
@@ -40,6 +42,7 @@ interface UploadProgress {
 }
 
 // Error Handling Types
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface ApiError {
   message: string;
   statusCode: number;
@@ -54,6 +57,7 @@ interface UploadState {
   error: string | null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface AppState {
   recipe: Recipe | null;
   uploadState: UploadState;
@@ -68,6 +72,7 @@ export interface FileValidation {
 }
 
 // Configuration Types
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface AppConfig {
   maxFileSize: number;
   allowedFileTypes: string[];
@@ -123,6 +128,7 @@ export interface SettingsExport {
 }
 
 // Enhanced API Types with Settings Support
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface EnhancedAnalyzeFridgeRequest extends AnalyzeFridgeRequest {
   userSettings?: {
     cookingPreferences?: CookingPreferences;

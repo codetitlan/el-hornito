@@ -109,7 +109,11 @@
     "personalizedRecipeGeneration": "Personalized Recipe Generation:",
     "personalizedRecipeDescription": "The AI will use your saved preferences and dietary restrictions from your settings to create a customized recipe.",
     "setUpPreferences": "Set up your preferences →",
-    "generateRecipe": "Generate Personalized Recipe"
+    "generateRecipe": "Generate Personalized Recipe",
+    "invalidFile": "Invalid file. Please upload a valid image.",
+    "preparing": "Preparing image...",
+    "analysisFailed": "Recipe analysis failed. Please try again.",
+    "selectedImageAlt": "Selected fridge photo"
   },
   "recipe": {
     "clickToView": "Click to view full recipe",
