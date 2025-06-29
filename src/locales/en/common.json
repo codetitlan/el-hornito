@@ -110,5 +110,19 @@
     "personalizedRecipeDescription": "The AI will use your saved preferences and dietary restrictions from your settings to create a customized recipe.",
     "setUpPreferences": "Set up your preferences →",
     "generateRecipe": "Generate Personalized Recipe"
+  },
+  "recipe": {
+    "clickToView": "Click to view full recipe",
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "steps": "steps",
+    "servings": "servings",
+    "more": "more",
+    "noRecipeTitle": "No Recipe Yet",
+    "noRecipeDescription": "Upload a photo of your fridge to get started with AI-powered recipe suggestions!",
+    "chefsTitle": "Chef's Tips",
+    "share": "Share",
+    "print": "Print",
+    "linkCopied": "Link copied to clipboard!"
   }
 }

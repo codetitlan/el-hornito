@@ -5,6 +5,7 @@ import { Sparkles, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { SettingsManager } from '@/lib/settings';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 
 interface OnboardingBannerProps {
   className?: string;
@@ -14,6 +15,7 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
   const t = useTranslations('common');
+  const router = useRouter();
 
   useEffect(() => {
     const settingsManager = SettingsManager.getInstance();
@@ -104,7 +106,7 @@ export function OnboardingBanner({ className }: OnboardingBannerProps) {
 
             <Button
               size="sm"
-              onClick={() => (window.location.href = '/settings')}
+              onClick={() => router.push('/settings')}
               className="bg-purple-600 hover:bg-purple-700 text-white"
             >
               <Settings size={14} className="mr-1" />

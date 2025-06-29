@@ -7,7 +7,7 @@ import { RecipeDisplay } from '@/components/RecipeDisplay';
 import { OnboardingBanner } from '@/components/OnboardingBanner';
 import { ApiKeyRequiredBanner } from '@/components/ApiKeyRequiredBanner';
 import { Recipe } from '@/types';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 export default function Home() {

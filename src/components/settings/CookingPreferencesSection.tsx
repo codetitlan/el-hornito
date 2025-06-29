@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { CookingPreferences } from '@/types';
 import { SETTINGS_CONFIG } from '@/lib/constants';
 import { PreferenceChips } from './PreferenceChips';
@@ -14,6 +15,8 @@ interface CookingPreferencesSectionProps {
 export const CookingPreferencesSection: React.FC<
   CookingPreferencesSectionProps
 > = ({ preferences, onChange, disabled = false, className = '' }) => {
+  const t = useTranslations('settings.cookingPreferences');
+
   const updatePreferences = (
     field: keyof CookingPreferences,
     value: string | string[] | number | undefined
@@ -28,8 +31,8 @@ export const CookingPreferencesSection: React.FC<
     <div className={`space-y-8 ${className}`}>
       {/* Cuisine Types */}
       <PreferenceChips
-        label="Favorite Cuisine Types"
-        description="Select the types of cuisine you enjoy most"
+        label={t('cuisineTypes')}
+        description={t('cuisineTypesDescription')}
         selected={preferences.cuisineTypes}
         options={[...SETTINGS_CONFIG.CUISINE_TYPES]}
         onChange={(selected) => updatePreferences('cuisineTypes', selected)}
@@ -39,8 +42,8 @@ export const CookingPreferencesSection: React.FC<
 
       {/* Dietary Restrictions */}
       <PreferenceChips
-        label="Dietary Restrictions"
-        description="Let us know about any dietary needs or preferences"
+        label={t('dietaryRestrictions')}
+        description={t('dietaryRestrictionsDescription')}
         selected={preferences.dietaryRestrictions}
         options={[...SETTINGS_CONFIG.DIETARY_RESTRICTIONS]}
         onChange={(selected) =>
@@ -51,32 +54,32 @@ export const CookingPreferencesSection: React.FC<
 
       {/* Spice Level */}
       <SettingsSelect
-        label="Preferred Spice Level"
-        description="How spicy do you like your food?"
+        label={t('spiceLevel')}
+        description={t('spiceLevelDescription')}
         value={preferences.spiceLevel}
         options={SETTINGS_CONFIG.SPICE_LEVELS.map((level) => ({ ...level }))}
         onChange={(value) => updatePreferences('spiceLevel', value)}
         disabled={disabled}
-        placeholder="Select spice level..."
+        placeholder={t('spiceLevelPlaceholder')}
       />
 
       {/* Cooking Time Preference */}
       <SettingsSelect
-        label="Cooking Time Preference"
-        description="How much time do you usually want to spend cooking?"
+        label={t('cookingTime')}
+        description={t('cookingTimeDescription')}
         value={preferences.cookingTimePreference}
         options={SETTINGS_CONFIG.COOKING_TIME_PREFERENCES.map((pref) => ({
           ...pref,
         }))}
         onChange={(value) => updatePreferences('cookingTimePreference', value)}
         disabled={disabled}
-        placeholder="Select cooking time preference..."
+        placeholder={t('cookingTimePlaceholder')}
       />
 
       {/* Meal Types */}
       <PreferenceChips
-        label="Meal Types"
-        description="What types of meals are you most interested in?"
+        label={t('mealTypes')}
+        description={t('mealTypesDescription')}
         selected={preferences.mealTypes}
         options={[...SETTINGS_CONFIG.MEAL_TYPES]}
         onChange={(selected) => updatePreferences('mealTypes', selected)}
@@ -90,11 +93,9 @@ export const CookingPreferencesSection: React.FC<
           htmlFor="servings"
           className="block text-sm font-medium text-gray-900"
         >
-          Default Number of Servings
+          {t('servings')}
         </label>
-        <p className="text-sm text-gray-500">
-          How many people do you usually cook for?
-        </p>
+        <p className="text-sm text-gray-500">{t('servingsDescription')}</p>
         <div className="flex items-center space-x-4">
           <input
             type="range"
@@ -118,8 +119,8 @@ export const CookingPreferencesSection: React.FC<
           </div>
         </div>
         <div className="flex justify-between text-xs text-gray-400">
-          <span>1 person</span>
-          <span>12+ people</span>
+          <span>{t('servingsMinLabel')}</span>
+          <span>{t('servingsMaxLabel')}</span>
         </div>
       </div>
 
@@ -129,10 +130,10 @@ export const CookingPreferencesSection: React.FC<
           htmlFor="notes"
           className="block text-sm font-medium text-gray-900"
         >
-          Additional Notes
+          {t('additionalNotes')}
         </label>
         <p className="text-sm text-gray-500">
-          Any other cooking preferences or special requirements?
+          {t('additionalNotesDescription')}
         </p>
         <textarea
           id="notes"
@@ -142,7 +143,7 @@ export const CookingPreferencesSection: React.FC<
             updatePreferences('additionalNotes', e.target.value || undefined)
           }
           disabled={disabled}
-          placeholder="e.g., prefer quick weeknight meals, love experimenting with new flavors..."
+          placeholder={t('additionalNotesPlaceholder')}
           className={`
             block w-full rounded-lg border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset 
             ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-orange-600 sm:text-sm sm:leading-6

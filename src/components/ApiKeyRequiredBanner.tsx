@@ -5,6 +5,7 @@ import { Key, Settings, AlertTriangle, ExternalLink, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { hasPersonalApiKey } from '@/lib/api';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 
 interface ApiKeyRequiredBannerProps {
   className?: string;
@@ -14,6 +15,7 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
   const [hasApiKey, setHasApiKey] = useState(true); // Start with true to avoid flash
   const [isDismissed, setIsDismissed] = useState(false);
   const t = useTranslations('errors.apiKeyBanner');
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user has configured a personal API key
@@ -55,7 +57,7 @@ export function ApiKeyRequiredBanner({ className }: ApiKeyRequiredBannerProps) {
           <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <Button
               size="sm"
-              onClick={() => (window.location.href = '/settings')}
+              onClick={() => router.push('/settings')}
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               <Settings size={14} className="mr-1" />

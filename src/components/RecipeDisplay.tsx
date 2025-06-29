@@ -10,6 +10,7 @@ import {
   Share2,
   Printer,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Recipe } from '@/types';
 import { Button } from './ui/Button';
@@ -21,6 +22,7 @@ interface RecipeDisplayProps {
 }
 
 export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
+  const t = useTranslations('common.recipe');
   const [checkedIngredients, setCheckedIngredients] = useState<Set<number>>(
     new Set()
   );
@@ -35,12 +37,9 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
           <ChefHat className="w-12 h-12 text-gray-400" />
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          No Recipe Yet
+          {t('noRecipeTitle')}
         </h3>
-        <p className="text-gray-500">
-          Upload a photo of your fridge to get started with AI-powered recipe
-          suggestions!
-        </p>
+        <p className="text-gray-500">{t('noRecipeDescription')}</p>
       </div>
     );
   }
@@ -92,7 +91,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
     try {
       await navigator.clipboard.writeText(window.location.href);
       // You could add a toast notification here
-      alert('Link copied to clipboard!');
+      alert(t('linkCopied'));
     } catch (error) {
       console.error('Failed to copy link:', error);
     }
@@ -125,7 +124,9 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
               {recipe.servings && (
                 <div className="flex items-center gap-1 text-gray-600">
                   <Users size={16} />
-                  <span>{recipe.servings} servings</span>
+                  <span>
+                    {recipe.servings} {t('servings')}
+                  </span>
                 </div>
               )}
 
@@ -150,7 +151,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
               icon={<Share2 size={16} />}
               onClick={handleShare}
             >
-              Share
+              {t('share')}
             </Button>
             <Button
               variant="outline"
@@ -158,7 +159,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
               icon={<Printer size={16} />}
               onClick={handlePrint}
             >
-              Print
+              {t('print')}
             </Button>
           </div>
         </div>
@@ -170,7 +171,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ChefHat size={20} />
-              Ingredients
+              {t('ingredients')}
             </h2>
             <div className="space-y-3">
               {recipe.ingredients.map((ingredient, index) => (
@@ -215,7 +216,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Instructions
+              {t('instructions')}
             </h2>
             <div className="space-y-4">
               {recipe.instructions.map((instruction, index) => (
@@ -258,7 +259,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-amber-900 mb-3 flex items-center gap-2">
             <Lightbulb size={20} />
-            Chef&apos;s Tips
+            {t('chefsTitle')}
           </h3>
           <ul className="space-y-2">
             {recipe.tips.map((tip, index) => (
@@ -280,7 +281,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
             icon={<Share2 size={16} />}
             onClick={handleShare}
           >
-            Share
+            {t('share')}
           </Button>
           <Button
             variant="outline"
@@ -288,7 +289,7 @@ export function RecipeDisplay({ recipe, className }: RecipeDisplayProps) {
             icon={<Printer size={16} />}
             onClick={handlePrint}
           >
-            Print
+            {t('print')}
           </Button>
         </div>
       </div>

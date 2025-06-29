@@ -3,7 +3,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Camera, Upload, X, Image as ImageIcon } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { cn, validateFile, formatFileSize } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
 import { Button } from './ui/Button';
