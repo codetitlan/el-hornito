@@ -16,7 +16,10 @@ const config: Config = {
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   // API testing specific configuration - focus on actively tested files
   collectCoverageFrom: [
-    'src/lib/utils.ts', // Only collect coverage on files we actively test
+    'src/lib/utils.ts', // Utility functions
+    'src/app/api/**/route.ts', // API routes
+    'src/lib/api.ts', // API utilities
+    'src/lib/settings.ts', // Settings utilities
     '!src/**/*.d.ts',
   ],
   // Coverage thresholds for comprehensively tested utilities

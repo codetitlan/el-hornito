@@ -1,52 +1,51 @@
 /**
- * Test Suite for /api/validate-api-key
- * Tests API key validation functionality and error handling
+ * Enhanced Test Suite for /api/validate-api-key
+ * Master-level API key validation testing
  */
 
 import { NextRequest } from 'next/server';
+import {
+  createMockRequestWithJSON,
+  AnthropicMockManager,
+  NextResponseMockManager,
+  MockValidationUtils,
+} from '../helpers/api-test-utils';
 
 // Mock Anthropic SDK
-const MockAnthropic = jest.fn();
+const mockAnthropicCreate = jest.fn();
+const MockAnthropic = jest.fn().mockImplementation(() => ({
+  messages: {
+    create: mockAnthropicCreate,
+  },
+}));
 jest.mock('@anthropic-ai/sdk', () => MockAnthropic);
 
 // Mock NextResponse to avoid Next.js runtime dependencies
+const mockNextResponseJson = jest.fn();
 jest.mock('next/server', () => ({
   NextResponse: {
-    json: jest.fn((data, options) => ({
-      json: () => Promise.resolve(data),
-      status: options?.status || 200,
-      ok: options?.status === undefined || options.status < 400,
-    })),
+    json: mockNextResponseJson,
   },
   NextRequest: jest.fn(),
 }));
 
-// Helper to create mock NextRequest
-const createMockNextRequest = (data: Record<string, unknown>) =>
-  ({
-    json: jest.fn().mockResolvedValue(data),
-    cookies: new Map(),
-    nextUrl: new URL('http://localhost:3000'),
-    page: {},
-    ua: '',
-    // Add minimal NextRequest properties to satisfy type checking
-  } as unknown as NextRequest);
+// Test utilities and mock managers
+let anthropicMockManager: AnthropicMockManager;
+let responseMockManager: NextResponseMockManager;
 
 describe('/api/validate-api-key', () => {
-  let mockAnthropicClient: {
-    messages: {
-      create: jest.Mock;
-    };
-  };
-
   beforeEach(() => {
-    mockAnthropicClient = {
-      messages: {
-        create: jest.fn(),
-      },
-    };
-    MockAnthropic.mockImplementation(() => mockAnthropicClient);
-    jest.resetModules();
+    jest.clearAllMocks();
+
+    // Initialize mock managers
+    anthropicMockManager = new AnthropicMockManager(mockAnthropicCreate);
+    responseMockManager = new NextResponseMockManager(mockNextResponseJson);
+
+    // Setup standard behavior
+    responseMockManager.setupStandardBehavior();
+    MockAnthropic.mockImplementation(() => ({
+      messages: { create: mockAnthropicCreate },
+    }));
   });
 
   afterEach(() => {
@@ -56,11 +55,11 @@ describe('/api/validate-api-key', () => {
   describe('POST /api/validate-api-key', () => {
     test('validates correct API key successfully', async () => {
       // Mock successful Anthropic response
-      mockAnthropicClient.messages.create.mockResolvedValue({
+      mockAnthropicCreate.mockResolvedValue({
         content: [{ type: 'text', text: 'Hello!' }],
       });
 
-      const mockRequest = createMockNextRequest({
+      const mockRequest = createMockRequestWithJSON({
         apiKey: 'valid-api-key-123',
       });
 
@@ -79,12 +78,12 @@ describe('/api/validate-api-key', () => {
 
     test('rejects invalid API key', async () => {
       // Mock Anthropic API error (invalid key)
-      mockAnthropicClient.messages.create.mockRejectedValue({
+      mockAnthropicCreate.mockRejectedValue({
         status: 401,
         message: 'Invalid API key',
       });
 
-      const mockRequest = createMockNextRequest({ apiKey: 'invalid-key' });
+      const mockRequest = createMockRequestWithJSON({ apiKey: 'invalid-key' });
 
       const { POST } = await import('@/app/api/validate-api-key/route');
       const response = await POST(mockRequest);
@@ -98,7 +97,7 @@ describe('/api/validate-api-key', () => {
     });
 
     test('returns 400 for missing API key', async () => {
-      const mockRequest = createMockNextRequest({});
+      const mockRequest = createMockRequestWithJSON({});
 
       const { POST } = await import('@/app/api/validate-api-key/route');
       const response = await POST(mockRequest);
@@ -112,11 +111,9 @@ describe('/api/validate-api-key', () => {
     });
 
     test('handles network errors gracefully', async () => {
-      mockAnthropicClient.messages.create.mockRejectedValue(
-        new Error('Network error')
-      );
+      mockAnthropicCreate.mockRejectedValue(new Error('Network error'));
 
-      const mockRequest = createMockNextRequest({ apiKey: 'test-key' });
+      const mockRequest = createMockRequestWithJSON({ apiKey: 'test-key' });
 
       const { POST } = await import('@/app/api/validate-api-key/route');
       const response = await POST(mockRequest);
@@ -130,7 +127,7 @@ describe('/api/validate-api-key', () => {
     });
 
     test('handles empty API key', async () => {
-      const mockRequest = createMockNextRequest({ apiKey: '' });
+      const mockRequest = createMockRequestWithJSON({ apiKey: '' });
 
       const { POST } = await import('@/app/api/validate-api-key/route');
       const response = await POST(mockRequest);
