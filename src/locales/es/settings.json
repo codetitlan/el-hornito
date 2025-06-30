@@ -3,6 +3,12 @@
     "title": "Configuración",
     "subtitle": "Personaliza tu experiencia culinaria"
   },
+  "language": {
+    "title": "Idioma",
+    "description": "Selecciona tu idioma preferido para la interfaz",
+    "label": "Idioma de la Interfaz",
+    "note": "Los cambios se aplicarán inmediatamente"
+  },
   "cookingPreferences": {
     "title": "Preferencias Culinarias",
     "subtitle": "Cuéntanos sobre tu estilo de cocina y necesidades dietéticas",
@@ -51,14 +57,14 @@
     }
   },
   "apiConfiguration": {
-    "title": "API Configuration",
-    "subtitle": "Optional: Use your own Anthropic Claude API key for unlimited usage",
-    "personalKey": "Personal API Key",
-    "personalKeyDescription": "Enter your Anthropic Claude API key to use your own quota instead of our shared service",
-    "personalKeyPlaceholder": "Enter your Anthropic Claude API key...",
-    "validate": "Validate & Save",
-    "clear": "Clear Key",
-    "validating": "Validating...",
+    "title": "Configuración de API",
+    "subtitle": "Opcional: Usa tu propia clave API de Anthropic Claude para uso ilimitado",
+    "personalKey": "Clave API Personal",
+    "personalKeyDescription": "Ingresa tu clave API de Anthropic Claude para usar tu propia cuota en lugar de nuestro servicio compartido",
+    "personalKeyPlaceholder": "Ingresa tu clave API de Anthropic Claude...",
+    "validate": "Validar y Guardar",
+    "clear": "Limpiar Clave",
+    "validating": "Validando...",
     "messages": {
       "enterKey": "Please enter an API key",
       "validationSuccess": "API key is valid and has been saved!",
@@ -124,8 +130,14 @@
     }
   },
   "privacy": {
-    "title": "Privacy & Data Storage",
-    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control."
+    "title": "Privacidad y Almacenamiento de Datos",
+    "description": "Todas tus configuraciones se almacenan localmente en tu navegador y nunca se transmiten a nuestros servidores. Tus datos permanecen completamente privados y bajo tu control.",
+    "items": [
+      "Las configuraciones se guardan en el almacenamiento local de tu navegador",
+      "No se recopilan ni transmiten datos personales",
+      "Puedes exportar, importar o limpiar tus datos en cualquier momento",
+      "En el futuro, podrás sincronizar configuraciones entre dispositivos con una cuenta"
+    ]
   },
   "common": {
     "selected": "selected",

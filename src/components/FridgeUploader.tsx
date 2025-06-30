@@ -11,7 +11,7 @@ import { ProgressSpinner } from './ui/LoadingSpinner';
 import { analyzeFridge } from '@/lib/api';
 import { Recipe, UserSettings } from '@/types';
 import { SettingsManager } from '@/lib/settings';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface FridgeUploaderProps {
   onRecipeGenerated: (recipe: Recipe) => void;
@@ -40,6 +40,7 @@ export function FridgeUploader({
   });
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const t = useTranslations('common.fridgeUploader');
+  const locale = useLocale() as 'en' | 'es';
 
   // Load user settings on component mount
   useEffect(() => {
@@ -101,6 +102,7 @@ export function FridgeUploader({
       const recipe = await analyzeFridge(
         selectedFile,
         userSettings || undefined,
+        locale,
         {
           onProgress: (progress) => {
             setUploadState((prev) => ({ ...prev, progress }));

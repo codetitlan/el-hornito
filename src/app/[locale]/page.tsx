@@ -61,7 +61,7 @@ export default function Home() {
 
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
-              
+
               <Link
                 href="/settings"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"

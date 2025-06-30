@@ -121,7 +121,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center space-x-3">
               <LanguageSwitcher />
-              
+
               {/* Changes Indicator */}
               {hasChanges && (
                 <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
@@ -200,17 +200,9 @@ export default function SettingsPage() {
               <div className="mt-2 text-blue-800">
                 <p className="text-sm">{t('privacy.description')}</p>
                 <ul className="mt-2 text-sm list-disc list-inside space-y-1">
-                  <li>
-                    Settings are saved in your browser&apos;s local storage
-                  </li>
-                  <li>No personal data is collected or transmitted</li>
-                  <li>
-                    You can export, import, or clear your data at any time
-                  </li>
-                  <li>
-                    In the future, you&apos;ll be able to sync settings across
-                    devices with an account
-                  </li>
+                  {t.raw('privacy.items').map((item: string, index: number) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -223,11 +215,10 @@ export default function SettingsPage() {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900">
-                API Configuration
+                {t('apiConfiguration.title')}
               </h2>
               <p className="text-gray-600 mt-1">
-                Optional: Use your own Anthropic Claude API key for unlimited
-                usage
+                {t('apiConfiguration.subtitle')}
               </p>
             </div>
 
@@ -243,14 +234,49 @@ export default function SettingsPage() {
             />
           </div>
 
+          {/* Language Preferences Section */}
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">
+                {t('language.title')}
+              </h2>
+              <p className="text-gray-600 mt-1">{t('language.description')}</p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t('language.label')}
+                </label>
+                <select
+                  value={settings.locale || 'en'}
+                  onChange={(e) =>
+                    updateSettings((prev) => ({
+                      ...prev,
+                      locale: e.target.value as 'en' | 'es',
+                    }))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={saving}
+                >
+                  <option value="en">🇺🇸 English</option>
+                  <option value="es">🇪🇸 Español</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t('language.note')}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Cooking Preferences Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900">
-                Cooking Preferences
+                {t('cookingPreferences.title')}
               </h2>
               <p className="text-gray-600 mt-1">
-                Tell us about your cooking style and dietary needs
+                {t('cookingPreferences.subtitle')}
               </p>
             </div>
 
@@ -270,10 +296,10 @@ export default function SettingsPage() {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900">
-                Kitchen Equipment
+                {t('kitchenEquipment.title')}
               </h2>
               <p className="text-gray-600 mt-1">
-                Let us know what equipment you have available
+                {t('kitchenEquipment.subtitle')}
               </p>
             </div>
 
@@ -293,10 +319,10 @@ export default function SettingsPage() {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-gray-900">
-                Data Management
+                {t('dataManagement.title')}
               </h2>
               <p className="text-gray-600 mt-1">
-                Export, import, or clear your settings
+                {t('dataManagement.subtitle')}
               </p>
             </div>
 
@@ -307,7 +333,7 @@ export default function SettingsPage() {
                 setHasChanges(false);
                 setSaveMessage({
                   type: 'success',
-                  text: 'Settings imported successfully!',
+                  text: t('messages.settingsImported'),
                 });
                 setTimeout(() => setSaveMessage(null), 3000);
               }}

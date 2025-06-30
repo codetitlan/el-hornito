@@ -13,6 +13,7 @@ const EnhancedAnalyzeRequestSchema = z.object({
   image: z.any(), // File object validation handled separately
   preferences: z.string().optional(),
   dietaryRestrictions: z.array(z.string()).optional(),
+  locale: z.enum(['en', 'es']).optional().default('en'),
   userSettings: z
     .object({
       cookingPreferences: z
@@ -77,9 +78,12 @@ function generateEnhancedPrompt(
     };
   } | null,
   preferences: string | null,
-  dietaryRestrictions: string | null
+  dietaryRestrictions: string | null,
+  locale: 'en' | 'es' = 'en'
 ): string {
-  let prompt = `
+  // Base prompts by language
+  const prompts = {
+    en: `
 Analyze this fridge photo and identify all visible ingredients. Based on the available ingredients, suggest ONE complete recipe that can be made primarily with these ingredients.
 
 Please respond in this exact JSON format:
@@ -107,50 +111,124 @@ Requirements:
 - Provide clear, step-by-step instructions
 - Include realistic cooking times
 - Make the recipe practical and achievable
-- If ingredients are unclear, make reasonable assumptions`.trim();
+- If ingredients are unclear, make reasonable assumptions`,
+    es: `
+Analiza esta foto de nevera e identifica todos los ingredientes visibles. Basándote en los ingredientes disponibles, sugiere UNA receta completa que se pueda hacer principalmente con estos ingredientes.
+
+Por favor responde en este formato JSON exacto:
+{
+  "title": "Nombre de la Receta",
+  "description": "Breve descripción del plato",
+  "cookingTime": "30 minutos",
+  "difficulty": "Fácil|Medio|Difícil",
+  "servings": 4,
+  "ingredients": [
+    "2 tazas de harina",
+    "1 huevo",
+    "..."
+  ],
+  "instructions": [
+    "Paso 1: ...",
+    "Paso 2: ...",
+    "..."
+  ],
+  "tips": ["Consejo de cocina opcional 1", "..."]
+}
+
+Requisitos:
+- Usa principalmente los ingredientes visibles en la foto
+- Proporciona instrucciones claras paso a paso
+- Incluye tiempos de cocción realistas
+- Haz que la receta sea práctica y realizable
+- Si los ingredientes no están claros, haz suposiciones razonables`,
+  };
+
+  let prompt = prompts[locale].trim();
 
   // Add user settings if available
   if (userSettings?.cookingPreferences) {
     const prefs = userSettings.cookingPreferences;
 
-    prompt += '\n\nUser Preferences:';
+    // Localized headings
+    const headings = {
+      en: 'User Preferences:',
+      es: 'Preferencias del Usuario:',
+    };
+
+    prompt += `\n\n${headings[locale]}`;
 
     if (prefs.cuisineTypes && prefs.cuisineTypes.length > 0) {
-      prompt += `\n- Preferred cuisines: ${prefs.cuisineTypes.join(', ')}`;
+      const labels = {
+        en: 'Preferred cuisines',
+        es: 'Cocinas preferidas',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.cuisineTypes.join(', ')}`;
     }
 
     if (prefs.dietaryRestrictions && prefs.dietaryRestrictions.length > 0) {
-      prompt += `\n- Dietary restrictions: ${prefs.dietaryRestrictions.join(
+      const labels = {
+        en: 'Dietary restrictions',
+        es: 'Restricciones dietéticas',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.dietaryRestrictions.join(
         ', '
       )}`;
     }
 
     if (prefs.spiceLevel) {
-      prompt += `\n- Spice level preference: ${prefs.spiceLevel}`;
+      const labels = {
+        en: 'Spice level preference',
+        es: 'Preferencia de nivel de picante',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.spiceLevel}`;
     }
 
     if (prefs.cookingTimePreference) {
       const timePrefs = {
-        quick: 'Quick meals (≤30 min)',
-        moderate: 'Moderate cooking time (30-60 min)',
-        elaborate: 'Elaborate recipes (60+ min)',
+        en: {
+          quick: 'Quick meals (≤30 min)',
+          moderate: 'Moderate cooking time (30-60 min)',
+          elaborate: 'Elaborate recipes (60+ min)',
+        },
+        es: {
+          quick: 'Comidas rápidas (≤30 min)',
+          moderate: 'Tiempo de cocción moderado (30-60 min)',
+          elaborate: 'Recetas elaboradas (60+ min)',
+        },
       };
-      prompt += `\n- Cooking time preference: ${
-        timePrefs[prefs.cookingTimePreference as keyof typeof timePrefs] ||
-        prefs.cookingTimePreference
-      }`;
+      const labels = {
+        en: 'Cooking time preference',
+        es: 'Preferencia de tiempo de cocción',
+      };
+      const timeLabel =
+        timePrefs[locale][
+          prefs.cookingTimePreference as keyof typeof timePrefs.en
+        ] || prefs.cookingTimePreference;
+      prompt += `\n- ${labels[locale]}: ${timeLabel}`;
     }
 
     if (prefs.mealTypes && prefs.mealTypes.length > 0) {
-      prompt += `\n- Preferred meal types: ${prefs.mealTypes.join(', ')}`;
+      const labels = {
+        en: 'Preferred meal types',
+        es: 'Tipos de comida preferidos',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.mealTypes.join(', ')}`;
     }
 
     if (prefs.defaultServings) {
-      prompt += `\n- Default servings: ${prefs.defaultServings}`;
+      const labels = {
+        en: 'Default servings',
+        es: 'Porciones predeterminadas',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.defaultServings}`;
     }
 
     if (prefs.additionalNotes) {
-      prompt += `\n- Additional notes: ${prefs.additionalNotes}`;
+      const labels = {
+        en: 'Additional notes',
+        es: 'Notas adicionales',
+      };
+      prompt += `\n- ${labels[locale]}: ${prefs.additionalNotes}`;
     }
   }
 
@@ -166,23 +244,45 @@ Requirements:
     ];
 
     if (allEquipment.length > 0) {
-      prompt += `\n\nAvailable Kitchen Equipment: ${allEquipment.join(', ')}`;
-      prompt +=
-        '\n- Please suggest recipes that work with the available equipment';
-      prompt += '\n- Avoid techniques requiring equipment not listed';
+      const labels = {
+        en: {
+          header: 'Available Kitchen Equipment',
+          suggest:
+            'Please suggest recipes that work with the available equipment',
+          avoid: 'Avoid techniques requiring equipment not listed',
+        },
+        es: {
+          header: 'Equipos de Cocina Disponibles',
+          suggest:
+            'Por favor sugiere recetas que funcionen con el equipo disponible',
+          avoid: 'Evita técnicas que requieran equipo no listado',
+        },
+      };
+
+      prompt += `\n\n${labels[locale].header}: ${allEquipment.join(', ')}`;
+      prompt += `\n- ${labels[locale].suggest}`;
+      prompt += `\n- ${labels[locale].avoid}`;
     }
   }
 
   // Legacy support for old preference format
   if (preferences) {
-    prompt += `\n\nAdditional preferences: ${preferences}`;
+    const labels = {
+      en: 'Additional preferences',
+      es: 'Preferencias adicionales',
+    };
+    prompt += `\n\n${labels[locale]}: ${preferences}`;
   }
 
   if (dietaryRestrictions) {
     try {
       const restrictions = JSON.parse(dietaryRestrictions);
       if (restrictions.length > 0) {
-        prompt += `\n\nLegacy dietary restrictions: ${restrictions.join(', ')}`;
+        const labels = {
+          en: 'Legacy dietary restrictions',
+          es: 'Restricciones dietéticas heredadas',
+        };
+        prompt += `\n\n${labels[locale]}: ${restrictions.join(', ')}`;
       }
     } catch (error) {
       console.error('Error parsing legacy dietary restrictions:', error);
@@ -204,6 +304,7 @@ export async function POST(request: NextRequest) {
     const dietaryRestrictions = formData.get('dietaryRestrictions') as
       | string
       | null;
+    const locale = (formData.get('locale') as 'en' | 'es') || 'en';
     const userSettingsJson = formData.get('userSettings') as string | null;
     personalApiKey = formData.get('apiKey') as string | null;
 
@@ -237,6 +338,7 @@ export async function POST(request: NextRequest) {
             }
           })()
         : undefined,
+      locale: locale,
       userSettings: userSettings || undefined,
       apiKey: personalApiKey || undefined,
     };
@@ -355,7 +457,8 @@ export async function POST(request: NextRequest) {
     const prompt = generateEnhancedPrompt(
       userSettings,
       preferences,
-      dietaryRestrictions
+      dietaryRestrictions,
+      locale
     );
 
     console.log('Sending request to Claude API...');

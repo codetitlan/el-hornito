@@ -1,8 +1,8 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { settingsManager } from '@/lib/settings';
 
 export function LanguageSwitcher() {
   const locale = useLocale();
@@ -10,8 +10,20 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
 
   const handleLocaleChange = (newLocale: string) => {
-    // Navigate to the same page but with new locale
-    router.push(pathname, { locale: newLocale });
+    // Prevent unnecessary navigation if already on the same locale
+    if (newLocale === locale) {
+      return;
+    }
+
+    // Save locale preference to settings
+    settingsManager.setLocale(newLocale as 'en' | 'es');
+
+    // Use Next.js router to handle locale change properly
+    const currentPath = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '');
+    const newPath = `/${newLocale}${currentPath}`;
+
+    // Use Next.js router.push for proper navigation
+    router.push(newPath);
   };
 
   return (

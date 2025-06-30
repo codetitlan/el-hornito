@@ -84,6 +84,7 @@ interface AppConfig {
 export interface UserSettings {
   version: string; // For future migrations
   lastUpdated: string;
+  locale?: 'en' | 'es'; // Language preference
   cookingPreferences: CookingPreferences;
   kitchenEquipment: KitchenEquipment;
   apiConfiguration: ApiConfiguration;

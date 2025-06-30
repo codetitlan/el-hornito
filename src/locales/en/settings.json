@@ -3,6 +3,12 @@
     "title": "Settings",
     "subtitle": "Customize your cooking experience"
   },
+  "language": {
+    "title": "Language",
+    "description": "Select your preferred interface language",
+    "label": "Interface Language",
+    "note": "Changes will apply immediately"
+  },
   "cookingPreferences": {
     "title": "Cooking Preferences",
     "subtitle": "Tell us about your cooking style and dietary needs",
@@ -125,7 +131,13 @@
   },
   "privacy": {
     "title": "Privacy & Data Storage",
-    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control."
+    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control.",
+    "items": [
+      "Settings are saved in your browser's local storage",
+      "No personal data is collected or transmitted",
+      "You can export, import, or clear your data at any time",
+      "In the future, you'll be able to sync settings across devices with an account"
+    ]
   },
   "common": {
     "selected": "selected",

@@ -387,6 +387,34 @@ export class SettingsManager {
 
     return migrated;
   }
+
+  /**
+   * Set user's preferred locale
+   */
+  public setLocale(locale: 'en' | 'es'): boolean {
+    try {
+      const settings = this.loadSettings();
+      settings.locale = locale;
+      settings.lastUpdated = new Date().toISOString();
+      return this.saveSettings(settings);
+    } catch (error) {
+      console.error('Failed to set locale:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get user's preferred locale with fallback to 'en'
+   */
+  public getLocale(): 'en' | 'es' {
+    try {
+      const settings = this.loadSettings();
+      return settings.locale || 'en';
+    } catch (error) {
+      console.error('Failed to get locale:', error);
+      return 'en';
+    }
+  }
 }
 
 // Export singleton instance

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { getMessages, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { routing } from '@/i18n/routing';
+
 import '../globals.css';
 
 const geistSans = Geist({
@@ -82,14 +83,15 @@ export default async function LocaleLayout({
 
   // Providing all messages to the client
   // side is the easiest way to get started
-  const messages = await getMessages();
+  // const messages = await getMessages();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        {/* <NextIntlClientProvider messages={messages}> */}
+        <NextIntlClientProvider>
           <ErrorBoundary>{children}</ErrorBoundary>
         </NextIntlClientProvider>
       </body>
