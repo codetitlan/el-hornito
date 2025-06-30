@@ -3,15 +3,13 @@
  * Configures the testing environment for API endpoint testing
  */
 
-/**
- * API Test Setup
- * Configures the testing environment for API endpoint testing
- */
-
-const { TextEncoder, TextDecoder } = require('util');
+import { TextEncoder, TextDecoder } from 'util';
 
 // Global polyfills for Node.js test environment
-Object.assign(global, { TextEncoder, TextDecoder });
+// Only assign if not already available (avoid redeclaration)
+if (typeof global.TextEncoder === 'undefined') {
+  Object.assign(global, { TextEncoder, TextDecoder });
+}
 
 // Mock Next.js request/response objects
 Object.assign(global, {
