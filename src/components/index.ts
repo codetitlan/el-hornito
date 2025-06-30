@@ -4,6 +4,9 @@
 export { Button } from './ui/Button';
 export { LoadingSpinner, ProgressSpinner } from './ui/LoadingSpinner';
 
+// i18n Components
+export { LanguageSwitcher } from './LanguageSwitcher';
+
 // Core Components
 export { ErrorBoundary } from './ErrorBoundary';
 export { FridgeUploader } from './FridgeUploader';

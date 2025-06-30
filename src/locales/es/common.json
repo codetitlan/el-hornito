@@ -1,0 +1,132 @@
+{
+  "app": {
+    "title": "El Hornito - IA de Nevera a Receta",
+    "tagline": "IA de Nevera a Receta",
+    "description": "Transforma el contenido de tu nevera en recetas deliciosas con IA. Sube una foto de tu nevera y obtén sugerencias de recetas personalizadas al instante.",
+    "keywords": "receta, IA, cocina, nevera, ingredientes, comida, Claude AI",
+    "author": "Equipo El Hornito",
+    "publisher": "El Hornito",
+    "ogDescription": "Transforma el contenido de tu nevera en recetas deliciosas con IA",
+    "ogAlt": "El Hornito - IA de Nevera a Receta",
+    "twitterDescription": "Transforma el contenido de tu nevera en recetas deliciosas con IA"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "reset": "Reiniciar",
+    "startOver": "Empezar de Nuevo",
+    "saveChanges": "Guardar Cambios",
+    "allSaved": "Todo Guardado",
+    "saving": "Guardando...",
+    "resetToDefaults": "Restablecer Valores por Defecto",
+    "tryAgain": "Intentar de Nuevo",
+    "goHome": "Ir al Inicio",
+    "dismiss": "Descartar",
+    "useSmartDefaults": "Usar Valores Inteligentes",
+    "customizeSettings": "Personalizar Configuración"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "settings": "Configuración",
+    "backToHome": "Volver al Inicio"
+  },
+  "status": {
+    "poweredBy": "Impulsado por Claude AI",
+    "unsavedChanges": "Cambios no guardados",
+    "loading": "Cargando...",
+    "ready": "Listo"
+  },
+  "hero": {
+    "poweredByBadge": "Impulsado por Claude AI",
+    "title": "Transforma tu Nevera en Recetas Increíbles",
+    "titleHighlight": "Nevera",
+    "subtitle": "Sube una foto del contenido de tu nevera y deja que nuestro chef IA cree recetas personalizadas que aprovechen al máximo lo que ya tienes. ¡No más desperdicio de comida, solo comidas deliciosas!",
+    "features": {
+      "photoAnalysis": "Análisis de Foto",
+      "aiPowered": "Impulsado por IA",
+      "customRecipes": "Recetas Personalizadas"
+    }
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "steps": {
+      "takePhoto": {
+        "title": "1. Toma una Foto",
+        "description": "Toma una foto clara del contenido de tu nevera o despensa"
+      },
+      "aiAnalysis": {
+        "title": "2. Análisis IA",
+        "description": "Nuestra IA identifica ingredientes y considera tus preferencias"
+      },
+      "getRecipe": {
+        "title": "3. Obtén Receta",
+        "description": "Recibe una receta personalizada con instrucciones paso a paso"
+      }
+    }
+  },
+  "footer": {
+    "tagline": "Transformando neveras en festines con el poder de la IA",
+    "credits": "Impulsado por Claude AI • Hecho con ❤️ para los amantes de la comida"
+  },
+  "onboarding": {
+    "welcomeTitle": "🎉 ¡Bienvenido a El Hornito!",
+    "enhanceTitle": "✨ Mejora tu Experiencia",
+    "welcomeDescription": "Obtén recomendaciones de recetas personalizadas configurando tus preferencias culinarias y restricciones dietéticas.",
+    "enhanceDescription": "Completa tu perfil para obtener sugerencias de recetas aún mejores adaptadas a tus gustos y equipos."
+  },
+  "upload": {
+    "steps": {
+      "preparing": "Preparando imagen...",
+      "uploading": "Subiendo al servidor...",
+      "analyzing": "Analizando ingredientes...",
+      "generating": "Generando receta...",
+      "complete": "¡Completo!"
+    }
+  },
+  "difficulty": {
+    "easy": "Fácil",
+    "medium": "Medio",
+    "hard": "Difícil"
+  },
+  "fridgeUploader": {
+    "analyzingMessage": "¡Nuestra IA está analizando el contenido de tu nevera y creando una receta perfecta solo para ti!",
+    "dropPhoto": "Suelta tu foto aquí",
+    "uploadPhoto": "Sube tu foto de la nevera",
+    "dragDrop": "Arrastra y suelta o haz clic para navegar (JPEG, PNG, WebP hasta 10MB)",
+    "takePhoto": "Tomar Foto",
+    "removeImage": "Eliminar imagen",
+    "removeSelectedImage": "Eliminar imagen seleccionada",
+    "yourRecipePreferences": "Tus Preferencias de Receta",
+    "edit": "Editar",
+    "dietary": "Dietético:",
+    "cuisines": "Cocinas:",
+    "preferences": "Preferencias:",
+    "meals": "comidas",
+    "spice": "picante",
+    "equipment": "Equipos:",
+    "tip": "🍳 Consejo:",
+    "tipText": "¡Configura tus preferencias en ajustes para obtener recetas más personalizadas!",
+    "personalizedRecipeGeneration": "Generación de Recetas Personalizadas:",
+    "personalizedRecipeDescription": "La IA utilizará tus preferencias guardadas y restricciones dietéticas de tu configuración para crear una receta personalizada.",
+    "setUpPreferences": "Configura tus preferencias →",
+    "generateRecipe": "Generar Receta Personalizada",
+    "invalidFile": "Archivo inválido. Por favor sube una imagen válida.",
+    "preparing": "Preparando imagen...",
+    "analysisFailed": "Falló el análisis de la receta. Por favor intenta de nuevo.",
+    "selectedImageAlt": "Foto seleccionada de la nevera"
+  },
+  "recipe": {
+    "clickToView": "Haz clic para ver la receta completa",
+    "ingredients": "Ingredientes",
+    "instructions": "Instrucciones",
+    "steps": "pasos",
+    "servings": "porciones",
+    "more": "más",
+    "noRecipeTitle": "Sin Receta Aún",
+    "noRecipeDescription": "¡Sube una foto de tu nevera para comenzar con sugerencias de recetas impulsadas por IA!",
+    "chefsTitle": "Consejos del Chef",
+    "share": "Compartir",
+    "print": "Imprimir",
+    "linkCopied": "¡Enlace copiado al portapapeles!"
+  }
+}

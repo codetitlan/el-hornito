@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { CookingPreferences } from '@/types';
-import { SETTINGS_CONFIG } from '@/lib/constants';
 import { PreferenceChips } from './PreferenceChips';
 import { SettingsSelect } from './SettingsSelect';
 
@@ -16,6 +15,7 @@ export const CookingPreferencesSection: React.FC<
   CookingPreferencesSectionProps
 > = ({ preferences, onChange, disabled = false, className = '' }) => {
   const t = useTranslations('settings.cookingPreferences');
+  const tOptions = useTranslations('settings.options');
 
   const updatePreferences = (
     field: keyof CookingPreferences,
@@ -34,7 +34,7 @@ export const CookingPreferencesSection: React.FC<
         label={t('cuisineTypes')}
         description={t('cuisineTypesDescription')}
         selected={preferences.cuisineTypes}
-        options={[...SETTINGS_CONFIG.CUISINE_TYPES]}
+        options={tOptions.raw('cuisineTypes') as string[]}
         onChange={(selected) => updatePreferences('cuisineTypes', selected)}
         disabled={disabled}
         maxSelections={8}
@@ -45,7 +45,7 @@ export const CookingPreferencesSection: React.FC<
         label={t('dietaryRestrictions')}
         description={t('dietaryRestrictionsDescription')}
         selected={preferences.dietaryRestrictions}
-        options={[...SETTINGS_CONFIG.DIETARY_RESTRICTIONS]}
+        options={tOptions.raw('dietaryRestrictions') as string[]}
         onChange={(selected) =>
           updatePreferences('dietaryRestrictions', selected)
         }
@@ -57,7 +57,13 @@ export const CookingPreferencesSection: React.FC<
         label={t('spiceLevel')}
         description={t('spiceLevelDescription')}
         value={preferences.spiceLevel}
-        options={SETTINGS_CONFIG.SPICE_LEVELS.map((level) => ({ ...level }))}
+        options={
+          tOptions.raw('spiceLevels') as Array<{
+            value: string;
+            label: string;
+            description: string;
+          }>
+        }
         onChange={(value) => updatePreferences('spiceLevel', value)}
         disabled={disabled}
         placeholder={t('spiceLevelPlaceholder')}
@@ -68,9 +74,13 @@ export const CookingPreferencesSection: React.FC<
         label={t('cookingTime')}
         description={t('cookingTimeDescription')}
         value={preferences.cookingTimePreference}
-        options={SETTINGS_CONFIG.COOKING_TIME_PREFERENCES.map((pref) => ({
-          ...pref,
-        }))}
+        options={
+          tOptions.raw('cookingTimePreferences') as Array<{
+            value: string;
+            label: string;
+            description: string;
+          }>
+        }
         onChange={(value) => updatePreferences('cookingTimePreference', value)}
         disabled={disabled}
         placeholder={t('cookingTimePlaceholder')}
@@ -81,7 +91,7 @@ export const CookingPreferencesSection: React.FC<
         label={t('mealTypes')}
         description={t('mealTypesDescription')}
         selected={preferences.mealTypes}
-        options={[...SETTINGS_CONFIG.MEAL_TYPES]}
+        options={tOptions.raw('mealTypes') as string[]}
         onChange={(selected) => updatePreferences('mealTypes', selected)}
         disabled={disabled}
         maxSelections={6}

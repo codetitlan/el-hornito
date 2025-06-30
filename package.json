@@ -46,6 +46,7 @@
     "eslint-config-next": "15.3.4",
     "jest": "^30.0.3",
     "jest-environment-jsdom": "^30.0.2",
+    "knip": "^5.61.3",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   },

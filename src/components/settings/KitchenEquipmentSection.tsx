@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { KitchenEquipment } from '@/types';
-import { SETTINGS_CONFIG } from '@/lib/constants';
 import { EquipmentGrid } from './EquipmentGrid';
 
 interface KitchenEquipmentSectionProps {
@@ -15,6 +14,7 @@ export const KitchenEquipmentSection: React.FC<
   KitchenEquipmentSectionProps
 > = ({ equipment, onChange, disabled = false, className = '' }) => {
   const t = useTranslations('settings.kitchenEquipment');
+  const tOptions = useTranslations('settings.options');
 
   const updateEquipment = (field: keyof KitchenEquipment, value: string[]) => {
     onChange({
@@ -29,7 +29,7 @@ export const KitchenEquipmentSection: React.FC<
       <EquipmentGrid
         label={t('basicAppliances')}
         description={t('basicAppliancesDescription')}
-        items={[...SETTINGS_CONFIG.BASIC_APPLIANCES]}
+        items={tOptions.raw('basicAppliances') as string[]}
         selected={equipment.basicAppliances}
         onChange={(selected) => updateEquipment('basicAppliances', selected)}
         disabled={disabled}
@@ -40,7 +40,7 @@ export const KitchenEquipmentSection: React.FC<
       <EquipmentGrid
         label={t('advancedAppliances')}
         description={t('advancedAppliancesDescription')}
-        items={[...SETTINGS_CONFIG.ADVANCED_APPLIANCES]}
+        items={tOptions.raw('advancedAppliances') as string[]}
         selected={equipment.advancedAppliances}
         onChange={(selected) => updateEquipment('advancedAppliances', selected)}
         disabled={disabled}
@@ -51,7 +51,7 @@ export const KitchenEquipmentSection: React.FC<
       <EquipmentGrid
         label={t('cookware')}
         description={t('cookwareDescription')}
-        items={[...SETTINGS_CONFIG.COOKWARE]}
+        items={tOptions.raw('cookware') as string[]}
         selected={equipment.cookware}
         onChange={(selected) => updateEquipment('cookware', selected)}
         disabled={disabled}
@@ -62,7 +62,7 @@ export const KitchenEquipmentSection: React.FC<
       <EquipmentGrid
         label={t('bakingEquipment')}
         description={t('bakingEquipmentDescription')}
-        items={[...SETTINGS_CONFIG.BAKING_EQUIPMENT]}
+        items={tOptions.raw('bakingEquipment') as string[]}
         selected={equipment.bakingEquipment}
         onChange={(selected) => updateEquipment('bakingEquipment', selected)}
         disabled={disabled}

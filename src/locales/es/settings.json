@@ -1,0 +1,310 @@
+{
+  "page": {
+    "title": "Configuración",
+    "subtitle": "Personaliza tu experiencia culinaria"
+  },
+  "language": {
+    "title": "Idioma",
+    "description": "Selecciona tu idioma preferido para la interfaz",
+    "label": "Idioma de la Interfaz",
+    "note": "Los cambios se aplicarán inmediatamente"
+  },
+  "cookingPreferences": {
+    "title": "Preferencias Culinarias",
+    "subtitle": "Cuéntanos sobre tu estilo de cocina y necesidades dietéticas",
+    "cuisineTypes": "Tipos de Cocina Favoritos",
+    "cuisineTypesDescription": "Selecciona los tipos de cocina que más disfrutas",
+    "dietaryRestrictions": "Restricciones Dietéticas",
+    "dietaryRestrictionsDescription": "Déjanos saber sobre cualquier necesidad o preferencia dietética",
+    "spiceLevel": "Nivel de Picante Preferido",
+    "spiceLevelDescription": "¿Qué tan picante te gusta tu comida?",
+    "spiceLevelPlaceholder": "Seleccionar nivel de picante...",
+    "cookingTime": "Preferencia de Tiempo de Cocción",
+    "cookingTimeDescription": "¿Cuánto tiempo sueles querer pasar cocinando?",
+    "cookingTimePlaceholder": "Seleccionar preferencia de tiempo de cocción...",
+    "mealTypes": "Tipos de Comida",
+    "mealTypesDescription": "¿En qué tipos de comidas estás más interesado?",
+    "servings": "Número Predeterminado de Porciones",
+    "servingsDescription": "¿Para cuántas personas sueles cocinar?",
+    "servingsMinLabel": "1 persona",
+    "servingsMaxLabel": "12+ personas",
+    "additionalNotes": "Notas Adicionales",
+    "additionalNotesDescription": "¿Alguna otra preferencia culinaria o requisito especial?",
+    "additionalNotesPlaceholder": "ej., prefiero comidas rápidas entre semana, me encanta experimentar con nuevos sabores..."
+  },
+  "kitchenEquipment": {
+    "title": "Equipos de Cocina",
+    "subtitle": "Déjanos saber qué equipos tienes disponibles",
+    "basicAppliances": "Electrodomésticos Básicos",
+    "basicAppliancesDescription": "Electrodomésticos esenciales de cocina que tienes disponibles",
+    "advancedAppliances": "Electrodomésticos Avanzados",
+    "advancedAppliancesDescription": "Electrodomésticos especializados que pueden mejorar tu cocina",
+    "cookware": "Utensilios y Sartenes",
+    "cookwareDescription": "Ollas, sartenes y recipientes de cocina que posees",
+    "bakingEquipment": "Equipos de Repostería",
+    "bakingEquipmentDescription": "Herramientas y equipos para hornear y postres",
+    "other": "Otros Equipos",
+    "otherDescription": "¿Alguna otra herramienta o equipo de cocina no listado arriba? (uno por línea)",
+    "otherPlaceholder": "ej., Máquina de pasta\nRebanadora mandolina\nBatidora de inmersión",
+    "otherNote": "Ingresa cada artículo en una nueva línea",
+    "noEquipmentSelected": "Ningún equipo seleccionado",
+    "summary": {
+      "title": "Resumen de Equipos",
+      "basicAppliances": "Electrodomésticos Básicos:",
+      "advancedAppliances": "Electrodomésticos Avanzados:",
+      "cookware": "Utensilios:",
+      "bakingEquipment": "Equipos de Repostería:",
+      "other": "Otros Equipos:"
+    }
+  },
+  "apiConfiguration": {
+    "title": "Configuración de API",
+    "subtitle": "Opcional: Usa tu propia clave API de Anthropic Claude para uso ilimitado",
+    "personalKey": "Clave API Personal",
+    "personalKeyDescription": "Ingresa tu clave API de Anthropic Claude para usar tu propia cuota en lugar de nuestro servicio compartido",
+    "personalKeyPlaceholder": "Ingresa tu clave API de Anthropic Claude...",
+    "validate": "Validar y Guardar",
+    "clear": "Limpiar Clave",
+    "validating": "Validando...",
+    "messages": {
+      "enterKey": "Por favor ingresa una clave API",
+      "validationSuccess": "¡La clave API es válida y ha sido guardada!",
+      "validationError": "Clave API inválida. Por favor verifica tu clave e inténtalo de nuevo.",
+      "validationFailed": "No se pudo validar la clave API. Por favor inténtalo de nuevo.",
+      "clearSuccess": "¡Clave API eliminada exitosamente!",
+      "clearFailed": "No se pudo eliminar la clave API"
+    },
+    "status": {
+      "active": "Clave API Personal Activa",
+      "activeDescription": "Estás usando tu propia clave API de Anthropic.",
+      "lastValidated": "Última validación:",
+      "defaultService": "Usando Servicio Predeterminado",
+      "defaultServiceDescription": "Estás usando nuestro servicio compartido. Añade tu propia clave API para uso ilimitado y respuestas más rápidas.",
+      "valid": "✓ Clave API válida configurada",
+      "invalid": "✗ Clave API inválida",
+      "none": "No hay clave API configurada"
+    },
+    "actions": {
+      "addPersonalKey": "Añadir Tu Clave API Personal",
+      "getKeyDescription": "Obtén tu clave API desde",
+      "anthropicConsole": "Consola de Anthropic",
+      "validateAndSave": "Validar y Guardar Clave API",
+      "manageKey": "Administrar Clave API",
+      "removeKey": "Eliminar Clave API Personal"
+    },
+    "security": {
+      "title": "Aviso de Seguridad",
+      "items": [
+        "Tu clave API se almacena localmente en tu navegador y nunca se transmite a nuestros servidores",
+        "Las claves API están codificadas básicamente para protección mínima en el almacenamiento local",
+        "Nunca compartas tu clave API con otros",
+        "Puedes revocar el acceso en cualquier momento desde la Consola de Anthropic"
+      ]
+    },
+    "help": {
+      "title": "Cómo obtener tu clave API:",
+      "step1": "1. Visita console.anthropic.com",
+      "step2": "2. Inicia sesión o crea una cuenta",
+      "step3": "3. Ve a la sección 'API Keys'",
+      "step4": "4. Crea una nueva clave API",
+      "step5": "5. Cópiala y pégala aquí",
+      "note": "Nota: Tu clave API se almacena de forma segura en tu navegador y nunca se envía a nuestros servidores."
+    },
+    "usageTracking": "Seguimiento de Uso",
+    "usageTrackingDescription": "Rastrear el uso de API y costos estimados (solo clave personal)"
+  },
+  "dataManagement": {
+    "title": "Gestión de Datos",
+    "subtitle": "Exporta, importa o borra tus configuraciones",
+    "dataSummary": {
+      "title": "Resumen de Tus Datos",
+      "cookingPreferences": "Preferencias Culinarias:",
+      "kitchenEquipment": "Equipos de Cocina:",
+      "lastUpdated": "Última Actualización:",
+      "version": "Versión:",
+      "items": "elementos"
+    },
+    "export": {
+      "button": "Exportar Configuraciones",
+      "description": "Descarga tus configuraciones actuales como un archivo JSON"
+    },
+    "import": {
+      "button": "Importar Configuraciones",
+      "description": "Sube un archivo de configuraciones previamente exportado",
+      "selectFile": "Seleccionar archivo de configuraciones..."
+    },
+    "reset": {
+      "dangerZone": "Zona de Peligro",
+      "button": "Restablecer a Valores Predeterminados",
+      "description": "Borra todas las configuraciones y vuelve a los valores predeterminados",
+      "confirmTitle": "Restablecer Configuraciones",
+      "confirmMessage": "¿Estás seguro de que quieres restablecer todas las configuraciones a los valores predeterminados? Esta acción no se puede deshacer.\n\nConsidera exportar tus configuraciones primero como respaldo.",
+      "confirmButton": "Restablecer Todas las Configuraciones",
+      "cancelButton": "Cancelar",
+      "successMessage": "Todos los datos de configuración han sido borrados.",
+      "failedMessage": "No se pudieron borrar los datos de configuración. Por favor inténtalo de nuevo."
+    },
+    "messages": {
+      "exportSuccess": "¡Configuraciones exportadas exitosamente!",
+      "exportFailed": "No se pudieron exportar las configuraciones. Por favor inténtalo de nuevo.",
+      "importSuccess": "¡Configuraciones importadas exitosamente!",
+      "importFailed": "No se pudieron importar las configuraciones. Por favor verifica el formato del archivo.",
+      "resetSuccess": "¡Configuraciones restablecidas a valores predeterminados!",
+      "resetFailed": "Failed to reset settings"
+    }
+  },
+  "privacy": {
+    "title": "Privacidad y Almacenamiento de Datos",
+    "description": "Todas tus configuraciones se almacenan localmente en tu navegador y nunca se transmiten a nuestros servidores. Tus datos permanecen completamente privados y bajo tu control.",
+    "items": [
+      "Las configuraciones se guardan en el almacenamiento local de tu navegador",
+      "No se recopilan ni transmiten datos personales",
+      "Puedes exportar, importar o limpiar tus datos en cualquier momento",
+      "En el futuro, podrás sincronizar configuraciones entre dispositivos con una cuenta"
+    ]
+  },
+  "common": {
+    "selected": "selected",
+    "noPreferencesSelected": "No preferences selected",
+    "remove": "Remove"
+  },
+  "messages": {
+    "settingsSaved": "Settings saved successfully!",
+    "settingsImported": "Settings imported successfully!",
+    "settingsReset": "Settings reset to defaults!",
+    "saveFailed": "Failed to save settings. Please try again.",
+    "saveError": "Ocurrió un error al guardar la configuración.",
+    "confirmReset": "¿Estás seguro de que quieres restablecer todas las configuraciones a los valores predeterminados? Esto no se puede deshacer."
+  },
+  "options": {
+    "cuisineTypes": [
+      "Italiana",
+      "Asiática",
+      "Mexicana",
+      "Mediterránea",
+      "Americana",
+      "Francesa",
+      "India",
+      "Tailandesa",
+      "Japonesa",
+      "Griega",
+      "Española",
+      "Medio Oriente",
+      "Coreana",
+      "Vietnamita",
+      "China",
+      "Alemana",
+      "Brasileña",
+      "Otra"
+    ],
+    "dietaryRestrictions": [
+      "Vegetariana",
+      "Vegana",
+      "Sin gluten",
+      "Sin lácteos",
+      "Sin frutos secos",
+      "Keto",
+      "Paleo",
+      "Baja en carbohidratos",
+      "Baja en sodio",
+      "Sin azúcar",
+      "Halal",
+      "Kosher",
+      "Pescetariana",
+      "Comida cruda"
+    ],
+    "spiceLevels": [
+      {
+        "value": "mild",
+        "label": "Suave",
+        "description": "Poco o nada de picante"
+      },
+      {
+        "value": "medium",
+        "label": "Medio",
+        "description": "Nivel de picante moderado"
+      },
+      {
+        "value": "spicy",
+        "label": "Picante",
+        "description": "Caliente y sabroso"
+      },
+      {
+        "value": "very-spicy",
+        "label": "Muy Picante",
+        "description": "Calor intenso"
+      }
+    ],
+    "cookingTimePreferences": [
+      {
+        "value": "quick",
+        "label": "Rápido (≤30 min)",
+        "description": "Comidas rápidas para días ocupados"
+      },
+      {
+        "value": "moderate",
+        "label": "Moderado (30-60 min)",
+        "description": "Tiempo de cocción equilibrado"
+      },
+      {
+        "value": "elaborate",
+        "label": "Elaborado (60+ min)",
+        "description": "Recetas detalladas y complejas"
+      }
+    ],
+    "mealTypes": [
+      "Desayuno",
+      "Almuerzo",
+      "Cena",
+      "Aperitivos",
+      "Postres",
+      "Entradas",
+      "Ensaladas",
+      "Sopas",
+      "Sándwiches",
+      "Bebidas"
+    ],
+    "basicAppliances": [
+      "Horno",
+      "Cocina",
+      "Microondas",
+      "Refrigerador",
+      "Congelador",
+      "Tostadora"
+    ],
+    "advancedAppliances": [
+      "Freidora de aire",
+      "Olla a presión",
+      "Olla de cocción lenta",
+      "Procesador de alimentos",
+      "Licuadora",
+      "Batidora de pie",
+      "Arrocera",
+      "Máquina de pan",
+      "Deshidratador",
+      "Sous Vide"
+    ],
+    "cookware": [
+      "Sartenes antiadherentes",
+      "Sartén de hierro fundido",
+      "Ollas de acero inoxidable",
+      "Wok",
+      "Olla holandesa",
+      "Sartén para grill",
+      "Vaporera",
+      "Bandeja para asar",
+      "Olla grande"
+    ],
+    "bakingEquipment": [
+      "Bandejas para hornear",
+      "Moldes para pasteles",
+      "Moldes para muffins",
+      "Moldes para pan",
+      "Moldes para tartas",
+      "Cortadores de galletas",
+      "Rodillo",
+      "Tazas medidoras",
+      "Báscula de cocina"
+    ]
+  }
+}

@@ -3,6 +3,12 @@
     "title": "Settings",
     "subtitle": "Customize your cooking experience"
   },
+  "language": {
+    "title": "Language",
+    "description": "Select your preferred interface language",
+    "label": "Interface Language",
+    "note": "Changes will apply immediately"
+  },
   "cookingPreferences": {
     "title": "Cooking Preferences",
     "subtitle": "Tell us about your cooking style and dietary needs",
@@ -41,6 +47,7 @@
     "otherDescription": "Any other kitchen tools or equipment not listed above? (one per line)",
     "otherPlaceholder": "e.g., Pasta machine\nMandoline slicer\nImmersion blender",
     "otherNote": "Enter each item on a new line",
+    "noEquipmentSelected": "No equipment selected",
     "summary": {
       "title": "Equipment Summary",
       "basicAppliances": "Basic Appliances:",
@@ -68,9 +75,31 @@
       "clearFailed": "Failed to clear API key"
     },
     "status": {
+      "active": "Personal API Key Active",
+      "activeDescription": "You're using your own Anthropic API key.",
+      "lastValidated": "Last validated:",
+      "defaultService": "Using Default Service",
+      "defaultServiceDescription": "You're using our shared service. Add your own API key for unlimited usage and faster responses.",
       "valid": "✓ Valid API key configured",
       "invalid": "✗ Invalid API key",
       "none": "No API key configured"
+    },
+    "actions": {
+      "addPersonalKey": "Add Your Personal API Key",
+      "getKeyDescription": "Get your API key from",
+      "anthropicConsole": "Anthropic Console",
+      "validateAndSave": "Validate & Save API Key",
+      "manageKey": "Manage API Key",
+      "removeKey": "Remove Personal API Key"
+    },
+    "security": {
+      "title": "Security Notice",
+      "items": [
+        "Your API key is stored locally in your browser and never transmitted to our servers",
+        "API keys are basic-encoded for minimal protection in local storage",
+        "Never share your API key with others",
+        "You can revoke access anytime from the Anthropic Console"
+      ]
     },
     "help": {
       "title": "How to get your API key:",
@@ -105,6 +134,7 @@
       "selectFile": "Select settings file..."
     },
     "reset": {
+      "dangerZone": "Danger Zone",
       "button": "Reset to Defaults",
       "description": "Clear all settings and return to default values",
       "confirmTitle": "Reset Settings",
@@ -125,7 +155,13 @@
   },
   "privacy": {
     "title": "Privacy & Data Storage",
-    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control."
+    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control.",
+    "items": [
+      "Settings are saved in your browser's local storage",
+      "No personal data is collected or transmitted",
+      "You can export, import, or clear your data at any time",
+      "In the future, you'll be able to sync settings across devices with an account"
+    ]
   },
   "common": {
     "selected": "selected",
@@ -137,7 +173,8 @@
     "settingsImported": "Settings imported successfully!",
     "settingsReset": "Settings reset to defaults!",
     "saveFailed": "Failed to save settings. Please try again.",
-    "saveError": "An error occurred while saving settings."
+    "saveError": "An error occurred while saving settings.",
+    "confirmReset": "Are you sure you want to reset all settings to defaults? This cannot be undone."
   },
   "options": {
     "cuisineTypes": [
