@@ -68,7 +68,7 @@ export class AnthropicMockManager {
    * Mock successful recipe generation
    */
   mockSuccessfulRecipe(locale: 'en' | 'es' = 'en') {
-    const recipes = {
+    const recipe = {
       en: {
         title: 'Mediterranean Pasta Salad',
         description:
@@ -113,7 +113,7 @@ export class AnthropicMockManager {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(recipes[locale]),
+          text: JSON.stringify(recipe[locale]),
         },
       ],
     });

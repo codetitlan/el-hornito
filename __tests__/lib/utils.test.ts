@@ -70,6 +70,30 @@ describe('utils', () => {
 
       expect(result.isValid).toBe(true); // Empty files are allowed by size, but would fail other checks
     });
+
+    test('handles null/undefined gracefully', () => {
+      expect(() => validateFile(null as unknown as File)).toThrow();
+      expect(() => validateFile(undefined as unknown as File)).toThrow();
+    });
+
+    test('handles files with exact size limit', () => {
+      const exactSizeFile = new File(['x'.repeat(5000000)], 'exact.jpg', {
+        type: 'image/jpeg',
+      });
+
+      const result = validateFile(exactSizeFile);
+      expect(result.isValid).toBe(true);
+    });
+
+    test('handles files slightly over size limit', () => {
+      const oversizedFile = new File(['x'.repeat(5000001)], 'over.jpg', {
+        type: 'image/jpeg',
+      });
+
+      const result = validateFile(oversizedFile);
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe('File size exceeds the maximum limit');
+    });
   });
 
   describe('formatFileSize', () => {
@@ -100,6 +124,33 @@ describe('utils', () => {
       expect(formatFileSize(0.5)).toBe('0.5 Bytes');
       expect(formatFileSize(Number.MAX_SAFE_INTEGER)).toBeTruthy();
     });
+
+    test('handles negative numbers', () => {
+      expect(formatFileSize(-1)).toBe('-1 Bytes');
+    });
+
+    test('handles infinite and NaN values', () => {
+      expect(formatFileSize(Infinity)).toBe('0 Bytes');
+      expect(formatFileSize(-Infinity)).toBe('-Infinity Bytes'); // Negative check happens first
+      expect(formatFileSize(NaN)).toBe('0 Bytes');
+    });
+
+    test('handles decimal values less than 1', () => {
+      expect(formatFileSize(0.1)).toBe('0.1 Bytes');
+      expect(formatFileSize(0.99)).toBe('0.99 Bytes');
+    });
+
+    test('handles very large numbers beyond GB', () => {
+      const terabyte = 1024 * 1024 * 1024 * 1024;
+      const result = formatFileSize(terabyte);
+      expect(result).toContain('GB'); // Should cap at GB
+    });
+
+    test('precision handling', () => {
+      // Test edge case where division results in long decimal
+      expect(formatFileSize(1025)).toBe('1 KB');
+      expect(formatFileSize(1536.7)).toBe('1.5 KB');
+    });
   });
 
   describe('getErrorMessage', () => {
@@ -122,6 +173,17 @@ describe('utils', () => {
     test('handles complex Error objects', () => {
       const error = new TypeError('Type error occurred');
       expect(getErrorMessage(error)).toBe('Type error occurred');
+    });
+
+    test('handles objects with message property', () => {
+      const errorLikeObject = { message: 'Custom error object' };
+      expect(getErrorMessage(errorLikeObject)).toBe(
+        'An unexpected error occurred'
+      );
+    });
+
+    test('handles empty string', () => {
+      expect(getErrorMessage('')).toBe('');
     });
   });
 
@@ -191,6 +253,26 @@ describe('utils', () => {
       expect(result).toBe('async success');
       expect(operation).toHaveBeenCalledTimes(1);
     });
+
+    test('handles zero retries', async () => {
+      const operation = jest
+        .fn()
+        .mockRejectedValue(new Error('Immediate failure'));
+
+      await expect(retryOperation(operation, 0)).rejects.toThrow(
+        'Immediate failure'
+      );
+      expect(operation).toHaveBeenCalledTimes(1);
+    });
+
+    test('handles successful operation with zero retries', async () => {
+      const operation = jest.fn().mockResolvedValue('success');
+
+      const result = await retryOperation(operation, 0);
+
+      expect(result).toBe('success');
+      expect(operation).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('cn (className utility)', () => {
@@ -219,6 +301,21 @@ describe('utils', () => {
       expect(cn(undefined)).toBe('');
       expect(cn(null)).toBe('');
     });
+
+    test('handles complex combinations', () => {
+      expect(
+        cn('base', ['array1', 'array2'], { obj1: true, obj2: false }, 'final')
+      ).toContain('base');
+      expect(
+        cn('base', ['array1', 'array2'], { obj1: true, obj2: false }, 'final')
+      ).toContain('array1');
+      expect(
+        cn('base', ['array1', 'array2'], { obj1: true, obj2: false }, 'final')
+      ).toContain('obj1');
+      expect(
+        cn('base', ['array1', 'array2'], { obj1: true, obj2: false }, 'final')
+      ).toContain('final');
+    });
   });
 
   describe('Error scenarios and edge cases', () => {
@@ -231,6 +328,40 @@ describe('utils', () => {
       expect(formatFileSize(-1)).toBe('-1 Bytes');
     });
 
+    test('formatFileSize handles infinite and NaN values', () => {
+      expect(formatFileSize(Infinity)).toBe('0 Bytes');
+      expect(formatFileSize(-Infinity)).toBe('-Infinity Bytes'); // Negative check happens first
+      expect(formatFileSize(NaN)).toBe('0 Bytes');
+    });
+
+    test('formatFileSize handles decimal values less than 1', () => {
+      expect(formatFileSize(0.1)).toBe('0.1 Bytes');
+      expect(formatFileSize(0.99)).toBe('0.99 Bytes');
+    });
+
+    test('formatFileSize handles very large numbers beyond GB', () => {
+      const terabyte = 1024 * 1024 * 1024 * 1024;
+      const result = formatFileSize(terabyte);
+      expect(result).toContain('GB'); // Should cap at GB
+    });
+
+    test('formatFileSize precision handling', () => {
+      // Test edge case where division results in long decimal
+      expect(formatFileSize(1025)).toBe('1 KB');
+      expect(formatFileSize(1536.7)).toBe('1.5 KB');
+    });
+
+    test('getErrorMessage handles objects with message property', () => {
+      const errorLikeObject = { message: 'Custom error object' };
+      expect(getErrorMessage(errorLikeObject)).toBe(
+        'An unexpected error occurred'
+      );
+    });
+
+    test('getErrorMessage handles empty string', () => {
+      expect(getErrorMessage('')).toBe('');
+    });
+
     test('retryOperation handles zero retries', async () => {
       const operation = jest
         .fn()
@@ -239,6 +370,15 @@ describe('utils', () => {
       await expect(retryOperation(operation, 0)).rejects.toThrow(
         'Immediate failure'
       );
+      expect(operation).toHaveBeenCalledTimes(1);
+    });
+
+    test('retryOperation handles successful operation with zero retries', async () => {
+      const operation = jest.fn().mockResolvedValue('success');
+
+      const result = await retryOperation(operation, 0);
+
+      expect(result).toBe('success');
       expect(operation).toHaveBeenCalledTimes(1);
     });
   });
