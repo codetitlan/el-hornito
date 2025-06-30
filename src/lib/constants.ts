@@ -247,7 +247,7 @@ export const createDefaultUserSettings = () => ({
     additionalNotes: undefined,
   },
   kitchenEquipment: {
-    basicAppliances: ['Oven', 'Stovetop', 'Microwave'] as string[], // Common defaults
+    basicAppliances: [] as string[], // Start with no defaults - let users choose
     advancedAppliances: [] as string[],
     cookware: [] as string[],
     bakingEquipment: [] as string[],

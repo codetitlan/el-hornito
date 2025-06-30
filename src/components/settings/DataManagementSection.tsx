@@ -212,7 +212,7 @@ export const DataManagementSection: React.FC<DataManagementSectionProps> = ({
 
       {/* Clear All Data */}
       <div className="space-y-3 pt-4 border-t border-gray-200">
-        <h4 className="font-medium text-red-900">Danger Zone</h4>
+        <h4 className="font-medium text-red-900">{t('reset.dangerZone')}</h4>
         <p className="text-sm text-gray-600">{t('reset.description')}</p>
         <Button
           onClick={handleClearData}

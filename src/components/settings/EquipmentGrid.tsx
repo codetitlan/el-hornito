@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface EquipmentItem {
   name: string;
@@ -28,6 +29,7 @@ export const EquipmentGrid: React.FC<EquipmentGridProps> = ({
   columns = 3,
   className = '',
 }) => {
+  const t = useTranslations('settings.kitchenEquipment');
   const toggleItem = (itemName: string) => {
     if (disabled) return;
 
@@ -138,7 +140,7 @@ export const EquipmentGrid: React.FC<EquipmentGridProps> = ({
 
       {selected.length === 0 && (
         <p className="text-sm text-gray-400 italic text-center py-8">
-          No equipment selected
+          {t('noEquipmentSelected')}
         </p>
       )}
     </div>

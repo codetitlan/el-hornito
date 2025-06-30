@@ -47,6 +47,7 @@
     "otherDescription": "¿Alguna otra herramienta o equipo de cocina no listado arriba? (uno por línea)",
     "otherPlaceholder": "ej., Máquina de pasta\nRebanadora mandolina\nBatidora de inmersión",
     "otherNote": "Ingresa cada artículo en una nueva línea",
+    "noEquipmentSelected": "Ningún equipo seleccionado",
     "summary": {
       "title": "Resumen de Equipos",
       "basicAppliances": "Electrodomésticos Básicos:",
@@ -66,66 +67,89 @@
     "clear": "Limpiar Clave",
     "validating": "Validando...",
     "messages": {
-      "enterKey": "Please enter an API key",
-      "validationSuccess": "API key is valid and has been saved!",
-      "validationError": "Invalid API key. Please check your key and try again.",
-      "validationFailed": "Failed to validate API key. Please try again.",
-      "clearSuccess": "API key cleared successfully!",
-      "clearFailed": "Failed to clear API key"
+      "enterKey": "Por favor ingresa una clave API",
+      "validationSuccess": "¡La clave API es válida y ha sido guardada!",
+      "validationError": "Clave API inválida. Por favor verifica tu clave e inténtalo de nuevo.",
+      "validationFailed": "No se pudo validar la clave API. Por favor inténtalo de nuevo.",
+      "clearSuccess": "¡Clave API eliminada exitosamente!",
+      "clearFailed": "No se pudo eliminar la clave API"
     },
     "status": {
-      "valid": "✓ Valid API key configured",
-      "invalid": "✗ Invalid API key",
-      "none": "No API key configured"
+      "active": "Clave API Personal Activa",
+      "activeDescription": "Estás usando tu propia clave API de Anthropic.",
+      "lastValidated": "Última validación:",
+      "defaultService": "Usando Servicio Predeterminado",
+      "defaultServiceDescription": "Estás usando nuestro servicio compartido. Añade tu propia clave API para uso ilimitado y respuestas más rápidas.",
+      "valid": "✓ Clave API válida configurada",
+      "invalid": "✗ Clave API inválida",
+      "none": "No hay clave API configurada"
+    },
+    "actions": {
+      "addPersonalKey": "Añadir Tu Clave API Personal",
+      "getKeyDescription": "Obtén tu clave API desde",
+      "anthropicConsole": "Consola de Anthropic",
+      "validateAndSave": "Validar y Guardar Clave API",
+      "manageKey": "Administrar Clave API",
+      "removeKey": "Eliminar Clave API Personal"
+    },
+    "security": {
+      "title": "Aviso de Seguridad",
+      "items": [
+        "Tu clave API se almacena localmente en tu navegador y nunca se transmite a nuestros servidores",
+        "Las claves API están codificadas básicamente para protección mínima en el almacenamiento local",
+        "Nunca compartas tu clave API con otros",
+        "Puedes revocar el acceso en cualquier momento desde la Consola de Anthropic"
+      ]
     },
     "help": {
-      "title": "How to get your API key:",
-      "step1": "1. Visit console.anthropic.com",
-      "step2": "2. Sign in or create an account",
-      "step3": "3. Go to 'API Keys' section",
-      "step4": "4. Create a new API key",
-      "step5": "5. Copy and paste it here",
-      "note": "Note: Your API key is stored securely in your browser and never sent to our servers."
+      "title": "Cómo obtener tu clave API:",
+      "step1": "1. Visita console.anthropic.com",
+      "step2": "2. Inicia sesión o crea una cuenta",
+      "step3": "3. Ve a la sección 'API Keys'",
+      "step4": "4. Crea una nueva clave API",
+      "step5": "5. Cópiala y pégala aquí",
+      "note": "Nota: Tu clave API se almacena de forma segura en tu navegador y nunca se envía a nuestros servidores."
     },
-    "usageTracking": "Usage Tracking",
-    "usageTrackingDescription": "Track API usage and estimated costs (personal key only)"
+    "usageTracking": "Seguimiento de Uso",
+    "usageTrackingDescription": "Rastrear el uso de API y costos estimados (solo clave personal)"
   },
   "dataManagement": {
-    "title": "Data Management",
-    "subtitle": "Export, import, or clear your settings",
+    "title": "Gestión de Datos",
+    "subtitle": "Exporta, importa o borra tus configuraciones",
     "dataSummary": {
-      "title": "Your Data Summary",
-      "cookingPreferences": "Cooking Preferences:",
-      "kitchenEquipment": "Kitchen Equipment:",
-      "lastUpdated": "Last Updated:",
-      "version": "Version:",
-      "items": "items"
+      "title": "Resumen de Tus Datos",
+      "cookingPreferences": "Preferencias Culinarias:",
+      "kitchenEquipment": "Equipos de Cocina:",
+      "lastUpdated": "Última Actualización:",
+      "version": "Versión:",
+      "items": "elementos"
     },
     "export": {
-      "button": "Export Settings",
-      "description": "Download your current settings as a JSON file"
+      "button": "Exportar Configuraciones",
+      "description": "Descarga tus configuraciones actuales como un archivo JSON"
     },
     "import": {
-      "button": "Import Settings",
-      "description": "Upload a previously exported settings file",
-      "selectFile": "Select settings file..."
+      "button": "Importar Configuraciones",
+      "description": "Sube un archivo de configuraciones previamente exportado",
+      "selectFile": "Seleccionar archivo de configuraciones..."
     },
     "reset": {
-      "button": "Reset to Defaults",
-      "description": "Clear all settings and return to default values",
-      "confirmTitle": "Reset Settings",
-      "confirmMessage": "Are you sure you want to reset all settings to defaults? This action cannot be undone.\n\nConsider exporting your settings first as a backup.",
-      "confirmButton": "Reset All Settings",
-      "cancelButton": "Cancel",
-      "successMessage": "All settings data has been cleared.",
-      "failedMessage": "Failed to clear settings data. Please try again."
+      "dangerZone": "Zona de Peligro",
+      "button": "Restablecer a Valores Predeterminados",
+      "description": "Borra todas las configuraciones y vuelve a los valores predeterminados",
+      "confirmTitle": "Restablecer Configuraciones",
+      "confirmMessage": "¿Estás seguro de que quieres restablecer todas las configuraciones a los valores predeterminados? Esta acción no se puede deshacer.\n\nConsidera exportar tus configuraciones primero como respaldo.",
+      "confirmButton": "Restablecer Todas las Configuraciones",
+      "cancelButton": "Cancelar",
+      "successMessage": "Todos los datos de configuración han sido borrados.",
+      "failedMessage": "No se pudieron borrar los datos de configuración. Por favor inténtalo de nuevo."
     },
     "messages": {
-      "exportSuccess": "Settings exported successfully!",
-      "exportFailed": "Failed to export settings. Please try again.",
-      "importSuccess": "Settings imported successfully!",
-      "importFailed": "Failed to import settings. Please check the file format.",
-      "resetSuccess": "Settings reset to defaults!",
+      "exportSuccess": "¡Configuraciones exportadas exitosamente!",
+      "exportFailed": "No se pudieron exportar las configuraciones. Por favor inténtalo de nuevo.",
+      "importSuccess": "¡Configuraciones importadas exitosamente!",
+      "importFailed": "No se pudieron importar las configuraciones. Por favor verifica el formato del archivo.",
+      "resetSuccess": "¡Configuraciones restablecidas a valores predeterminados!",
       "resetFailed": "Failed to reset settings"
     }
   },
@@ -149,137 +173,138 @@
     "settingsImported": "Settings imported successfully!",
     "settingsReset": "Settings reset to defaults!",
     "saveFailed": "Failed to save settings. Please try again.",
-    "saveError": "An error occurred while saving settings."
+    "saveError": "Ocurrió un error al guardar la configuración.",
+    "confirmReset": "¿Estás seguro de que quieres restablecer todas las configuraciones a los valores predeterminados? Esto no se puede deshacer."
   },
   "options": {
     "cuisineTypes": [
-      "Italian",
-      "Asian",
-      "Mexican",
-      "Mediterranean",
-      "American",
-      "French",
-      "Indian",
-      "Thai",
-      "Japanese",
-      "Greek",
-      "Spanish",
-      "Middle Eastern",
-      "Korean",
-      "Vietnamese",
-      "Chinese",
-      "German",
-      "Brazilian",
-      "Other"
+      "Italiana",
+      "Asiática",
+      "Mexicana",
+      "Mediterránea",
+      "Americana",
+      "Francesa",
+      "India",
+      "Tailandesa",
+      "Japonesa",
+      "Griega",
+      "Española",
+      "Medio Oriente",
+      "Coreana",
+      "Vietnamita",
+      "China",
+      "Alemana",
+      "Brasileña",
+      "Otra"
     ],
     "dietaryRestrictions": [
-      "Vegetarian",
-      "Vegan",
-      "Gluten-free",
-      "Dairy-free",
-      "Nut-free",
+      "Vegetariana",
+      "Vegana",
+      "Sin gluten",
+      "Sin lácteos",
+      "Sin frutos secos",
       "Keto",
       "Paleo",
-      "Low-carb",
-      "Low-sodium",
-      "Sugar-free",
+      "Baja en carbohidratos",
+      "Baja en sodio",
+      "Sin azúcar",
       "Halal",
       "Kosher",
-      "Pescatarian",
-      "Raw food"
+      "Pescetariana",
+      "Comida cruda"
     ],
     "spiceLevels": [
       {
         "value": "mild",
-        "label": "Mild",
-        "description": "Little to no heat"
+        "label": "Suave",
+        "description": "Poco o nada de picante"
       },
       {
         "value": "medium",
-        "label": "Medium",
-        "description": "Moderate spice level"
+        "label": "Medio",
+        "description": "Nivel de picante moderado"
       },
       {
         "value": "spicy",
-        "label": "Spicy",
-        "description": "Hot and flavorful"
+        "label": "Picante",
+        "description": "Caliente y sabroso"
       },
       {
         "value": "very-spicy",
-        "label": "Very Spicy",
-        "description": "Intense heat"
+        "label": "Muy Picante",
+        "description": "Calor intenso"
       }
     ],
     "cookingTimePreferences": [
       {
         "value": "quick",
-        "label": "Quick (≤30 min)",
-        "description": "Fast meals for busy days"
+        "label": "Rápido (≤30 min)",
+        "description": "Comidas rápidas para días ocupados"
       },
       {
         "value": "moderate",
-        "label": "Moderate (30-60 min)",
-        "description": "Balanced cooking time"
+        "label": "Moderado (30-60 min)",
+        "description": "Tiempo de cocción equilibrado"
       },
       {
         "value": "elaborate",
-        "label": "Elaborate (60+ min)",
-        "description": "Detailed, complex recipes"
+        "label": "Elaborado (60+ min)",
+        "description": "Recetas detalladas y complejas"
       }
     ],
     "mealTypes": [
-      "Breakfast",
-      "Lunch",
-      "Dinner",
-      "Snacks",
-      "Desserts",
-      "Appetizers",
-      "Salads",
-      "Soups",
-      "Sandwiches",
-      "Beverages"
+      "Desayuno",
+      "Almuerzo",
+      "Cena",
+      "Aperitivos",
+      "Postres",
+      "Entradas",
+      "Ensaladas",
+      "Sopas",
+      "Sándwiches",
+      "Bebidas"
     ],
     "basicAppliances": [
-      "Oven",
-      "Stovetop",
-      "Microwave",
-      "Refrigerator",
-      "Freezer",
-      "Toaster"
+      "Horno",
+      "Cocina",
+      "Microondas",
+      "Refrigerador",
+      "Congelador",
+      "Tostadora"
     ],
     "advancedAppliances": [
-      "Air Fryer",
-      "Instant Pot",
-      "Slow Cooker",
-      "Food Processor",
-      "Blender",
-      "Stand Mixer",
-      "Rice Cooker",
-      "Bread Maker",
-      "Dehydrator",
+      "Freidora de aire",
+      "Olla a presión",
+      "Olla de cocción lenta",
+      "Procesador de alimentos",
+      "Licuadora",
+      "Batidora de pie",
+      "Arrocera",
+      "Máquina de pan",
+      "Deshidratador",
       "Sous Vide"
     ],
     "cookware": [
-      "Non-stick pans",
-      "Cast iron skillet",
-      "Stainless steel pots",
+      "Sartenes antiadherentes",
+      "Sartén de hierro fundido",
+      "Ollas de acero inoxidable",
       "Wok",
-      "Dutch oven",
-      "Grill pan",
-      "Steamer",
-      "Roasting pan",
-      "Stockpot"
+      "Olla holandesa",
+      "Sartén para grill",
+      "Vaporera",
+      "Bandeja para asar",
+      "Olla grande"
     ],
     "bakingEquipment": [
-      "Baking sheets",
-      "Cake pans",
-      "Muffin tins",
-      "Loaf pans",
-      "Pie dishes",
-      "Cookie cutters",
-      "Rolling pin",
-      "Measuring cups",
-      "Kitchen scale"
+      "Bandejas para hornear",
+      "Moldes para pasteles",
+      "Moldes para muffins",
+      "Moldes para pan",
+      "Moldes para tartas",
+      "Cortadores de galletas",
+      "Rodillo",
+      "Tazas medidoras",
+      "Báscula de cocina"
     ]
   }
 }

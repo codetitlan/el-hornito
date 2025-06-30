@@ -127,14 +127,14 @@ export const ApiConfigurationSection: React.FC<
               <CheckCircle className="w-5 h-5 text-green-600" />
               <div>
                 <h4 className="font-medium text-green-900">
-                  Personal API Key Active
+                  {t('status.active')}
                 </h4>
                 <p className="text-sm text-green-700">
-                  You&apos;re using your own Anthropic API key.
+                  {t('status.activeDescription')}
                   {configuration.lastValidation && (
                     <>
                       {' '}
-                      Last validated:{' '}
+                      {t('status.lastValidated')}{' '}
                       {new Date(
                         configuration.lastValidation
                       ).toLocaleDateString()}
@@ -148,11 +148,10 @@ export const ApiConfigurationSection: React.FC<
               <Key className="w-5 h-5 text-blue-600" />
               <div>
                 <h4 className="font-medium text-blue-900">
-                  Using Default Service
+                  {t('status.defaultService')}
                 </h4>
                 <p className="text-sm text-blue-700">
-                  You&apos;re using our shared service. Add your own API key for
-                  unlimited usage and faster responses.
+                  {t('status.defaultServiceDescription')}
                 </p>
               </div>
             </>
@@ -165,17 +164,17 @@ export const ApiConfigurationSection: React.FC<
         <div className="space-y-4">
           <div>
             <h4 className="font-medium text-gray-900 mb-2">
-              Add Your Personal API Key
+              {t('actions.addPersonalKey')}
             </h4>
             <p className="text-sm text-gray-600 mb-4">
-              Get your API key from{' '}
+              {t('actions.getKeyDescription')}{' '}
               <a
                 href="https://console.anthropic.com/account/keys"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-orange-600 hover:text-orange-700 underline"
               >
-                Anthropic Console
+                {t('actions.anthropicConsole')}
               </a>
             </p>
           </div>
@@ -222,7 +221,7 @@ export const ApiConfigurationSection: React.FC<
               disabled={disabled || isValidating || !apiKey.trim()}
               className="w-full sm:w-auto"
             >
-              {isValidating ? 'Validating...' : 'Validate & Save API Key'}
+              {isValidating ? t('validating') : t('actions.validateAndSave')}
             </Button>
           </div>
         </div>
@@ -231,14 +230,16 @@ export const ApiConfigurationSection: React.FC<
       {/* Remove API Key */}
       {configuration.hasPersonalKey && (
         <div className="space-y-3">
-          <h4 className="font-medium text-gray-900">Manage API Key</h4>
+          <h4 className="font-medium text-gray-900">
+            {t('actions.manageKey')}
+          </h4>
           <Button
             onClick={handleRemoveKey}
             disabled={disabled}
             variant="outline"
             className="border-red-300 text-red-700 hover:bg-red-50"
           >
-            Remove Personal API Key
+            {t('actions.removeKey')}
           </Button>
         </div>
       )}
@@ -283,19 +284,12 @@ export const ApiConfigurationSection: React.FC<
           <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
           <div className="text-sm">
             <h4 className="font-medium text-yellow-900 mb-1">
-              Security Notice
+              {t('security.title')}
             </h4>
             <ul className="text-yellow-800 space-y-1 list-disc list-inside">
-              <li>
-                Your API key is stored locally in your browser and never
-                transmitted to our servers
-              </li>
-              <li>
-                API keys are basic-encoded for minimal protection in local
-                storage
-              </li>
-              <li>Never share your API key with others</li>
-              <li>You can revoke access anytime from the Anthropic Console</li>
+              {t.raw('security.items').map((item: string, index: number) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>
