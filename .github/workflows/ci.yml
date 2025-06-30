@@ -173,15 +173,17 @@ jobs:
           total_files=$(find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | wc -l)
           echo "• TypeScript/JavaScript files analyzed: $total_files"
 
-          if grep -q "error" eslint-output.log; then
-            errors=$(grep -c "error" eslint-output.log || echo "0")
+          # Check for actual ESLint errors (not just the word "error")
+          if grep -q "✖" eslint-output.log || grep -q "[0-9]\+ error" eslint-output.log; then
+            errors=$(grep -c "✖\|[0-9]\+ error" eslint-output.log || echo "0")
             echo "• ❌ ESLint errors: $errors"
           else
             echo "• ✅ No ESLint errors found"
           fi
 
-          if grep -q "warning" eslint-output.log; then
-            warnings=$(grep -c "warning" eslint-output.log || echo "0")
+          # Check for actual ESLint warnings (not just the word "warning")
+          if grep -q "⚠\|[0-9]\+ warning" eslint-output.log; then
+            warnings=$(grep -c "⚠\|[0-9]\+ warning" eslint-output.log || echo "0")
             echo "• ⚠️ ESLint warnings: $warnings"
           else
             echo "• ✅ No ESLint warnings found"
