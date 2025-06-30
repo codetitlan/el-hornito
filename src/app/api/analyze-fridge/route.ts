@@ -120,7 +120,7 @@ Por favor responde en este formato JSON exacto:
   "title": "Nombre de la Receta",
   "description": "Breve descripción del plato",
   "cookingTime": "30 minutos",
-  "difficulty": "Fácil|Medio|Difícil",
+  "difficulty": "Easy|Medium|Hard",
   "servings": 4,
   "ingredients": [
     "2 tazas de harina",
@@ -140,7 +140,8 @@ Requisitos:
 - Proporciona instrucciones claras paso a paso
 - Incluye tiempos de cocción realistas
 - Haz que la receta sea práctica y realizable
-- Si los ingredientes no están claros, haz suposiciones razonables`,
+- Si los ingredientes no están claros, haz suposiciones razonables
+- IMPORTANTE: El campo "difficulty" debe ser exactamente "Easy", "Medium" o "Hard" en inglés`,
   };
 
   let prompt = prompts[locale].trim();
