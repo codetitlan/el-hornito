@@ -1,0 +1,49 @@
+{
+  "file": {
+    "tooLarge": "El tamaño del archivo debe ser menor a 10MB",
+    "invalidType": "Por favor sube una imagen JPEG, PNG o WebP"
+  },
+  "api": {
+    "keyRequired": "Clave API requerida",
+    "keyInvalid": "Clave API inválida",
+    "noKey": "Para usar El Hornito, necesitas configurar una clave API en configuración.",
+    "getStarted": "Comienza agregando tu clave API de Anthropic Claude en configuración.",
+    "limitReached": "Límite de uso de API alcanzado. Por favor verifica tu clave API o intenta más tarde."
+  },
+  "network": {
+    "connectionError": "Error de red. Por favor verifica tu conexión.",
+    "timeout": "Tiempo de espera agotado. Por favor intenta de nuevo.",
+    "serverError": "Error del servidor. Por favor intenta más tarde."
+  },
+  "upload": {
+    "failed": "Subida falló. Por favor intenta de nuevo.",
+    "processing": "Procesando imagen...",
+    "analyzing": "Analizando el contenido de tu nevera...",
+    "analysisFailed": "Falló el análisis de la imagen. Por favor intenta de nuevo.",
+    "noIngredients": "No se detectaron ingredientes en la imagen. Por favor intenta con una foto diferente.",
+    "apiError": "Servicio temporalmente no disponible. Por favor intenta más tarde."
+  },
+  "general": {
+    "somethingWentWrong": "Algo salió mal",
+    "unexpectedError": "Ocurrió un error inesperado",
+    "tryAgain": "Por favor intenta de nuevo"
+  },
+  "errorBoundary": {
+    "title": "¡Ups! Algo salió mal",
+    "description": "Encontramos un error inesperado. Nuestro equipo ha sido notificado y estamos trabajando en una solución.",
+    "tryAgainButton": "Intentar de Nuevo",
+    "goHomeButton": "Ir al Inicio",
+    "errorDetailsTitle": "Detalles del Error (Desarrollo)"
+  },
+  "mainPage": {
+    "errorTitle": "Algo salió mal"
+  },
+  "apiKeyBanner": {
+    "title": "Clave API Requerida",
+    "description": "Esta aplicación requiere una clave API personal de Anthropic para funcionar. Necesitas configurar tu propia clave API en configuración para generar recetas.",
+    "configureButton": "Configurar Clave API",
+    "getKeyButton": "Obtener Clave API",
+    "helpText": "¿No tienes una clave API? Visita la Consola de Anthropic para crear una. Las claves API se almacenan de forma segura en tu navegador.",
+    "dismiss": "Descartar"
+  }
+}

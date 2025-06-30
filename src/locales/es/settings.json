@@ -1,0 +1,273 @@
+{
+  "page": {
+    "title": "Configuración",
+    "subtitle": "Personaliza tu experiencia culinaria"
+  },
+  "cookingPreferences": {
+    "title": "Preferencias Culinarias",
+    "subtitle": "Cuéntanos sobre tu estilo de cocina y necesidades dietéticas",
+    "cuisineTypes": "Tipos de Cocina Favoritos",
+    "cuisineTypesDescription": "Selecciona los tipos de cocina que más disfrutas",
+    "dietaryRestrictions": "Restricciones Dietéticas",
+    "dietaryRestrictionsDescription": "Déjanos saber sobre cualquier necesidad o preferencia dietética",
+    "spiceLevel": "Nivel de Picante Preferido",
+    "spiceLevelDescription": "¿Qué tan picante te gusta tu comida?",
+    "spiceLevelPlaceholder": "Seleccionar nivel de picante...",
+    "cookingTime": "Preferencia de Tiempo de Cocción",
+    "cookingTimeDescription": "¿Cuánto tiempo sueles querer pasar cocinando?",
+    "cookingTimePlaceholder": "Seleccionar preferencia de tiempo de cocción...",
+    "mealTypes": "Tipos de Comida",
+    "mealTypesDescription": "¿En qué tipos de comidas estás más interesado?",
+    "servings": "Número Predeterminado de Porciones",
+    "servingsDescription": "¿Para cuántas personas sueles cocinar?",
+    "servingsMinLabel": "1 persona",
+    "servingsMaxLabel": "12+ personas",
+    "additionalNotes": "Notas Adicionales",
+    "additionalNotesDescription": "¿Alguna otra preferencia culinaria o requisito especial?",
+    "additionalNotesPlaceholder": "ej., prefiero comidas rápidas entre semana, me encanta experimentar con nuevos sabores..."
+  },
+  "kitchenEquipment": {
+    "title": "Equipos de Cocina",
+    "subtitle": "Déjanos saber qué equipos tienes disponibles",
+    "basicAppliances": "Electrodomésticos Básicos",
+    "basicAppliancesDescription": "Electrodomésticos esenciales de cocina que tienes disponibles",
+    "advancedAppliances": "Electrodomésticos Avanzados",
+    "advancedAppliancesDescription": "Electrodomésticos especializados que pueden mejorar tu cocina",
+    "cookware": "Utensilios y Sartenes",
+    "cookwareDescription": "Ollas, sartenes y recipientes de cocina que posees",
+    "bakingEquipment": "Equipos de Repostería",
+    "bakingEquipmentDescription": "Herramientas y equipos para hornear y postres",
+    "other": "Otros Equipos",
+    "otherDescription": "¿Alguna otra herramienta o equipo de cocina no listado arriba? (uno por línea)",
+    "otherPlaceholder": "ej., Máquina de pasta\nRebanadora mandolina\nBatidora de inmersión",
+    "otherNote": "Ingresa cada artículo en una nueva línea",
+    "summary": {
+      "title": "Resumen de Equipos",
+      "basicAppliances": "Electrodomésticos Básicos:",
+      "advancedAppliances": "Electrodomésticos Avanzados:",
+      "cookware": "Utensilios:",
+      "bakingEquipment": "Equipos de Repostería:",
+      "other": "Otros Equipos:"
+    }
+  },
+  "apiConfiguration": {
+    "title": "API Configuration",
+    "subtitle": "Optional: Use your own Anthropic Claude API key for unlimited usage",
+    "personalKey": "Personal API Key",
+    "personalKeyDescription": "Enter your Anthropic Claude API key to use your own quota instead of our shared service",
+    "personalKeyPlaceholder": "Enter your Anthropic Claude API key...",
+    "validate": "Validate & Save",
+    "clear": "Clear Key",
+    "validating": "Validating...",
+    "messages": {
+      "enterKey": "Please enter an API key",
+      "validationSuccess": "API key is valid and has been saved!",
+      "validationError": "Invalid API key. Please check your key and try again.",
+      "validationFailed": "Failed to validate API key. Please try again.",
+      "clearSuccess": "API key cleared successfully!",
+      "clearFailed": "Failed to clear API key"
+    },
+    "status": {
+      "valid": "✓ Valid API key configured",
+      "invalid": "✗ Invalid API key",
+      "none": "No API key configured"
+    },
+    "help": {
+      "title": "How to get your API key:",
+      "step1": "1. Visit console.anthropic.com",
+      "step2": "2. Sign in or create an account",
+      "step3": "3. Go to 'API Keys' section",
+      "step4": "4. Create a new API key",
+      "step5": "5. Copy and paste it here",
+      "note": "Note: Your API key is stored securely in your browser and never sent to our servers."
+    },
+    "usageTracking": "Usage Tracking",
+    "usageTrackingDescription": "Track API usage and estimated costs (personal key only)"
+  },
+  "dataManagement": {
+    "title": "Data Management",
+    "subtitle": "Export, import, or clear your settings",
+    "dataSummary": {
+      "title": "Your Data Summary",
+      "cookingPreferences": "Cooking Preferences:",
+      "kitchenEquipment": "Kitchen Equipment:",
+      "lastUpdated": "Last Updated:",
+      "version": "Version:",
+      "items": "items"
+    },
+    "export": {
+      "button": "Export Settings",
+      "description": "Download your current settings as a JSON file"
+    },
+    "import": {
+      "button": "Import Settings",
+      "description": "Upload a previously exported settings file",
+      "selectFile": "Select settings file..."
+    },
+    "reset": {
+      "button": "Reset to Defaults",
+      "description": "Clear all settings and return to default values",
+      "confirmTitle": "Reset Settings",
+      "confirmMessage": "Are you sure you want to reset all settings to defaults? This action cannot be undone.\n\nConsider exporting your settings first as a backup.",
+      "confirmButton": "Reset All Settings",
+      "cancelButton": "Cancel",
+      "successMessage": "All settings data has been cleared.",
+      "failedMessage": "Failed to clear settings data. Please try again."
+    },
+    "messages": {
+      "exportSuccess": "Settings exported successfully!",
+      "exportFailed": "Failed to export settings. Please try again.",
+      "importSuccess": "Settings imported successfully!",
+      "importFailed": "Failed to import settings. Please check the file format.",
+      "resetSuccess": "Settings reset to defaults!",
+      "resetFailed": "Failed to reset settings"
+    }
+  },
+  "privacy": {
+    "title": "Privacy & Data Storage",
+    "description": "All your settings are stored locally in your browser and never transmitted to our servers. Your data remains completely private and under your control."
+  },
+  "common": {
+    "selected": "selected",
+    "noPreferencesSelected": "No preferences selected",
+    "remove": "Remove"
+  },
+  "messages": {
+    "settingsSaved": "Settings saved successfully!",
+    "settingsImported": "Settings imported successfully!",
+    "settingsReset": "Settings reset to defaults!",
+    "saveFailed": "Failed to save settings. Please try again.",
+    "saveError": "An error occurred while saving settings."
+  },
+  "options": {
+    "cuisineTypes": [
+      "Italian",
+      "Asian",
+      "Mexican",
+      "Mediterranean",
+      "American",
+      "French",
+      "Indian",
+      "Thai",
+      "Japanese",
+      "Greek",
+      "Spanish",
+      "Middle Eastern",
+      "Korean",
+      "Vietnamese",
+      "Chinese",
+      "German",
+      "Brazilian",
+      "Other"
+    ],
+    "dietaryRestrictions": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free",
+      "Dairy-free",
+      "Nut-free",
+      "Keto",
+      "Paleo",
+      "Low-carb",
+      "Low-sodium",
+      "Sugar-free",
+      "Halal",
+      "Kosher",
+      "Pescatarian",
+      "Raw food"
+    ],
+    "spiceLevels": [
+      {
+        "value": "mild",
+        "label": "Mild",
+        "description": "Little to no heat"
+      },
+      {
+        "value": "medium",
+        "label": "Medium",
+        "description": "Moderate spice level"
+      },
+      {
+        "value": "spicy",
+        "label": "Spicy",
+        "description": "Hot and flavorful"
+      },
+      {
+        "value": "very-spicy",
+        "label": "Very Spicy",
+        "description": "Intense heat"
+      }
+    ],
+    "cookingTimePreferences": [
+      {
+        "value": "quick",
+        "label": "Quick (≤30 min)",
+        "description": "Fast meals for busy days"
+      },
+      {
+        "value": "moderate",
+        "label": "Moderate (30-60 min)",
+        "description": "Balanced cooking time"
+      },
+      {
+        "value": "elaborate",
+        "label": "Elaborate (60+ min)",
+        "description": "Detailed, complex recipes"
+      }
+    ],
+    "mealTypes": [
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Snacks",
+      "Desserts",
+      "Appetizers",
+      "Salads",
+      "Soups",
+      "Sandwiches",
+      "Beverages"
+    ],
+    "basicAppliances": [
+      "Oven",
+      "Stovetop",
+      "Microwave",
+      "Refrigerator",
+      "Freezer",
+      "Toaster"
+    ],
+    "advancedAppliances": [
+      "Air Fryer",
+      "Instant Pot",
+      "Slow Cooker",
+      "Food Processor",
+      "Blender",
+      "Stand Mixer",
+      "Rice Cooker",
+      "Bread Maker",
+      "Dehydrator",
+      "Sous Vide"
+    ],
+    "cookware": [
+      "Non-stick pans",
+      "Cast iron skillet",
+      "Stainless steel pots",
+      "Wok",
+      "Dutch oven",
+      "Grill pan",
+      "Steamer",
+      "Roasting pan",
+      "Stockpot"
+    ],
+    "bakingEquipment": [
+      "Baking sheets",
+      "Cake pans",
+      "Muffin tins",
+      "Loaf pans",
+      "Pie dishes",
+      "Cookie cutters",
+      "Rolling pin",
+      "Measuring cups",
+      "Kitchen scale"
+    ]
+  }
+}

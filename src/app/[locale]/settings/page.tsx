@@ -8,6 +8,7 @@ import { CookingPreferencesSection } from '@/components/settings/CookingPreferen
 import { KitchenEquipmentSection } from '@/components/settings/KitchenEquipmentSection';
 import { DataManagementSection } from '@/components/settings/DataManagementSection';
 import { ApiConfigurationSection } from '@/components/settings/ApiConfigurationSection';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -119,6 +120,8 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex items-center space-x-3">
+              <LanguageSwitcher />
+              
               {/* Changes Indicator */}
               {hasChanges && (
                 <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">

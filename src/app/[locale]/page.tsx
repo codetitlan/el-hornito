@@ -6,6 +6,7 @@ import { FridgeUploader } from '@/components/FridgeUploader';
 import { RecipeDisplay } from '@/components/RecipeDisplay';
 import { OnboardingBanner } from '@/components/OnboardingBanner';
 import { ApiKeyRequiredBanner } from '@/components/ApiKeyRequiredBanner';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Recipe } from '@/types';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
@@ -59,6 +60,8 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              
               <Link
                 href="/settings"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"

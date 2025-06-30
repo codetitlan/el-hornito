@@ -255,6 +255,7 @@ Implementation plan for expanding El Hornito's i18n system beyond the English-on
 ### Configuration Updates
 
 #### Updated `src/i18n.ts`:
+
 ```typescript
 export const locales = ['en', 'es'] as const;
 export type Locale = (typeof locales)[number];
@@ -268,20 +269,21 @@ export function detectLocale(): Locale {
     if (userPref && locales.includes(userPref as Locale)) {
       return userPref as Locale;
     }
-    
+
     // 2. Browser language
     const browserLang = getBrowserLocale();
     if (browserLang && locales.includes(browserLang as Locale)) {
       return browserLang as Locale;
     }
   }
-  
+
   // 3. Default to English
   return defaultLocale;
 }
 ```
 
 #### Settings Manager Enhancement:
+
 ```typescript
 export class SettingsManager {
   // ...existing methods...
@@ -300,6 +302,7 @@ export class SettingsManager {
 ```
 
 ### Language Switcher Component:
+
 ```typescript
 'use client';
 
@@ -315,14 +318,14 @@ export function LanguageSwitcher() {
   const handleLocaleChange = (newLocale: string) => {
     // Update user preference
     settingsManager.setLocale(newLocale as Locale);
-    
+
     // Navigate to new locale
     router.push('/', { locale: newLocale });
   };
 
   return (
-    <select 
-      value={locale} 
+    <select
+      value={locale}
       onChange={(e) => handleLocaleChange(e.target.value)}
       className="language-switcher"
       aria-label="Select language"
@@ -335,6 +338,7 @@ export function LanguageSwitcher() {
 ```
 
 ### Enhanced Recipe Generation:
+
 ```typescript
 // Updated API route with locale support
 const createRecipePrompt = (locale: Locale, fridgeAnalysis: string) => {
@@ -410,21 +414,25 @@ const createRecipePrompt = (locale: Locale, fridgeAnalysis: string) => {
 ### Gradual Rollout Phases
 
 #### Phase A: Silent Deployment
+
 - Deploy Spanish translations but keep English-only UI
 - Monitor performance impact and system stability
 - Validate translation loading and caching
 
 #### Phase B: Beta Testing
+
 - Enable language switcher for beta users
 - Collect feedback on translation quality
 - Monitor usage patterns and performance
 
 #### Phase C: Full Rollout
+
 - Enable automatic language detection
 - Full public access to Spanish interface
 - Monitor adoption and user satisfaction
 
 #### Phase D: Optimization
+
 - Optimize based on real usage data
 - Refine translations based on user feedback
 - Plan for potential third language addition
@@ -434,18 +442,21 @@ const createRecipePrompt = (locale: Locale, fridgeAnalysis: string) => {
 ## Success Metrics
 
 ### Performance Metrics
+
 - **Bundle size increase**: <15% from English-only baseline
 - **Initial load time**: <100ms additional delay for translation loading
 - **Language switch time**: <200ms for UI update
 - **Translation cache hit rate**: >90% for returning users
 
 ### User Experience Metrics
+
 - **Language detection accuracy**: >95% correct on first visit
 - **Translation completeness**: 100% of UI elements translated
 - **Error fallback rate**: <1% of translation requests fail to English fallback
 - **User language preference retention**: >95% of choices persist correctly
 
 ### Business Metrics
+
 - **Spanish user adoption**: Track usage in Spanish-speaking regions
 - **Recipe generation success**: Spanish recipes meet quality standards
 - **User engagement**: Compare engagement metrics between languages
@@ -485,6 +496,7 @@ const createRecipePrompt = (locale: Locale, fridgeAnalysis: string) => {
 ### Sample Spanish Translations
 
 #### `locales/es/common.json` (excerpt):
+
 ```json
 {
   "app": {
@@ -507,6 +519,7 @@ const createRecipePrompt = (locale: Locale, fridgeAnalysis: string) => {
 ```
 
 #### `locales/es/settings.json` (excerpt):
+
 ```json
 {
   "page": {
