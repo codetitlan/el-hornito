@@ -91,13 +91,23 @@ const compressImage = async (
 
 // Format file size
 export const formatFileSize = (bytes: number): string => {
+  // Handle edge cases
   if (bytes === 0) return '0 Bytes';
+  if (bytes < 0) return `${bytes} Bytes`;
+  if (!Number.isFinite(bytes) || Number.isNaN(bytes)) return '0 Bytes';
+
+  // Handle decimal values less than 1
+  if (bytes < 1) return `${bytes} Bytes`;
 
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  // Ensure we don't exceed the sizes array
+  const sizeIndex = Math.min(i, sizes.length - 1);
+  const size = bytes / Math.pow(k, sizeIndex);
+
+  return `${parseFloat(size.toFixed(2))} ${sizes[sizeIndex]}`;
 };
 
 // Error handling utilities

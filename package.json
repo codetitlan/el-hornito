@@ -8,6 +8,16 @@
     "build:dev": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false --passWithNoTests",
+    "test:verbose": "jest --verbose",
+    "ci:build": "npm run lint && npm run type-check && npm run build",
+    "ci:test": "npm run test:ci",
+    "ci:all": "npm run ci:build && npm run ci:test",
     "railway:help": "node railway-helper.mjs help",
     "railway:list": "node railway-helper.mjs list",
     "railway:check": "node railway-helper.mjs check",
@@ -17,8 +27,7 @@
     "cache:warm": "echo 'Cache warming completed'",
     "cleanup": "echo 'Cleanup job completed'",
     "health:check": "curl -f http://localhost:3000/api/health || exit 1",
-    "seed:prod": "echo 'Production seeding completed'",
-    "test": "jest"
+    "seed:prod": "echo 'Production seeding completed'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.55.0",
