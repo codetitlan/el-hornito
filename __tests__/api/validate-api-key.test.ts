@@ -8,7 +8,6 @@ import {
   createMockRequestWithJSON,
   AnthropicMockManager,
   NextResponseMockManager,
-  MockValidationUtils,
 } from '../helpers/api-test-utils';
 
 // Mock Anthropic SDK
@@ -158,6 +157,50 @@ describe('/api/validate-api-key', () => {
         success: false,
         error: 'Internal server error',
       });
+    });
+  });
+
+  describe('Error Coverage - Missing Lines 47-54', () => {
+    test('should handle rate limit error (line 47-54)', async () => {
+      // Setup rate limit error
+      anthropicMockManager.mockRateLimitError();
+      responseMockManager.setupStandardBehavior();
+
+      const mockRequest = createMockRequestWithJSON({
+        apiKey: 'sk-ant-api-test-rate-limited',
+      });
+
+      const { POST } = await import('@/app/api/validate-api-key/route');
+      await POST(mockRequest);
+
+      expect(mockNextResponseJson).toHaveBeenCalledWith(
+        {
+          success: false,
+          error: 'Rate limit exceeded. API key is valid but over limit.',
+        },
+        { status: 400 }
+      );
+    });
+
+    test('should handle generic validation errors (line 47-54)', async () => {
+      // Mock a generic error that should hit the fallback error handling
+      mockAnthropicCreate.mockRejectedValue(new Error('Generic API error'));
+      responseMockManager.setupStandardBehavior();
+
+      const mockRequest = createMockRequestWithJSON({
+        apiKey: 'sk-ant-api-test-generic-error',
+      });
+
+      const { POST } = await import('@/app/api/validate-api-key/route');
+      await POST(mockRequest);
+
+      expect(mockNextResponseJson).toHaveBeenCalledWith(
+        {
+          success: false,
+          error: 'Failed to validate API key',
+        },
+        { status: 400 }
+      );
     });
   });
 });

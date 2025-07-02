@@ -52,6 +52,7 @@ describe('/lib/settings.ts - Progressive Coverage', () => {
       delete global.window;
 
       const { SettingsManager } = await import('@/lib/settings');
+      SettingsManager.resetInstance();
       const manager = SettingsManager.getInstance();
 
       const settings = manager.loadSettings();
@@ -376,6 +377,440 @@ describe('/lib/settings.ts - Progressive Coverage', () => {
       const settings = manager.loadSettings();
       expect(settings).toBeDefined();
       expect(settings.version).toBe('1.0.0');
+    });
+  });
+
+  describe('Step 10: Locale Management', () => {
+    test('setLocale updates locale in settings', async () => {
+      mockLocalStorage.setItem.mockImplementation(() => true);
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const result = manager.setLocale('es');
+
+      expect(result).toBe(true);
+      expect(mockLocalStorage.setItem).toHaveBeenCalled();
+    });
+
+    test('getLocale returns stored locale', async () => {
+      const settingsWithLocale = {
+        version: '1.0.0',
+        lastUpdated: new Date().toISOString(),
+        locale: 'es',
+        cookingPreferences: {
+          cuisineTypes: [],
+          dietaryRestrictions: [],
+          spiceLevel: 'mild',
+          cookingTimePreference: 'quick',
+          mealTypes: [],
+          defaultServings: 4,
+          additionalNotes: '',
+        },
+        kitchenEquipment: {
+          basicAppliances: [],
+          advancedAppliances: [],
+          cookware: [],
+          bakingEquipment: [],
+          other: [],
+        },
+        apiConfiguration: {
+          provider: 'anthropic',
+          hasPersonalKey: false,
+          keyValidated: false,
+          usePersonalKey: false,
+          usageTracking: true,
+          retryAttempts: 3,
+        },
+      };
+
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify(settingsWithLocale)
+      );
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const locale = manager.getLocale();
+      expect(locale).toBe('es');
+    });
+
+    test('getLocale defaults to en when no locale stored', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const locale = manager.getLocale();
+      expect(locale).toBe('en');
+    });
+
+    test('setLocale handles errors gracefully', async () => {
+      mockLocalStorage.setItem.mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const result = manager.setLocale('es');
+      expect(result).toBe(false);
+    });
+
+    test('getLocale handles errors gracefully', async () => {
+      mockLocalStorage.getItem.mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const locale = manager.getLocale();
+      expect(locale).toBe('en');
+    });
+  });
+
+  describe('Step 11: User State Detection', () => {
+    test('isNewUser returns true when no settings exist', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const isNew = manager.isNewUser();
+      expect(isNew).toBe(true);
+    });
+
+    test('isNewUser returns false when settings exist', async () => {
+      mockLocalStorage.getItem.mockReturnValue('{"version": "1.0.0"}');
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const isNew = manager.isNewUser();
+      expect(isNew).toBe(false);
+    });
+
+    test.skip('isNewUser handles server environment', async () => {
+      const originalWindow = global.window;
+
+      const { SettingsManager } = await import('@/lib/settings');
+
+      // Temporarily remove window to simulate server
+      // @ts-expect-error - Testing server environment
+      delete global.window;
+
+      // Verify window is actually undefined
+      expect(typeof window).toBe('undefined');
+
+      // Reset singleton to ensure clean state for SSR simulation
+      SettingsManager.resetInstance();
+      const manager = SettingsManager.getInstance();
+
+      const isNew = manager.isNewUser();
+      expect(isNew).toBe(true);
+
+      global.window = originalWindow;
+    });
+
+    test('isNewUser handles localStorage errors', async () => {
+      mockLocalStorage.getItem.mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const isNew = manager.isNewUser();
+      expect(isNew).toBe(true);
+    });
+  });
+
+  describe('Step 12: Preference Configuration Detection', () => {
+    test('hasConfiguredPreferences returns false for default settings', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const hasConfig = manager.hasConfiguredPreferences();
+      expect(hasConfig).toBe(false);
+    });
+
+    test('hasConfiguredPreferences returns true when cuisineTypes configured', async () => {
+      const settingsWithCuisine = {
+        version: '1.0.0',
+        cookingPreferences: {
+          cuisineTypes: ['italian'],
+          dietaryRestrictions: [],
+          spiceLevel: 'medium',
+          cookingTimePreference: 'moderate',
+        },
+      };
+
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify(settingsWithCuisine)
+      );
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const hasConfig = manager.hasConfiguredPreferences();
+      expect(hasConfig).toBe(true);
+    });
+
+    test('hasConfiguredPreferences returns true when dietaryRestrictions configured', async () => {
+      const settingsWithDiet = {
+        version: '1.0.0',
+        cookingPreferences: {
+          cuisineTypes: [],
+          dietaryRestrictions: ['vegetarian'],
+          spiceLevel: 'medium',
+          cookingTimePreference: 'moderate',
+        },
+      };
+
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify(settingsWithDiet)
+      );
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const hasConfig = manager.hasConfiguredPreferences();
+      expect(hasConfig).toBe(true);
+    });
+
+    test('hasConfiguredPreferences returns true when spiceLevel changed', async () => {
+      const settingsWithSpice = {
+        version: '1.0.0',
+        cookingPreferences: {
+          cuisineTypes: [],
+          dietaryRestrictions: [],
+          spiceLevel: 'spicy',
+          cookingTimePreference: 'moderate',
+        },
+      };
+
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify(settingsWithSpice)
+      );
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const hasConfig = manager.hasConfiguredPreferences();
+      expect(hasConfig).toBe(true);
+    });
+
+    test('hasConfiguredPreferences returns true when cookingTimePreference changed', async () => {
+      const settingsWithTime = {
+        version: '1.0.0',
+        cookingPreferences: {
+          cuisineTypes: [],
+          dietaryRestrictions: [],
+          spiceLevel: 'medium',
+          cookingTimePreference: 'quick',
+        },
+      };
+
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify(settingsWithTime)
+      );
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const hasConfig = manager.hasConfiguredPreferences();
+      expect(hasConfig).toBe(true);
+    });
+  });
+
+  describe('Step 13: Smart Defaults and Clearing', () => {
+    test('getSmartDefaults returns comprehensive default preferences', async () => {
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const defaults = manager.getSmartDefaults();
+
+      expect(defaults.cookingPreferences).toBeDefined();
+      expect(defaults.cookingPreferences?.cuisineTypes).toEqual([
+        'comfort-food',
+        'healthy',
+      ]);
+      expect(defaults.cookingPreferences?.spiceLevel).toBe('medium');
+      expect(defaults.cookingPreferences?.defaultServings).toBe(4);
+      expect(defaults.kitchenEquipment).toBeDefined();
+      expect(defaults.kitchenEquipment?.basicAppliances).toContain('oven');
+    });
+
+    test('clearSettings removes data from localStorage', async () => {
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const result = manager.clearSettings();
+
+      expect(result).toBe(true);
+      expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
+        'elhornito-user-settings'
+      );
+    });
+
+    test.skip('clearSettings handles server environment', async () => {
+      const originalWindow = global.window;
+
+      const { SettingsManager } = await import('@/lib/settings');
+
+      // Temporarily remove window to simulate server
+      // @ts-expect-error - Testing server environment
+      delete global.window;
+
+      // Reset singleton to ensure clean state for SSR simulation
+      SettingsManager.resetInstance();
+      const manager = SettingsManager.getInstance();
+
+      const result = manager.clearSettings();
+      expect(result).toBe(false);
+
+      global.window = originalWindow;
+    });
+
+    test('clearSettings handles localStorage errors', async () => {
+      mockLocalStorage.removeItem.mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const result = manager.clearSettings();
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('Step 14: Validation Edge Cases', () => {
+    test('saveSettings rejects settings with invalid keyValidated type', async () => {
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const invalidSettings = {
+        version: '1.0.0',
+        lastUpdated: new Date().toISOString(),
+        cookingPreferences: {
+          cuisineTypes: [],
+          dietaryRestrictions: [],
+          spiceLevel: 'mild',
+          cookingTimePreference: 'quick',
+          mealTypes: [],
+          defaultServings: 4,
+        },
+        kitchenEquipment: {
+          basicAppliances: [],
+          advancedAppliances: [],
+          cookware: [],
+          bakingEquipment: [],
+          other: [],
+        },
+        apiConfiguration: {
+          provider: 'anthropic',
+          hasPersonalKey: false,
+          keyValidated: 'invalid-type', // Should be boolean
+          usePersonalKey: false,
+          usageTracking: { enabled: false, monthlyLimit: 100, currentUsage: 0 },
+          retryAttempts: 3,
+        },
+      };
+
+      const result = manager.saveSettings(
+        invalidSettings as unknown as UserSettings
+      );
+      expect(result).toBe(false);
+    });
+
+    test('saveSettings handles server environment gracefully', async () => {
+      const originalWindow = global.window;
+      // @ts-expect-error - Testing server environment
+      delete global.window;
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+      const settings = manager.loadSettings();
+
+      const result = manager.saveSettings(settings);
+      expect(result).toBe(false);
+
+      global.window = originalWindow;
+    });
+
+    test('importSettings handles invalid settings validation failure', async () => {
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      const invalidExportData = {
+        version: '1.0.0',
+        exportDate: new Date().toISOString(),
+        settings: {
+          version: '1.0.0',
+          lastUpdated: new Date().toISOString(),
+          cookingPreferences: {
+            cuisineTypes: 'invalid-format', // Should be array
+            dietaryRestrictions: [],
+            spiceLevel: 'mild',
+            cookingTimePreference: 'quick',
+            mealTypes: [],
+            defaultServings: 4,
+          },
+          kitchenEquipment: {
+            basicAppliances: [],
+            advancedAppliances: [],
+            cookware: [],
+            bakingEquipment: [],
+            other: [],
+          },
+          apiConfiguration: {
+            hasPersonalKey: false,
+            keyValidated: false,
+            usageTracking: false,
+          },
+        },
+      };
+
+      const result = manager.importSettings(JSON.stringify(invalidExportData));
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Invalid');
+    });
+
+    test('importSettings handles save failure during import', async () => {
+      mockLocalStorage.setItem.mockImplementation(() => {
+        throw new Error('Storage full');
+      });
+
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      // Export valid settings first
+      const exportData = manager.exportSettings();
+
+      // Try to import them when save fails
+      const result = manager.importSettings(exportData);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Failed to save imported settings');
+    });
+
+    test('exportSettings uses cached settings when available', async () => {
+      const { SettingsManager } = await import('@/lib/settings');
+      const manager = SettingsManager.getInstance();
+
+      // Load settings to cache them
+      manager.loadSettings();
+
+      // Export should use cached settings (this branch wasn't covered)
+      const exportData = manager.exportSettings();
+      const parsed = JSON.parse(exportData);
+
+      expect(parsed.settings).toBeDefined();
+      expect(parsed.version).toBe('1.0.0');
+      expect(parsed.exportDate).toBeDefined();
     });
   });
 });

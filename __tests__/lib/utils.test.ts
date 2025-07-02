@@ -382,4 +382,68 @@ describe('utils', () => {
       expect(operation).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('Internal utility functions coverage', () => {
+    describe('Edge case testing for existing functions', () => {
+      test('Mathematical edge cases in formatFileSize', () => {
+        // Test mathematical operations
+        const testCases = [
+          { input: 1024, expected: '1 KB' },
+          { input: 1048576, expected: '1 MB' },
+          { input: 1073741824, expected: '1 GB' },
+        ];
+
+        testCases.forEach(({ input, expected }) => {
+          expect(formatFileSize(input)).toBe(expected);
+        });
+      });
+
+      test('String edge cases in getErrorMessage', () => {
+        // Test various error types
+        const testCases = [
+          { input: new TypeError('Type error'), expected: 'Type error' },
+          { input: new ReferenceError('Ref error'), expected: 'Ref error' },
+          { input: '', expected: '' },
+          { input: 'Custom string error', expected: 'Custom string error' },
+        ];
+
+        testCases.forEach(({ input, expected }) => {
+          expect(getErrorMessage(input)).toBe(expected);
+        });
+      });
+
+      test('Complex class name combinations in cn', () => {
+        // Test edge cases for className utility
+        expect(cn('a', 'b', 'c')).toBe('a b c');
+        expect(cn(['a', 'b'], { c: true, d: false })).toBe('a b c');
+        expect(cn('')).toBe('');
+        expect(cn(null, undefined, false, 'valid')).toBe('valid');
+      });
+
+      test('File validation boundary conditions', () => {
+        // Test exact boundary conditions
+        const exactFile = new File(['x'.repeat(5000000)], 'exact.jpg', {
+          type: 'image/jpeg',
+        });
+        expect(validateFile(exactFile).isValid).toBe(true);
+
+        const overFile = new File(['x'.repeat(5000001)], 'over.jpg', {
+          type: 'image/jpeg',
+        });
+        expect(validateFile(overFile).isValid).toBe(false);
+      });
+
+      test('Retry operation with custom delays', async () => {
+        // Test retry with different configurations
+        const operation = jest
+          .fn()
+          .mockRejectedValueOnce(new Error('First'))
+          .mockResolvedValueOnce('Success');
+
+        const result = await retryOperation(operation, 1);
+        expect(result).toBe('Success');
+        expect(operation).toHaveBeenCalledTimes(2);
+      });
+    });
+  });
 });

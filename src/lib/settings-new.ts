@@ -4,7 +4,7 @@
  */
 
 // Re-export everything from the new modular structure
-export * from './settings/index';
+export * from './settings';
 
 // Ensure backward compatibility for the main exports
-export { SettingsManager, settingsManager } from './settings/index';
+export { SettingsManager, settingsManager } from './settings';

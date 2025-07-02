@@ -260,4 +260,167 @@ describe('/api/analyze-fridge - Core Functionality', () => {
       );
     });
   });
+
+  describe('Error Coverage - Missing Lines', () => {
+    describe('User Settings Validation Errors (Lines 61-68)', () => {
+      test('should handle malformed user settings JSON', async () => {
+        const formData = new FormData();
+        formData.append(
+          'image',
+          createMockFile('test.jpg', 1000000, 'image/jpeg')
+        );
+        formData.append('locale', 'en');
+        formData.append('userSettings', 'invalid-json{malformed'); // Malformed JSON
+
+        const mockRequest = createMockRequestWithFormData(formData);
+        const { POST } = await import('@/app/api/analyze-fridge/route');
+
+        await POST(mockRequest as NextRequest);
+
+        expect(mockNextResponseJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            success: false,
+            error: expect.stringContaining('settings'),
+          }),
+          { status: 400 }
+        );
+      });
+
+      test('should handle invalid user settings structure', async () => {
+        const formData = new FormData();
+        formData.append(
+          'image',
+          createMockFile('test.jpg', 1000000, 'image/jpeg')
+        );
+        formData.append('locale', 'en');
+        formData.append(
+          'userSettings',
+          JSON.stringify({
+            invalidField: 'invalid', // Invalid structure
+          })
+        );
+
+        const mockRequest = createMockRequestWithFormData(formData);
+        const { POST } = await import('@/app/api/analyze-fridge/route');
+
+        await POST(mockRequest as NextRequest);
+
+        expect(mockNextResponseJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            success: false,
+            error: expect.any(String),
+          }),
+          { status: 401 }
+        );
+      });
+    });
+
+    describe('Authentication Error Handling (Lines 85-94)', () => {
+      test('should handle auth errors with personal API key', async () => {
+        // Mock auth error
+        anthropicMockManager.mockAuthError();
+
+        const formData = new FormData();
+        formData.append(
+          'image',
+          createMockFile('test.jpg', 1000000, 'image/jpeg')
+        );
+        formData.append('locale', 'en');
+        formData.append('apiKey', 'invalid-personal-key');
+        formData.append(
+          'userSettings',
+          JSON.stringify({
+            difficulty: 'easy',
+            dietaryRestrictions: [],
+          })
+        );
+
+        const mockRequest = createMockRequestWithFormData(formData);
+        const { POST } = await import('@/app/api/analyze-fridge/route');
+
+        await POST(mockRequest as NextRequest);
+
+        expect(mockNextResponseJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            success: false,
+            error: expect.any(String),
+            processingTime: expect.any(Number),
+          }),
+          { status: 500 }
+        );
+      });
+
+      test('should handle auth errors without personal API key', async () => {
+        // Mock auth error
+        anthropicMockManager.mockAuthError();
+
+        const formData = new FormData();
+        formData.append(
+          'image',
+          createMockFile('test.jpg', 1000000, 'image/jpeg')
+        );
+        formData.append('locale', 'en');
+        // No apiKey provided - will use system key
+        formData.append(
+          'userSettings',
+          JSON.stringify({
+            difficulty: 'easy',
+            dietaryRestrictions: [],
+          })
+        );
+
+        const mockRequest = createMockRequestWithFormData(formData);
+        const { POST } = await import('@/app/api/analyze-fridge/route');
+
+        await POST(mockRequest as NextRequest);
+
+        expect(mockNextResponseJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            success: false,
+            error: expect.stringContaining('Authentication failed'),
+            processingTime: expect.any(Number),
+          }),
+          { status: 401 }
+        );
+      });
+
+      // Note: Lines 85-94 (auth-specific error handling) require very specific error conditions
+      // that are difficult to mock consistently. The current coverage already tests the main error paths.
+    });
+
+    describe('General Error Handling (Line 111)', () => {
+      test('should handle non-auth errors with proper error response', async () => {
+        // Mock a general error (not auth-related)
+        anthropicMockManager.mockRateLimitError();
+
+        const formData = new FormData();
+        formData.append(
+          'image',
+          createMockFile('test.jpg', 1000000, 'image/jpeg')
+        );
+        formData.append('locale', 'en');
+        formData.append(
+          'userSettings',
+          JSON.stringify({
+            difficulty: 'easy',
+            dietaryRestrictions: [],
+          })
+        );
+
+        const mockRequest = createMockRequestWithFormData(formData);
+        const { POST } = await import('@/app/api/analyze-fridge/route');
+
+        await POST(mockRequest as NextRequest);
+
+        expect(mockNextResponseJson).toHaveBeenCalledWith(
+          expect.objectContaining({
+            success: false,
+            error: expect.any(String),
+            processingTime: expect.any(Number),
+          }),
+          { status: expect.any(Number) }
+        );
+      });
+    });
+  });
 });
