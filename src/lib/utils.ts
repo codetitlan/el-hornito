@@ -32,72 +32,25 @@ export const validateFile = (file: File): FileValidation => {
   };
 };
 
-// File conversion utilities
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const result = reader.result as string;
-      // Remove data URL prefix to get just the base64 string
-      const base64 = result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = (error) => reject(error);
-  });
-};
-
-// Image compression utility
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const compressImage = async (
-  file: File,
-  maxWidth: number = 1024
-): Promise<File> => {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-
-    img.onload = () => {
-      // Calculate new dimensions
-      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
-      canvas.width = img.width * ratio;
-      canvas.height = img.height * ratio;
-
-      // Draw compressed image
-      ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            const compressedFile = new File([blob], file.name, {
-              type: file.type,
-              lastModified: Date.now(),
-            });
-            resolve(compressedFile);
-          } else {
-            resolve(file); // Fallback to original file
-          }
-        },
-        file.type,
-        0.8
-      ); // 80% quality
-    };
-
-    img.src = URL.createObjectURL(file);
-  });
-};
-
 // Format file size
 export const formatFileSize = (bytes: number): string => {
+  // Handle edge cases
   if (bytes === 0) return '0 Bytes';
+  if (bytes < 0) return `${bytes} Bytes`;
+  if (!Number.isFinite(bytes) || Number.isNaN(bytes)) return '0 Bytes';
+
+  // Handle decimal values less than 1
+  if (bytes < 1) return `${bytes} Bytes`;
 
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  // Ensure we don't exceed the sizes array
+  const sizeIndex = Math.min(i, sizes.length - 1);
+  const size = bytes / Math.pow(k, sizeIndex);
+
+  return `${parseFloat(size.toFixed(2))} ${sizes[sizeIndex]}`;
 };
 
 // Error handling utilities
@@ -128,56 +81,4 @@ export const retryOperation = async <T>(
     }
     throw error;
   }
-};
-
-// Recipe formatting utilities
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const formatCookingTime = (time: string): string => {
-  // Normalize cooking time format
-  const cleanTime = time.toLowerCase().trim();
-
-  if (cleanTime.includes('min')) {
-    return cleanTime;
-  }
-
-  if (cleanTime.includes('hour')) {
-    return cleanTime;
-  }
-
-  // Assume minutes if no unit specified
-  const numMatch = cleanTime.match(/\d+/);
-  if (numMatch) {
-    return `${numMatch[0]} minutes`;
-  }
-
-  return time;
-};
-
-// Local storage utilities
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const storage = {
-  get: (key: string) => {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
-    } catch {
-      return null;
-    }
-  },
-
-  set: (key: string, value: unknown) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      // Silently fail if localStorage is not available
-    }
-  },
-
-  remove: (key: string) => {
-    try {
-      localStorage.removeItem(key);
-    } catch {
-      // Silently fail if localStorage is not available
-    }
-  },
 };
