@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Enhanced API Route Test Utilities
  * Master-level infrastructure for bulletproof API testing
