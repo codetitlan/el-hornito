@@ -1,9 +1,5 @@
 import '@testing-library/jest-dom';
 
-import '@testing-library/jest-dom';
-
-import '@testing-library/jest-dom';
-
 // Mock Next.js server environment for API route testing
 // This sets up the necessary globals that Next.js API routes expect
 Object.defineProperty(global, 'Request', {
@@ -48,28 +44,28 @@ Object.assign(process.env, {
 });
 
 // Mock console methods to reduce noise during testing
-const originalConsole = {
-  error: console.error,
-  log: console.log,
-  warn: console.warn,
-};
+// const originalConsole = {
+//   error: console.error,
+//   log: console.log,
+//   warn: console.warn,
+// };
 
-beforeEach(() => {
-  // Reset console mocks before each test
-  jest.clearAllMocks();
+// beforeEach(() => {
+//   // Reset console mocks before each test
+//   jest.clearAllMocks();
 
-  // Only mock console in tests that explicitly need it
-  console.error = jest.fn();
-  console.log = jest.fn();
-  console.warn = jest.fn();
-});
+//   // Only mock console in tests that explicitly need it
+//   console.error = jest.fn();
+//   console.log = jest.fn();
+//   console.warn = jest.fn();
+// });
 
-afterEach(() => {
-  // Restore original console methods
-  console.error = originalConsole.error;
-  console.log = originalConsole.log;
-  console.warn = originalConsole.warn;
-});
+// afterEach(() => {
+//   // Restore original console methods
+//   console.error = originalConsole.error;
+//   console.log = originalConsole.log;
+//   console.warn = originalConsole.warn;
+// });
 
 // Global test timeout (30 seconds for API tests)
 jest.setTimeout(30000);

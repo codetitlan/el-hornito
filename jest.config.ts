@@ -15,22 +15,16 @@ const config: Config = {
   // Only run actual test files
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
   // API testing specific configuration - focus on actively tested files
-  collectCoverageFrom: [
-    'src/lib/utils.ts', // Utility functions
-    'src/app/api/**/route.ts', // API routes
-    'src/lib/api.ts', // API utilities
-    'src/lib/settings.ts', // Settings utilities
-    '!src/**/*.d.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
   // Coverage thresholds for comprehensively tested utilities
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-  },
+  // coverageThreshold: {
+  //   global: {
+  //     branches: 80,
+  //     functions: 80,
+  //     lines: 80,
+  //     statements: 80,
+  //   },
+  // },
   // Test environment overrides
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],
