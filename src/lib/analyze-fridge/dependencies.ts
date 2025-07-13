@@ -8,17 +8,31 @@ import { AnalyzeFridgeDependencies } from './types';
 export function createDefaultDependencies(
   personalApiKey?: string | null
 ): AnalyzeFridgeDependencies {
-  // Determine which API key to use
+  console.log(
+    'DEBUG: createDefaultDependencies called with personalApiKey:',
+    personalApiKey
+  );
+
+  // Determine which API key to use - prioritize personal API key
   const apiKeyToUse = personalApiKey || ENV.ANTHROPIC_API_KEY;
 
   if (!apiKeyToUse) {
-    throw new Error('No API key available');
+    throw new Error(
+      'Authentication failed - no API key available - please provide a personal API key or configure ANTHROPIC_API_KEY environment variable'
+    );
   }
+
+  console.log(
+    'DEBUG: Creating Anthropic client with key:',
+    apiKeyToUse?.substring(0, 10) + '...'
+  );
 
   // Create Anthropic client with appropriate API key
   const anthropicClient = new Anthropic({
     apiKey: apiKeyToUse,
   });
+
+  console.log('DEBUG: Anthropic client created:', typeof anthropicClient);
 
   return {
     anthropicClient: {

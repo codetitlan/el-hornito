@@ -208,6 +208,7 @@ const analyzeFridgeMock = async (
   // Customize mock recipe based on user settings and locale
   let customizedRecipe = { ...mockRecipes[locale] };
 
+  // Handle different cuisine types - prioritize vegetarian if present
   if (userSettings?.cookingPreferences.cuisineTypes.includes('vegetarian')) {
     const vegetarianTitles = {
       en: 'Vegetarian Garden Pasta',
@@ -222,8 +223,25 @@ const analyzeFridgeMock = async (
       title: vegetarianTitles[locale],
       description: vegetarianDescriptions[locale],
     };
+  } else if (
+    userSettings?.cookingPreferences.cuisineTypes.includes('italian')
+  ) {
+    const italianTitles = {
+      en: 'Italian Mediterranean Pasta',
+      es: 'Pasta Mediterránea Italiana',
+    };
+    const italianDescriptions = {
+      en: 'A classic italian pasta dish with mediterranean vegetables',
+      es: 'Un plato de pasta italiana clásico con verduras mediterráneas',
+    };
+    customizedRecipe = {
+      ...customizedRecipe,
+      title: italianTitles[locale],
+      description: italianDescriptions[locale],
+    };
   }
 
+  // Handle dietary restrictions
   if (
     userSettings?.cookingPreferences.dietaryRestrictions.includes('gluten-free')
   ) {
@@ -236,6 +254,24 @@ const analyzeFridgeMock = async (
       ingredients: customizedRecipe.ingredients.map((ingredient: string) =>
         ingredient.includes('pasta') || ingredient.includes('pasta')
           ? glutenFreeLabels[locale]
+          : ingredient
+      ),
+    };
+  }
+
+  if (
+    userSettings?.cookingPreferences.dietaryRestrictions.includes('dairy-free')
+  ) {
+    const dairyFreeDescriptions = {
+      en: 'A fresh and healthy dairy-free pasta dish with vegetables from your fridge',
+      es: 'Un plato de pasta fresco y saludable sin lácteos con verduras de tu nevera',
+    };
+    customizedRecipe = {
+      ...customizedRecipe,
+      description: dairyFreeDescriptions[locale],
+      ingredients: customizedRecipe.ingredients.map((ingredient: string) =>
+        ingredient.includes('cheese') || ingredient.includes('queso')
+          ? ingredient.replace(/cheese|queso/, 'nutritional yeast')
           : ingredient
       ),
     };

@@ -96,11 +96,25 @@ export async function POST(request: NextRequest) {
     const processingTime = Date.now() - startTime;
     const errorMessage = getErrorMessage(error);
 
-    console.error('API Error:', errorMessage);
-    console.error('Full error:', error);
+    console.error('=== API ROUTE ERROR DEBUG ===');
+    console.error('Error object:', error);
+    console.error('Error name:', (error as Error)?.name);
+    console.error('Error constructor:', (error as Error)?.constructor?.name);
+    console.error('Error message:', errorMessage);
+    console.error('personalApiKey:', personalApiKey);
+    console.error('============================');
 
     // Use extracted error classification
     const errorClass = classifyAnalysisError(error as Error);
+
+    console.error('=== ERROR CLASSIFICATION RESULT ===');
+    console.error('Status:', errorClass.status);
+    console.error('Message:', errorClass.message);
+    console.error('isAuthError:', errorClass.isAuthError);
+    console.error('isRateLimit:', errorClass.isRateLimit);
+    console.error('=====================================');
+    console.error('Classification result:', errorClass);
+    console.error('===================================');
 
     // Handle specific error types for better user experience
     if (errorClass.isAuthError) {
@@ -110,6 +124,19 @@ export async function POST(request: NextRequest) {
           error: personalApiKey
             ? 'Invalid personal API key. Please check your Anthropic API key in settings.'
             : 'Authentication failed. Please configure a valid API key.',
+          processingTime,
+        } as AnalyzeFridgeResponse,
+        { status: errorClass.status }
+      );
+    }
+
+    if (errorClass.isRateLimit) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: personalApiKey
+            ? 'You have exceeded your personal API key rate limit. Please check your plan and billing details.'
+            : errorClass.message, // Use the default message for environment key
           processingTime,
         } as AnalyzeFridgeResponse,
         { status: errorClass.status }

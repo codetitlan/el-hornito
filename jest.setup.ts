@@ -44,7 +44,7 @@ Object.defineProperty(global, 'Response', {
 // Global setup for all tests
 Object.assign(process.env, {
   NODE_ENV: 'test',
-  ANTHROPIC_API_KEY: 'test-api-key',
+  // Do NOT set ANTHROPIC_API_KEY - this forces tests to use our mock
 });
 
 // Mock console methods to reduce noise during testing

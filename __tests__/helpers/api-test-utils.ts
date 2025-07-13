@@ -4,6 +4,11 @@
  */
 
 import { NextRequest } from 'next/server';
+import {
+  AuthenticationError,
+  RateLimitError,
+  APIError,
+} from '../__mocks__/@anthropic-ai/sdk'; // Import from our mock file
 
 /**
  * Enhanced mock NextRequest with FormData support
@@ -156,28 +161,38 @@ export class AnthropicMockManager {
   }
 
   /**
-   * Mock API errors
-   */
-  mockAPIError(message: string = 'API Error') {
-    this.mockCreate.mockRejectedValue(new Error(message));
-  }
-
-  /**
-   * Mock rate limiting error
-   */
-  mockRateLimitError() {
-    const error = new Error('Rate limit exceeded') as any;
-    error.status = 429;
-    this.mockCreate.mockRejectedValue(error);
-  }
-
-  /**
-   * Mock authentication error
+   * Mock an authentication error (invalid API key)
    */
   mockAuthError() {
-    const error = new Error('Invalid API key') as any;
-    error.status = 401;
-    this.mockCreate.mockRejectedValue(error);
+    this.mockCreate.mockRejectedValue(new AuthenticationError());
+  }
+
+  /**
+   * Mock a rate limit error
+   */
+  mockRateLimitError() {
+    this.mockCreate.mockRejectedValue(new RateLimitError());
+  }
+
+  /**
+   * Mock a generic API error with a custom message
+   */
+  mockAPIError(message: string, status?: number) {
+    this.mockCreate.mockRejectedValue(new APIError(message, status));
+  }
+
+  /**
+   * Mock a successful empty or malformed response from Anthropic
+   */
+  mockEmptyOrMalformedResponse() {
+    this.mockCreate.mockResolvedValue({
+      content: [
+        {
+          type: 'text',
+          text: '',
+        },
+      ],
+    });
   }
 }
 

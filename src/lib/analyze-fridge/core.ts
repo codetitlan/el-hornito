@@ -121,6 +121,11 @@ export function createAnthropicMessageParams(
   };
 }
 
+// Declare an interface for errors with processing time
+interface EnhancedError extends Error {
+  processingTime?: number;
+}
+
 // Main business logic function - Testable with dependency injection
 export async function analyzeUserFridge(
   input: AnalyzeFridgeInput,
@@ -129,6 +134,11 @@ export async function analyzeUserFridge(
   const startTime = Date.now();
 
   try {
+    console.log('=== ANALYZE USER FRIDGE START ===');
+    console.log('Input:', input);
+    console.log('Dependencies:', dependencies);
+    console.log('================================');
+
     // Validate file input (defensive programming)
     const fileValidation = validateFileInput(input.files);
     if (!fileValidation.isValid) {
@@ -170,6 +180,13 @@ export async function analyzeUserFridge(
     );
 
     console.log('Sending request to Claude API...');
+    console.log('=== ANTHROPIC API CALL ===');
+    console.log('Client:', dependencies.anthropicClient);
+    console.log(
+      'Messages create function:',
+      dependencies.anthropicClient.messages.create
+    );
+    console.log('========================');
 
     // Call Claude API with retry logic
     const claudeResponse = await dependencies.retryOperation(async () => {
@@ -211,29 +228,85 @@ export async function analyzeUserFridge(
     console.error('API Error:', errorMessage);
     console.error('Full error:', error);
 
-    // Enhance error for better debugging
-    const enhancedError = new Error(errorMessage);
-    Object.assign(enhancedError, { processingTime });
-    throw enhancedError;
+    // Preserve the original error while adding processingTime
+    // Important: Don't create a new Error which would lose the class/type info
+    if (error instanceof Error) {
+      // Add processingTime to the error object without changing its prototype
+      (error as EnhancedError).processingTime = processingTime;
+      throw error;
+    } else {
+      // If it's not an Error object, wrap it in one
+      const wrappedError = new Error(
+        typeof error === 'string' ? error : String(error)
+      );
+      (wrappedError as EnhancedError).processingTime = processingTime;
+      throw wrappedError;
+    }
   }
 }
 
 // Error classification for different response codes - Pure function
-export function classifyAnalysisError(error: Error): {
+export function classifyAnalysisError(error: Error | string | unknown): {
   status: number;
   message: string;
   isAuthError?: boolean;
   isRateLimit?: boolean;
 } {
-  const errorMessage = error.message.toLowerCase();
+  // Handle cases where we're given a string instead of an Error object
+  if (typeof error === 'string') {
+    error = new Error(error);
+  }
 
-  // Check for authentication errors
+  // Ensure we have an object to work with
+  if (!error || typeof error !== 'object') {
+    error = new Error('Unknown error');
+  }
+
+  // First, detect errors based on their class/name (most reliable)
+  const errorObj = error as {
+    name?: string;
+    message?: string;
+    constructor?: { name?: string };
+  };
+
+  const errorName = errorObj.name || '';
+  const errorMessage = (errorObj.message || '').toLowerCase();
+
+  // 1. Detect authentication errors
+  if (
+    errorName === 'AuthenticationError' ||
+    errorObj.constructor?.name === 'AuthenticationError'
+  ) {
+    return {
+      status: 401,
+      message:
+        'Invalid API key. Please check your Anthropic API key in settings.',
+      isAuthError: true,
+    };
+  }
+
+  // 2. Detect rate limit errors
+  if (
+    errorName === 'RateLimitError' ||
+    errorObj.constructor?.name === 'RateLimitError'
+  ) {
+    return {
+      status: 429,
+      message: 'Service is temporarily busy. Please try again in a moment.',
+      isRateLimit: true,
+    };
+  }
+
+  // 3. Fallback to message content analysis
+  // Authentication errors by message
   if (
     errorMessage.includes('401') ||
     errorMessage.includes('unauthorized') ||
     errorMessage.includes('authentication') ||
     errorMessage.includes('invalid_api_key') ||
-    errorMessage.includes('no api key available')
+    errorMessage.includes('invalid api key') ||
+    errorMessage.includes('no api key available') ||
+    errorMessage.includes('authentication failed')
   ) {
     return {
       status: 401,
