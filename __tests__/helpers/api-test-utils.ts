@@ -331,24 +331,6 @@ export class PerformanceTestUtils {
       );
     }
   }
-
-  /**
-   * Run concurrent tests and measure performance
-   */
-  static async runConcurrentTests<T>(
-    tests: Array<() => Promise<T>>,
-    expectedCount: number
-  ): Promise<{ results: T[]; duration: number; successCount: number }> {
-    const start = performance.now();
-    const promises = tests.map((test) => test().catch((error) => ({ error })));
-    const results = await Promise.all(promises);
-    const duration = performance.now() - start;
-    const successCount = results.filter(
-      (result) => !('error' in result)
-    ).length;
-
-    return { results: results as T[], duration, successCount };
-  }
 }
 
 /**
