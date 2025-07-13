@@ -17,17 +17,10 @@ export async function POST(request: NextRequest) {
       apiKey: apiKey,
     });
 
-    // Make a very simple request to validate the key
+    // Validate the key by listing models (doesn't consume tokens)
     try {
-      await anthropic.messages.create({
-        model: 'claude-3-haiku-20240307', // Use the smallest model for validation
-        max_tokens: 10,
-        messages: [
-          {
-            role: 'user',
-            content: 'Hi',
-          },
-        ],
+      await anthropic.models.list({
+        limit: 1,
       });
 
       return NextResponse.json({ success: true });
